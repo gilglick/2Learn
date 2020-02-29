@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">2Learn</string>
+    <string name="app_logo">Logo</string>
+
+    <!-- Login string  -->
+    <string name="user_name">User name</string>
+    <string name="email_login">userName@gmail.com</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="hint">********</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_with_facebook">Sign up facebook</string>
+    <string name="forget_password">Forget your password?</string>
+
+    <!-- Register form string  -->
+    <string name="full_name">Full Name</string>
+    <string name="email">Email</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="date_of_birth">Date of birth</string>
+    <string name="phone_number">Phone number</string>
+    <string name="register">Register</string>
+
+
+    <!-- Profile string  -->
+    <string name="user_image_content">User image picture</string>
+    <string name="close">close</string>
+    <string name="open">open</string>
+    <string name="about">About</string>
+    <string name="description">
+        A self-starter and quick learner. Versatile skill set with experience in customer service,
+        sales, and written and oral communication. Received multiple awards for excellence in customer service.
+        Recognized skills in mentoring, mediating between employees, and in leading team projects.
+    </string>
+    <!-- Drawer menu   -->
+    <string name="home_menu">Home</string>
+    <string name="prfile_menu">Profile</string>
+    <string name="chat_menu">Chat</string>
+    <string name="proficiency">My proficiency</string>
+    <string name="add_proficiency">Add Proficiency</string>
+    <string name="my_match">My match</string>
+    <string name="israel_kfar_saba">Israel - kfar saba</string>
+
+
+</resources>
+

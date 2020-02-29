@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_menu"
+            android:title="@string/home_menu"/>
+        <item android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_profile_menu"
+            android:title="@string/prfile_menu"/>
+        <item android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_chat_menu"
+            android:title="@string/chat_menu"/>
+    </group>
+
+    <item android:title="@string/proficiency">
+        <menu>
+            <item android:id="@+id/proficiency"
+                android:icon="@drawable/ic_proficiency_menu"
+                android:title="@string/add_proficiency"/>
+            <item android:id="@+id/my_match"
+                android:icon="@drawable/ic_match"
+                android:title="@string/my_match"/>
+        </menu>
+    </item>
+
+</menu>
