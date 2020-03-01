@@ -11,6 +11,7 @@ public class Student implements Parcelable {
     private String dateOfBirth;
     private String phoneNumber;
     private String studentDescription;
+    private String location;
     private ImageView image;
     private HashMap<Course, Integer> hashmap = new HashMap<Course, Integer>();
 
@@ -63,7 +64,7 @@ public class Student implements Parcelable {
         return phoneNumber;
     }
 
-
+    public String getLocation() {return location;}
 
     public ImageView getImage() {
         return image;
