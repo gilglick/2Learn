@@ -76,6 +76,7 @@ public class FormActivity extends AppCompatActivity {
                 Student stud = new Student(
                         mFullName.getText().toString(),
                         mEmail.getText().toString(),
+                        "location",
                         mDateOfBirth.getText().toString(),
                         mPhoneNumber.getText().toString());
                 Log.i("tag", stud + "");
@@ -106,7 +107,7 @@ public class FormActivity extends AppCompatActivity {
 
         DateDialog.mDateSetListener = (datePicker, year, month, day) -> {
             month = month + 1;
-            String date = DateDialog.dateFormat(year,month,day);
+            String date = DateDialog.dateFormat(year, month, day);
             mDateOfBirth.setText(date);
         };
     }

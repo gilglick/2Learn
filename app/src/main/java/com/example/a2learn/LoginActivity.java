@@ -40,8 +40,6 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         signIn.setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this,UserContainerActivity.class));
-
             if(hasInputError()){
                 return;
             }
@@ -52,8 +50,8 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(AuthResult authResult) {
                     Toast.makeText(LoginActivity.this, "Sign in successfully", Toast.LENGTH_SHORT).show();
-                    //FireStoreHelper fireStoreHelper = new FireStoreHelper();
-                    //fireStoreHelper.getStudent(email.getText().toString());
+                    startActivity(new Intent(LoginActivity.this,UserContainerActivity.class).putExtra("userId",email.getText().toString()));
+
                 }
             }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this, "Sign in failed, forget your password?", Toast.LENGTH_LONG).show());
         });

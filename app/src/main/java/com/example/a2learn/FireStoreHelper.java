@@ -1,52 +1,79 @@
 package com.example.a2learn;
 
 import android.util.Log;
+import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FireStoreHelper {
     private static final String TAG = "FireStoreHelper";
-    private static final String USER_COLLECTION = "users";
-    private static final String EMAIL = "email";
-    private static final String FULL_NAME = "full name";
-    private static final String PHONE = "phone";
-    private static final String DATE_OF_BIRTH = "date of birth";
-    private static final String STUD_DESCRIPTION = "student description";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference collectionReference = db.collection("profiles");
+    private Student studentFromStore;
 
+    public CollectionReference getCollectionReference() {
+        return collectionReference;
+    }
 
     public void addStudent(Student student) {
-        Map<String, Object> user = new HashMap<>();
-        user.put(EMAIL, student.getEmail());
-        user.put(FULL_NAME, student.getFullName());
-        user.put(PHONE, student.getPhoneNumber());
-        user.put(DATE_OF_BIRTH, student.getDateOfBirth());
-        user.put(STUD_DESCRIPTION, student.getStudentDescription());
-
-        db.collection(USER_COLLECTION).document(student.getEmail()).
-                set(user).addOnSuccessListener(aVoid -> {
-        }).addOnFailureListener(e -> Log.i(TAG, "onFailure: "));
-    }
-
-    public void getStudent(String userEmail) {
-
-        db.collection("users").document(userEmail)
-                .get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                Student student = new Student(
-                        documentSnapshot.getString(FULL_NAME),
-                        documentSnapshot.getString(EMAIL),
-                        documentSnapshot.getString(DATE_OF_BIRTH),
-                        documentSnapshot.getString(PHONE));
-                Log.i(TAG, "onSuccess: " + student);
-            }
-        })
-                .addOnFailureListener(e -> { });
+        collectionReference.document(student.getEmail()).set(student).
+                addOnSuccessListener(aVoid -> Log.i(TAG, "onSuccess: ")).
+                addOnFailureListener(e -> Log.i(TAG, "onFailure: "));
     }
 
 
+
+    public void updateFullName(String docId,String newName){
+        final String FULL_NAME = "fullName";
+        collectionReference.document(docId).update(FULL_NAME,newName);
+    }
+
+    public void updateLocation(String docId,String newLocation){
+        final String LOCATION = "location";
+        collectionReference.document(docId).update(LOCATION,newLocation);
+    }
+
+    public void updatePhone(String docId,String newPhoneNumber){
+        final String PHONE_NUMBER = "phoneNumber";
+        collectionReference.document(docId).update(PHONE_NUMBER,newPhoneNumber);
+    }
+    //String fullName, String email, String location, String dateOfBirth, String phoneNumber
+    public void updateDateOfBirth(String docId,String newDateOfBirth){
+        final String DATE_OF_BIRTH= "dateOfBirth";
+        collectionReference.document(docId).update(DATE_OF_BIRTH,newDateOfBirth);
+    }
+
+    public void updateDescription(String docId, String newDescription){
+        final String DESCRIPTION = "description";
+        collectionReference.document(docId).update(DESCRIPTION,newDescription);
+    }
+
+
+    public void addCourseToHelpList(String docId,String courseName){
+        final String HELP_LIST = "giveHelpCourse";
+        collectionReference.document(docId).update(HELP_LIST, FieldValue.arrayUnion(courseName));
+    }
+
+    public void addCourseToNeedList(String docId, String courseName){
+        final String HELP_LIST = "needHelpCourse";
+        collectionReference.document(docId).update(HELP_LIST, FieldValue.arrayUnion(courseName));
+    }
+
+    private interface FirebaseCallback {
+        void onListCallBack(List<Course> courseList);
+        void onStudentCallBack(Student student);
+    }
 }
+

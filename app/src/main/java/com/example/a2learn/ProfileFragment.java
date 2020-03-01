@@ -22,6 +22,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,7 +36,10 @@ import com.squareup.picasso.Transformation;
 import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
+    private FireStoreHelper fireStoreHelper = new FireStoreHelper();
+    private Student student;
     private Button editButton;
+    private TextView emailTextView;
     private EditText userNameProfile;
     private EditText userLocationProfile;
     private EditText phoneNumber;
@@ -43,15 +47,20 @@ public class ProfileFragment extends Fragment {
     private EditText userAbout;
     private ImageView imgCapture;
     private boolean active = false;
+
     private static final int PICK_IMAGE_GALLERY = 1;
     private static final int PICK_IMAGE_CAMERA = 0;
 
+    ProfileFragment(Student student){
+        this.student = student;
+    }
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         imgCapture = view.findViewById(R.id.userImage);
         Button cameraButton = view.findViewById(R.id.cameraButton);
+        emailTextView = view.findViewById(R.id.emailTextView);
         editButton = view.findViewById(R.id.editButton);
         userNameProfile = view.findViewById(R.id.userNameProfile);
         userLocationProfile = view.findViewById(R.id.userLocationProfile);
@@ -62,8 +71,11 @@ public class ProfileFragment extends Fragment {
         ImageView twitterImage = view.findViewById(R.id.twitter);
         ImageView linkedin = view.findViewById(R.id.linkedin);
         setEditPermissions(false);
-
+        updateUserProfile();
         editButton.setOnClickListener(v -> {
+            if(active){
+                fireStoreHelper.updateDescription(student.getEmail(),userAbout.getText().toString());
+            }
             active = !active;
             setEditPermissions(active);
 
@@ -104,14 +116,14 @@ public class ProfileFragment extends Fragment {
 
     }
 
-
-    private boolean isProfileChanged(Student student) {
-        return isFieldChanged(userNameProfile.getText().toString(), student.getFullName())
-                || isFieldChanged(userLocationProfile.getText().toString(), student.getLocation())
-                || isFieldChanged(phoneNumber.getText().toString(), student.getPhoneNumber())
-                || isFieldChanged(date.getText().toString(), student.getDateOfBirth())
-                || isFieldChanged(userAbout.getText().toString(), student.getStudentDescription());
-    }
+//
+//    private boolean isProfileChanged(Student student) {
+//        return isFieldChanged(userNameProfile.getText().toString(), student.getFullName())
+//                || isFieldChanged(userLocationProfile.getText().toString(), student.getLocation())
+//                || isFieldChanged(phoneNumber.getText().toString(), student.getPhoneNumber())
+//                || isFieldChanged(date.getText().toString(), student.getDateOfBirth())
+//                || isFieldChanged(userAbout.getText().toString(), student.getStudentDescription());
+//    }
 
     private boolean isFieldChanged(String currentProfile, String currentField) {
         return !currentProfile.equals(currentField);
@@ -151,38 +163,16 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
-
-
+    private void updateUserProfile(){
+        userNameProfile.setText(student.getFullName());
+        emailTextView.setText(student.getEmail());
+        userLocationProfile.setText(student.getLocation());
+        phoneNumber.setText(student.getPhoneNumber());
+        date.setText(student.getDateOfBirth());
+        userAbout.setText(student.getDescription() + " ");
+    }
 }
 
 
 
 
-/*
-  @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle(" ");
-                alert.setMessage("Message");
-
-                // Set an EditText view to get user input
-                final EditText input = new EditText(getActivity());
-                alert.setView(input);
-
-                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-
-                        // Do something with value!
-                    }
-                });
-
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        // Canceled.
-                    }
-                });
-
-                alert.show();
-            }
-        });
- */

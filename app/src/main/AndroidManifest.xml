@@ -21,7 +21,7 @@
         </activity>
         <activity android:name=".UserContainerActivity" />
         <activity android:name=".FormActivity" />
-        <activity android:name=".ProfileActivity" />
+
     </application>
 
 </manifest>

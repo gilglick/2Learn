@@ -4,7 +4,7 @@ package com.example.a2learn;
 public class Course implements Comparable<Course> {
 
     private String courseName;
-    private int courseNumber;
+    private String courseNumber;
 
     public Course(Builder builder) {
         this.courseName = builder.courseName;
@@ -19,14 +19,14 @@ public class Course implements Comparable<Course> {
 
     public static class Builder {
         private String courseName;
-        private int courseNumber;
+        private String courseNumber;
 
         public Builder setCourseName(String courseName) {
             this.courseName = courseName;
             return this;
         }
 
-        public Builder setCourseNumber(int courseNumber) {
+        public Builder setCourseNumber(String courseNumber) {
             this.courseNumber = courseNumber;
             return this;
         }
@@ -42,7 +42,7 @@ public class Course implements Comparable<Course> {
     }
 
 
-    public int getCourseNumber() {
+    public String getCourseNumber() {
         return courseNumber;
     }
 
@@ -51,7 +51,7 @@ public class Course implements Comparable<Course> {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((courseName == null) ? 0 : courseName.hashCode());
-        result = prime * result + courseNumber;
+        result = prime * result + Integer.parseInt(courseNumber);
         return result;
     }
 
