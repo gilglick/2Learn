@@ -3,22 +3,16 @@ package com.example.a2learn;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Shader;
+
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,58 +21,64 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.example.a2learn.com.exmaple.a2learn.utility.CircleTransform;
+import com.example.a2learn.com.exmaple.a2learn.utility.CompressImageHelper;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
     private FireStoreHelper fireStoreHelper = new FireStoreHelper();
+    private StorageReference ref = fireStoreHelper.getmStorageRef().child(FireStoreHelper.PROFILE_STORAGE);
     private Student student;
     private Button editButton;
-    private TextView emailTextView;
-    private EditText userNameProfile;
-    private EditText userLocationProfile;
-    private EditText phoneNumber;
-    private EditText date;
-    private EditText userAbout;
-    private ImageView imgCapture;
-    private boolean active = false;
-
+    private TextView userEmail;
+    private EditText userName;
+    private EditText userLocation;
+    private EditText userPhoneNumber;
+    private EditText userDate;
+    private EditText userDescription;
+    private ImageView userImage;
+    private boolean editMode = false;
+    private static Uri imageUri;
     private static final int PICK_IMAGE_GALLERY = 1;
     private static final int PICK_IMAGE_CAMERA = 0;
 
-    ProfileFragment(Student student){
+    ProfileFragment(Student student) {
         this.student = student;
+
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        imgCapture = view.findViewById(R.id.userImage);
+        userImage = view.findViewById(R.id.userImage);
         Button cameraButton = view.findViewById(R.id.cameraButton);
-        emailTextView = view.findViewById(R.id.emailTextView);
+        userEmail = view.findViewById(R.id.emailTextView);
         editButton = view.findViewById(R.id.editButton);
-        userNameProfile = view.findViewById(R.id.userNameProfile);
-        userLocationProfile = view.findViewById(R.id.userLocationProfile);
-        phoneNumber = view.findViewById(R.id.phoneNumberProfile);
-        date = view.findViewById(R.id.dateOfBirthProfile);
-        userAbout = view.findViewById(R.id.userAboutProfile);
+        userName = view.findViewById(R.id.userNameProfile);
+        userLocation = view.findViewById(R.id.userLocationProfile);
+        userPhoneNumber = view.findViewById(R.id.phoneNumberProfile);
+        userDate = view.findViewById(R.id.dateOfBirthProfile);
+        userDescription = view.findViewById(R.id.userAboutProfile);
         ImageView facebookImage = view.findViewById(R.id.facebook);
         ImageView twitterImage = view.findViewById(R.id.twitter);
         ImageView linkedin = view.findViewById(R.id.linkedin);
+        initializeUserProfile();
         setEditPermissions(false);
-        updateUserProfile();
         editButton.setOnClickListener(v -> {
-            if(active){
-                fireStoreHelper.updateDescription(student.getEmail(),userAbout.getText().toString());
+            if (editMode) {
+                updateUserField();
             }
-            active = !active;
-            setEditPermissions(active);
-
+            editMode = !editMode;
+            setEditPermissions(editMode);
         });
 
         cameraButton.setOnClickListener(v -> selectImage(getContext()));
@@ -89,19 +89,19 @@ public class ProfileFragment extends Fragment {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setEditPermissions(boolean active) {
-        editButton.setBackgroundResource(active ? R.drawable.edit_mode : R.drawable.edit);
-        userNameProfile.setEnabled(active);
-        userLocationProfile.setEnabled(active);
-        phoneNumber.setEnabled(active);
-        userAbout.setEnabled(active);
-        date.setEnabled(active);
-        date.setCompoundDrawablesWithIntrinsicBounds(0, 0, active ? R.drawable.ic_date_range_black_24dp : 0, 0);
-        date.setOnTouchListener((v, event) ->
+    private void setEditPermissions(boolean editMode) {
+        editButton.setBackgroundResource(editMode ? R.drawable.edit_mode : R.drawable.edit);
+        userName.setEnabled(editMode);
+        userLocation.setEnabled(editMode);
+        userPhoneNumber.setEnabled(editMode);
+        userDescription.setEnabled(editMode);
+        userDate.setEnabled(editMode);
+        userDate.setCompoundDrawablesWithIntrinsicBounds(0, 0, editMode ? R.drawable.ic_date_range_black_24dp : 0, 0);
+        userDate.setOnTouchListener((v, event) ->
         {
             final int DRAWABLE_RIGHT = 2;
-            if (event.getAction() == MotionEvent.ACTION_UP && date.getCompoundDrawables()[DRAWABLE_RIGHT] != null) {
-                if (event.getRawX() >= (date.getRight() - date.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+            if (event.getAction() == MotionEvent.ACTION_UP && userDate.getCompoundDrawables()[DRAWABLE_RIGHT] != null) {
+                if (event.getRawX() >= (userDate.getRight() - userDate.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                     DateDialog.createCalender(getActivity()).show();
                     return true;
                 }
@@ -110,24 +110,10 @@ public class ProfileFragment extends Fragment {
         });
         DateDialog.mDateSetListener = (datePicker, year, month, day) -> {
             month = month + 1;
-            date.setText(DateDialog.dateFormat(year, month, day));
+            userDate.setText(DateDialog.dateFormat(year, month, day));
         };
-
-
     }
 
-//
-//    private boolean isProfileChanged(Student student) {
-//        return isFieldChanged(userNameProfile.getText().toString(), student.getFullName())
-//                || isFieldChanged(userLocationProfile.getText().toString(), student.getLocation())
-//                || isFieldChanged(phoneNumber.getText().toString(), student.getPhoneNumber())
-//                || isFieldChanged(date.getText().toString(), student.getDateOfBirth())
-//                || isFieldChanged(userAbout.getText().toString(), student.getStudentDescription());
-//    }
-
-    private boolean isFieldChanged(String currentProfile, String currentField) {
-        return !currentProfile.equals(currentField);
-    }
 
     private void selectImage(Context context) {
         final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
@@ -149,27 +135,83 @@ public class ProfileFragment extends Fragment {
         builder.show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
-            imgCapture.setImageURI(data.getData());
-            Uri imageUri = data.getData();
-            Picasso.get().load(imageUri).transform(new CircleTransform()).into(imgCapture);
-        } else if (requestCode == PICK_IMAGE_CAMERA) {
-            if (resultCode == Activity.RESULT_OK) {
-                Objects.requireNonNull(data.getExtras()).get("data");
-                imgCapture.setImageBitmap((Bitmap) data.getExtras().get("data"));
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            switch (requestCode) {
+                case PICK_IMAGE_CAMERA:
+                    imageUri = data.getData();
+                    updateUserImageInStorage();
+                    getUserImageFromStorage();
+                    break;
+                case PICK_IMAGE_GALLERY:
+                    Objects.requireNonNull(data.getExtras()).get("data");
+                    userImage.setImageBitmap((Bitmap) data.getExtras().get("data"));
+                    break;
             }
         }
     }
-    private void updateUserProfile(){
-        userNameProfile.setText(student.getFullName());
-        emailTextView.setText(student.getEmail());
-        userLocationProfile.setText(student.getLocation());
-        phoneNumber.setText(student.getPhoneNumber());
-        date.setText(student.getDateOfBirth());
-        userAbout.setText(student.getDescription() + " ");
+
+    private void initializeUserProfile() {
+        getUserImageFromStorage();
+        userName.setText(student.getFullName());
+        userEmail.setText(student.getEmail());
+        userLocation.setText(student.getLocation());
+        userPhoneNumber.setText(student.getPhoneNumber());
+        userDate.setText(student.getDateOfBirth());
+        userDescription.setText(student.getDescription());
+
+    }
+
+    private void updateUserField() {
+        if (!userName.getText().toString().equals(student.getFullName())) {
+            student.setFullName(userName.getText().toString());
+            fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.FULL_NAME, userName.getText().toString());
+        }
+        if (!userLocation.getText().toString().equals(student.getLocation())) {
+            student.setLocation(userLocation.getText().toString());
+            fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.LOCATION, userLocation.getText().toString());
+        }
+        if (!userPhoneNumber.getText().toString().equals(student.getPhoneNumber())) {
+            student.setPhoneNumber(userPhoneNumber.getText().toString());
+            fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.PHONE_NUMBER, userPhoneNumber.getText().toString());
+        }
+        if (!userDate.getText().toString().equals(student.getDateOfBirth())) {
+            student.setDateOfBirth(userDate.getText().toString());
+            fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.DATE_OF_BIRTH, userDate.getText().toString());
+        }
+        if (!userDescription.getText().toString().equals(student.getDescription())) {
+            student.setDescription(userDescription.getText().toString());
+            fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.DESCRIPTION, userDescription.getText().toString());
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    private void updateUserImageInStorage() {
+        StorageReference reference = ref.child(student.getEmail());
+        byte[] byteStream = CompressImageHelper.compressImage(getActivity(), imageUri);
+        if (byteStream != null) {
+            UploadTask uploadTask = reference.putBytes(byteStream);
+            uploadTask.addOnSuccessListener(taskSnapshot -> Toast.makeText(getActivity(), "Uploaded Failed", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(exception -> Toast.makeText(getActivity(), "Uploaded Failed", Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    private void getUserImageFromStorage() {
+        StorageReference reference = ref.child(student.getEmail());
+        reference.getDownloadUrl().
+                addOnSuccessListener(uri -> Picasso.get().load(uri).
+                transform(new CircleTransform()).into(userImage))
+                .addOnFailureListener(e -> Toast.makeText(getActivity(), "Falied get the image", Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateUserField();
+
     }
 }
 

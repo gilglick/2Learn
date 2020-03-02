@@ -1,30 +1,39 @@
 package com.example.a2learn;
 
 import android.util.Log;
-import android.widget.Toast;
 
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class FireStoreHelper {
+public final class FireStoreHelper {
     private static final String TAG = "FireStoreHelper";
+    static final String FULL_NAME = "fullName";
+    static final String LOCATION = "location";
+    static final String PHONE_NUMBER = "phoneNumber";
+    static final String DATE_OF_BIRTH = "dateOfBirth";
+    static final String GIVE_HELP_LIST = "giveHelpCourse";
+    static final String NEED_HELP_LIST = "needHelpCourse";
+    static final String DESCRIPTION = "description";
+    static final String PROFILE_STORAGE = "profileImages";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference collectionReference = db.collection("profiles");
-    private Student studentFromStore;
+    private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
 
-    public CollectionReference getCollectionReference() {
+    public  CollectionReference getCollectionReference() {
         return collectionReference;
+    }
+
+    public StorageReference getmStorageRef() {
+        return mStorageRef;
+    }
+
+    public FirebaseAuth getFirebaseAuth() {
+        return firebaseAuth;
     }
 
     public void addStudent(Student student) {
@@ -34,46 +43,19 @@ public class FireStoreHelper {
     }
 
 
-
-    public void updateFullName(String docId,String newName){
-        final String FULL_NAME = "fullName";
-        collectionReference.document(docId).update(FULL_NAME,newName);
-    }
-
-    public void updateLocation(String docId,String newLocation){
-        final String LOCATION = "location";
-        collectionReference.document(docId).update(LOCATION,newLocation);
-    }
-
-    public void updatePhone(String docId,String newPhoneNumber){
-        final String PHONE_NUMBER = "phoneNumber";
-        collectionReference.document(docId).update(PHONE_NUMBER,newPhoneNumber);
-    }
-    //String fullName, String email, String location, String dateOfBirth, String phoneNumber
-    public void updateDateOfBirth(String docId,String newDateOfBirth){
-        final String DATE_OF_BIRTH= "dateOfBirth";
-        collectionReference.document(docId).update(DATE_OF_BIRTH,newDateOfBirth);
-    }
-
-    public void updateDescription(String docId, String newDescription){
-        final String DESCRIPTION = "description";
-        collectionReference.document(docId).update(DESCRIPTION,newDescription);
+    public void updateField(String docId, String field, String newValue) {
+        collectionReference.document(docId).update(field, newValue);
     }
 
 
-    public void addCourseToHelpList(String docId,String courseName){
-        final String HELP_LIST = "giveHelpCourse";
-        collectionReference.document(docId).update(HELP_LIST, FieldValue.arrayUnion(courseName));
+    public void updateListField(String docId, String field, String newValue) {
+        collectionReference.document(docId).update(field, FieldValue.arrayUnion(newValue));
     }
 
-    public void addCourseToNeedList(String docId, String courseName){
-        final String HELP_LIST = "needHelpCourse";
-        collectionReference.document(docId).update(HELP_LIST, FieldValue.arrayUnion(courseName));
+    public void writeImageToStorage(){
+
     }
 
-    private interface FirebaseCallback {
-        void onListCallBack(List<Course> courseList);
-        void onStudentCallBack(Student student);
-    }
+
 }
 

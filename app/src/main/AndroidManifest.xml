@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.a2learn">
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -21,6 +23,7 @@
         </activity>
         <activity android:name=".UserContainerActivity" />
         <activity android:name=".FormActivity" />
+        <activity android:name=".MainActivity" />
 
     </application>
 

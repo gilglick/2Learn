@@ -37,6 +37,7 @@ public class FormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registeration_form);
+        firebaseAuth = FirebaseAuth.getInstance();
         mFullName = findViewById(R.id.fullName);
         mEmail = findViewById(R.id.email);
         mPassword = findViewById(R.id.password);
@@ -44,9 +45,8 @@ public class FormActivity extends AppCompatActivity {
         mPhoneNumber = findViewById(R.id.phoneNumber);
         mDateOfBirth = findViewById(R.id.dateOfBirth);
         progressBar = findViewById(R.id.progressBar);
-        inProgress(false);
-        firebaseAuth = FirebaseAuth.getInstance();
         registerButton = findViewById(R.id.registerButton);
+        inProgress(false);
 
         registerButton.setOnClickListener(e -> {
             boolean validName, validEmail, validPassword, validConfirmPassword, validDateOfBirth, validInput;
@@ -98,7 +98,6 @@ public class FormActivity extends AppCompatActivity {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (mDateOfBirth.getRight() - mDateOfBirth.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                     DateDialog.createCalender(this).show();
-
                     return true;
                 }
             }

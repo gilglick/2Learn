@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -27,8 +28,6 @@ public class UserContainerActivity extends AppCompatActivity implements Navigati
     private String userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         userId = getIntent().getStringExtra("userId");
@@ -52,9 +51,7 @@ public class UserContainerActivity extends AppCompatActivity implements Navigati
                 fragmentTransaction.replace(R.id.container_fragment, new ProfileFragment(stud));
                 fragmentTransaction.commit();
             }
-
         });
-
     }
 
 
@@ -78,17 +75,21 @@ public class UserContainerActivity extends AppCompatActivity implements Navigati
                     fragmentTransaction.replace(R.id.container_fragment, new ProfileFragment(stud));
                     fragmentTransaction.commit();
                 }
-
             });
-
         }
+
         if (item.getItemId() == R.id.proficiency) {
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_fragment, new Proficiency());
             fragmentTransaction.commit();
         }
+        if (item.getItemId() == R.id.logOut) {
+            startActivity(new Intent(this,LoginActivity.class));
+            fireStoreHelper.getFirebaseAuth().signOut();
+            finish();
 
+        }
         return false;
     }
 

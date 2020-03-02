@@ -1,12 +1,7 @@
 package com.example.a2learn;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.widget.ImageView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Student {
@@ -59,6 +54,38 @@ public class Student {
 
     public List<Course> getNeedHelpList() {
         return needHelpList;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setGiveHelpList(List<Course> giveHelpList) {
+        this.giveHelpList = giveHelpList;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setNeedHelpList(List<Course> needHelpList) {
+        this.needHelpList = needHelpList;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getLocation() {
