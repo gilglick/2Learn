@@ -3,7 +3,6 @@ package com.example.a2learn;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -13,48 +12,34 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-
 public class LoginActivity extends AppCompatActivity {
-    EditText email, password;
-    FirebaseAuth mAuth;
+    private EditText email, password;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         configGameWindow();
         setContentView(R.layout.activity_login);
+        mAuth = FirebaseAuth.getInstance();
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         Button signIn = findViewById(R.id.signIn);
         Button signUp = findViewById(R.id.signUp);
-        Button facebookSignUp = findViewById(R.id.facebookSignUp);
-        mAuth = FirebaseAuth.getInstance();
 
         signIn.setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this,UserContainerActivity.class));
-
-            if(hasInputError()){
+            if (hasInputError()) {
                 return;
             }
-            String email1 = email.getText().toString();
-            String password1 = password.getText().toString();
-            Log.i("fd", "onCreate: " + password1 + " " + email1);
-            mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                @Override
-                public void onSuccess(AuthResult authResult) {
-                    Toast.makeText(LoginActivity.this, "Sign in successfully", Toast.LENGTH_SHORT).show();
-                    //FireStoreHelper fireStoreHelper = new FireStoreHelper();
-                    //fireStoreHelper.getStudent(email.getText().toString());
-                }
+            final String userEmail = email.getText().toString();
+            final String userPassword = password.getText().toString();
+            mAuth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(authResult -> {
+                startActivity(new Intent(LoginActivity.this, UserContainerActivity.class).putExtra("userId", email.getText().toString()));
             }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this, "Sign in failed, forget your password?", Toast.LENGTH_LONG).show());
         });
 
@@ -63,13 +48,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean hasInputError() {
-        boolean validEmail,validPassword;
+        boolean validEmail, validPassword;
         validEmail = Validation.isValidEmail(email.getText().toString());
         validPassword = Validation.isValidPassword(password.getText().toString());
-        if(!validEmail){
+        if (!validEmail) {
             email.setError("Not valid format of email");
         }
-        if(!validPassword){
+        if (!validPassword) {
             password.setError("Not valid password format");
         }
         return !validEmail && !validPassword;

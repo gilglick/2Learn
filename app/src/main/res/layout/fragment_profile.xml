@@ -8,8 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gradStart"
         android:orientation="vertical">
+
 
         <FrameLayout
             android:id="@+id/profileImageContainer"
@@ -29,7 +29,7 @@
                 android:src="@drawable/ic_user" />
 
             <Button
-                android:id="@+id/angry_btn"
+                android:id="@+id/cameraButton"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center|right"
@@ -43,16 +43,18 @@
 
         </FrameLayout>
 
-        <TextView
-            android:id="@+id/userNameTextView"
+        <EditText
+            android:id="@+id/userNameProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:fontFamily="sans-serif-light"
+            android:background="@android:color/transparent"
+
             android:text="@string/user_name"
-            android:textColor="@color/white"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -69,14 +71,16 @@
                 android:background="@drawable/pin"
                 android:contentDescription="@string/user_image_content" />
 
-            <TextView
-                android:id="@+id/userLocation"
+            <EditText
+                android:id="@+id/userLocationProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="12dp"
                 android:fontFamily="sans-serif-light"
+                android:background="@android:color/transparent"
+
+                android:paddingStart="12dp"
                 android:text="@string/israel_kfar_saba"
-                android:textColor="@color/white"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="18sp"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
@@ -208,11 +212,14 @@
                         android:textColor="@color/headings"
                         android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/phoneNumeberEditText"
+                    <EditText
+                        android:id="@+id/phoneNumberProfile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
+                        android:background="@android:color/transparent"
+
+                        android:inputType="phone"
                         android:text="@string/phone_number"
                         android:textColor="#000000"
                         android:textSize="14sp" />
@@ -239,11 +246,14 @@
                         android:textColor="@color/headings"
                         android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/dateOfBirthEditText"
-                        android:layout_width="wrap_content"
+                    <EditText
+                        android:id="@+id/dateOfBirthProfile"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
+                        android:background="@android:color/transparent"
+                        android:inputType="date"
+                        android:drawableEnd="@drawable/ic_date_range_black_24dp"
                         android:text="@string/date_of_birth"
                         android:textColor="#000000"
                         android:textSize="14sp" />
@@ -257,7 +267,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/descriptionLayout"
+                    android:id="@+id/userAboutLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -270,12 +280,13 @@
                         android:textSize="12sp" />
 
                     <EditText
-                        android:id="@+id/description"
+                        android:id="@+id/userAboutProfile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
-                        android:text="@string/description"
+                        android:background="@android:color/transparent"
                         android:inputType="none"
+                        android:text="@string/description"
                         android:textColor="#000000"
                         android:textSize="14sp" />
 
@@ -285,12 +296,26 @@
                         android:layout_marginTop="15dp"
                         android:background="@color/grey" />
 
+                    <Button
+                        android:id="@+id/editButton"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="end"
+                        android:layout_margin="9dp"
+                        android:background="@drawable/edit"
+                        android:contentDescription="@string/user_image_content"
+                        android:padding="3dp" />
                 </LinearLayout>
 
 
             </LinearLayout>
+
+
         </RelativeLayout>
+
+
     </ScrollView>
+
 
 
 </LinearLayout>
