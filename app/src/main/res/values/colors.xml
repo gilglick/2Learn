@@ -15,4 +15,5 @@
     <color name="grey">#E5E5E5</color>
     <color name="light_grey">#eeeeee</color>
     <color name="white">#FFFFFF</color>
+    <color name="transparent">#80000000</color>
 </resources>

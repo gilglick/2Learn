@@ -1,47 +1,32 @@
 package com.example.a2learn;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.widget.ImageView;
-import java.util.HashMap;
 
-public class Student implements Parcelable {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Student {
     private String fullName;
     private String email;
-    private String dateOfBirth;
     private String phoneNumber;
-    private String studentDescription;
-    private ImageView image;
-    private HashMap<Course, Integer> hashmap = new HashMap<Course, Integer>();
+    private String dateOfBirth;
+    private String location;
+    private String description;
+    private List<Course> giveHelpList;
+    private List<Course> needHelpList;
 
-    public Student(String fullName, String email, String dateOfBirth, String phoneNumber) {
+    public Student(){
+
+    }
+    public Student(String fullName, String email, String location, String dateOfBirth, String phoneNumber) {
         this.fullName = fullName;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
+        this.location = location;
+        this.description = "";
+        giveHelpList = new ArrayList<>();
+        needHelpList = new ArrayList<>();
     }
-
-
-    protected Student(Parcel in) {
-        fullName = in.readString();
-        email = in.readString();
-        dateOfBirth = in.readString();
-        phoneNumber = in.readString();
-        studentDescription = in.readString();
-    }
-
-    public static final Creator<Student> CREATOR = new Creator<Student>() {
-        @Override
-        public Student createFromParcel(Parcel in) {
-            return new Student(in);
-        }
-
-        @Override
-        public Student[] newArray(int size) {
-            return new Student[size];
-        }
-    };
-
 
     public String getFullName() {
         return fullName;
@@ -49,10 +34,6 @@ public class Student implements Parcelable {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getStudentDescription() {
-        return studentDescription;
     }
 
     public String getDateOfBirth() {
@@ -63,16 +44,53 @@ public class Student implements Parcelable {
         return phoneNumber;
     }
 
-
-
-    public ImageView getImage() {
-        return image;
+    public String getDescription() {
+        return description;
     }
 
-    public HashMap<Course, Integer> getHashmap() {
-        return hashmap;
+    public List<Course> getGiveHelpList() {
+        return giveHelpList;
     }
 
+    public List<Course> getNeedHelpList() {
+        return needHelpList;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setGiveHelpList(List<Course> giveHelpList) {
+        this.giveHelpList = giveHelpList;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setNeedHelpList(List<Course> needHelpList) {
+        this.needHelpList = needHelpList;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getLocation() {
+        return location;
+    }
 
     @Override
     public int hashCode() {
@@ -101,20 +119,8 @@ public class Student implements Parcelable {
                 + "email: " + email + "\n"
                 + "phone: " + phoneNumber + "\n"
                 + "date of birth: " + dateOfBirth + "\n"
-                + "student description: " + studentDescription + "\n";
+                + "student description: " + "\n";
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(fullName);
-        dest.writeString(email);
-        dest.writeString(dateOfBirth);
-        dest.writeString(phoneNumber);
-        dest.writeString(studentDescription);
-    }
 }

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.a2learn">
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -10,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:windowSoftInputMode="adjustPan"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -20,7 +23,8 @@
         </activity>
         <activity android:name=".UserContainerActivity" />
         <activity android:name=".FormActivity" />
-        <activity android:name=".ProfileActivity" />
+        <activity android:name=".MainActivity" />
+
     </application>
 
 </manifest>

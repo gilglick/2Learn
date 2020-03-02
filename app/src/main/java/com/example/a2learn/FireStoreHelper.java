@@ -2,51 +2,60 @@ package com.example.a2learn;
 
 import android.util.Log;
 
-
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class FireStoreHelper {
+public final class FireStoreHelper {
     private static final String TAG = "FireStoreHelper";
-    private static final String USER_COLLECTION = "users";
-    private static final String EMAIL = "email";
-    private static final String FULL_NAME = "full name";
-    private static final String PHONE = "phone";
-    private static final String DATE_OF_BIRTH = "date of birth";
-    private static final String STUD_DESCRIPTION = "student description";
+    static final String FULL_NAME = "fullName";
+    static final String LOCATION = "location";
+    static final String PHONE_NUMBER = "phoneNumber";
+    static final String DATE_OF_BIRTH = "dateOfBirth";
+    static final String GIVE_HELP_LIST = "giveHelpCourse";
+    static final String NEED_HELP_LIST = "needHelpCourse";
+    static final String DESCRIPTION = "description";
+    static final String PROFILE_STORAGE = "profileImages";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private CollectionReference collectionReference = db.collection("profiles");
+    private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
 
-
-    public void addStudent(Student student) {
-        Map<String, Object> user = new HashMap<>();
-        user.put(EMAIL, student.getEmail());
-        user.put(FULL_NAME, student.getFullName());
-        user.put(PHONE, student.getPhoneNumber());
-        user.put(DATE_OF_BIRTH, student.getDateOfBirth());
-        user.put(STUD_DESCRIPTION, student.getStudentDescription());
-
-        db.collection(USER_COLLECTION).document(student.getEmail()).
-                set(user).addOnSuccessListener(aVoid -> {
-        }).addOnFailureListener(e -> Log.i(TAG, "onFailure: "));
+    public  CollectionReference getCollectionReference() {
+        return collectionReference;
     }
 
-    public void getStudent(String userEmail) {
+    public StorageReference getmStorageRef() {
+        return mStorageRef;
+    }
 
-        db.collection("users").document(userEmail)
-                .get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                Student student = new Student(
-                        documentSnapshot.getString(FULL_NAME),
-                        documentSnapshot.getString(EMAIL),
-                        documentSnapshot.getString(DATE_OF_BIRTH),
-                        documentSnapshot.getString(PHONE));
-                Log.i(TAG, "onSuccess: " + student);
-            }
-        })
-                .addOnFailureListener(e -> { });
+    public FirebaseAuth getFirebaseAuth() {
+        return firebaseAuth;
+    }
+
+    public void addStudent(Student student) {
+        collectionReference.document(student.getEmail()).set(student).
+                addOnSuccessListener(aVoid -> Log.i(TAG, "onSuccess: ")).
+                addOnFailureListener(e -> Log.i(TAG, "onFailure: "));
+    }
+
+
+    public void updateField(String docId, String field, String newValue) {
+        collectionReference.document(docId).update(field, newValue);
+    }
+
+
+    public void updateListField(String docId, String field, String newValue) {
+        collectionReference.document(docId).update(field, FieldValue.arrayUnion(newValue));
+    }
+
+    public void writeImageToStorage(){
+
     }
 
 
 }
+

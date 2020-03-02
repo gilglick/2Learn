@@ -27,7 +27,6 @@ import java.util.Objects;
 public class FormActivity extends AppCompatActivity {
 
     private EditText mFullName, mEmail, mPassword, mConfirmPassword, mDateOfBirth, mPhoneNumber;
-    private DatePickerDialog.OnDateSetListener mDateSetListener;
     private Button registerButton;
     private ProgressBar progressBar;
     private FirebaseAuth firebaseAuth;
@@ -38,6 +37,7 @@ public class FormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registeration_form);
+        firebaseAuth = FirebaseAuth.getInstance();
         mFullName = findViewById(R.id.fullName);
         mEmail = findViewById(R.id.email);
         mPassword = findViewById(R.id.password);
@@ -45,9 +45,8 @@ public class FormActivity extends AppCompatActivity {
         mPhoneNumber = findViewById(R.id.phoneNumber);
         mDateOfBirth = findViewById(R.id.dateOfBirth);
         progressBar = findViewById(R.id.progressBar);
-        inProgress(false);
-        firebaseAuth = FirebaseAuth.getInstance();
         registerButton = findViewById(R.id.registerButton);
+        inProgress(false);
 
         registerButton.setOnClickListener(e -> {
             boolean validName, validEmail, validPassword, validConfirmPassword, validDateOfBirth, validInput;
@@ -77,6 +76,7 @@ public class FormActivity extends AppCompatActivity {
                 Student stud = new Student(
                         mFullName.getText().toString(),
                         mEmail.getText().toString(),
+                        "location",
                         mDateOfBirth.getText().toString(),
                         mPhoneNumber.getText().toString());
                 Log.i("tag", stud + "");
@@ -97,32 +97,18 @@ public class FormActivity extends AppCompatActivity {
             final int DRAWABLE_RIGHT = 2;
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (mDateOfBirth.getRight() - mDateOfBirth.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                    createCalender();
+                    DateDialog.createCalender(this).show();
                     return true;
                 }
             }
             return false;
         });
 
-        mDateSetListener = (datePicker, year, month, day) -> {
+        DateDialog.mDateSetListener = (datePicker, year, month, day) -> {
             month = month + 1;
-            String date = month + "/" + day + "/" + year;
+            String date = DateDialog.dateFormat(year, month, day);
             mDateOfBirth.setText(date);
         };
-    }
-
-    public void createCalender() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog dialog = new DatePickerDialog(
-                FormActivity.this,
-                android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                mDateSetListener, year, month, day);
-        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
     }
 
 
