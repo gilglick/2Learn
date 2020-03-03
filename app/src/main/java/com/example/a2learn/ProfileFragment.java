@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,7 +44,8 @@ public class ProfileFragment extends Fragment {
     private EditText userLocation;
     private EditText userPhoneNumber;
     private EditText userDate;
-    private EditText userDescription;
+    private TextView userNeedHelpTextView;
+    private TextView userOfferHelpTextView;
     private ImageView userImage;
     private boolean editMode = false;
     private static Uri imageUri;
@@ -67,7 +69,8 @@ public class ProfileFragment extends Fragment {
         userLocation = view.findViewById(R.id.userLocationProfile);
         userPhoneNumber = view.findViewById(R.id.phoneNumberProfile);
         userDate = view.findViewById(R.id.dateOfBirthProfile);
-        userDescription = view.findViewById(R.id.userAboutProfile);
+        userOfferHelpTextView = view.findViewById(R.id.offerHelpList);
+        userNeedHelpTextView = view.findViewById(R.id.needHelpList);
         ImageView facebookImage = view.findViewById(R.id.facebook);
         ImageView twitterImage = view.findViewById(R.id.twitter);
         ImageView linkedin = view.findViewById(R.id.linkedin);
@@ -94,7 +97,6 @@ public class ProfileFragment extends Fragment {
         userName.setEnabled(editMode);
         userLocation.setEnabled(editMode);
         userPhoneNumber.setEnabled(editMode);
-        userDescription.setEnabled(editMode);
         userDate.setEnabled(editMode);
         userDate.setCompoundDrawablesWithIntrinsicBounds(0, 0, editMode ? R.drawable.ic_date_range_black_24dp : 0, 0);
         userDate.setOnTouchListener((v, event) ->
@@ -121,7 +123,9 @@ public class ProfileFragment extends Fragment {
         builder.setTitle("Choose your profile picture");
         builder.setItems(options, (dialog, item) -> {
             if (options[item].equals("Take Photo")) {
-                Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                takePicture.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                //Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
             } else if (options[item].equals("Choose from Gallery")) {
                 Intent gallery = new Intent();
@@ -141,14 +145,15 @@ public class ProfileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null) {
             switch (requestCode) {
-                case PICK_IMAGE_CAMERA:
+                case PICK_IMAGE_GALLERY:
                     imageUri = data.getData();
+                    Toast.makeText(getActivity(), "from camera", Toast.LENGTH_SHORT).show();
                     updateUserImageInStorage();
                     getUserImageFromStorage();
                     break;
-                case PICK_IMAGE_GALLERY:
-                    Objects.requireNonNull(data.getExtras()).get("data");
-                    userImage.setImageBitmap((Bitmap) data.getExtras().get("data"));
+                case PICK_IMAGE_CAMERA:
+//                    imageUri = data.getData();
+//                    Picasso.get().load(imageUri).transform(new CircleTransform()).into(userImage);
                     break;
             }
         }
@@ -161,7 +166,8 @@ public class ProfileFragment extends Fragment {
         userLocation.setText(student.getLocation());
         userPhoneNumber.setText(student.getPhoneNumber());
         userDate.setText(student.getDateOfBirth());
-        userDescription.setText(student.getDescription());
+        userOfferHelpTextView.setText(student.userOfferListStringFormat());
+        userNeedHelpTextView.setText(student.userNeedHelpListStringFormat());
 
     }
 
@@ -182,10 +188,7 @@ public class ProfileFragment extends Fragment {
             student.setDateOfBirth(userDate.getText().toString());
             fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.DATE_OF_BIRTH, userDate.getText().toString());
         }
-        if (!userDescription.getText().toString().equals(student.getDescription())) {
-            student.setDescription(userDescription.getText().toString());
-            fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.DESCRIPTION, userDescription.getText().toString());
-        }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -210,7 +213,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        updateUserField();
+        //updateUserField();
 
     }
 }

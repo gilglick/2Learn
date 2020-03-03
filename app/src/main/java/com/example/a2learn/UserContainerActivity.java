@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,6 +27,7 @@ public class UserContainerActivity extends AppCompatActivity implements Navigati
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     private String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,39 +61,42 @@ public class UserContainerActivity extends AppCompatActivity implements Navigati
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawerLayout.closeDrawer(GravityCompat.START);
 
-        if (item.getItemId() == R.id.nav_home) {
-            fragmentManager = getSupportFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_fragment, new HomeFragment());
-            fragmentTransaction.commit();
-
-        }
-        if (item.getItemId() == R.id.nav_profile) {
-            fireStoreHelper.getCollectionReference().document(userId).get().addOnSuccessListener(documentSnapshot -> {
-                if (documentSnapshot.exists()) {
-                    Student stud = documentSnapshot.toObject(Student.class);
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.container_fragment, new ProfileFragment(stud));
-                    fragmentTransaction.commit();
+        fireStoreHelper.getCollectionReference().document(userId).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                Student student = documentSnapshot.toObject(Student.class);
+                switch (item.getItemId()) {
+                    case R.id.nav_home:
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.container_fragment, new HomeFragment());
+                        fragmentTransaction.commit();
+                        break;
+                    case R.id.nav_profile:
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.container_fragment, new ProfileFragment(student));
+                        fragmentTransaction.commit();
+                        break;
+                    case R.id.proficiency:
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.container_fragment, new ProficiencyFragment(student));
+                        fragmentTransaction.commit();
+                        break;
                 }
-            });
-        }
 
-        if (item.getItemId() == R.id.proficiency) {
-            fragmentManager = getSupportFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_fragment, new Proficiency());
-            fragmentTransaction.commit();
-        }
-        if (item.getItemId() == R.id.logOut) {
-            startActivity(new Intent(this,LoginActivity.class));
-            fireStoreHelper.getFirebaseAuth().signOut();
-            finish();
+            }
+            if (item.getItemId() == R.id.logOut) {
+                startActivity(new Intent(this, LoginActivity.class));
+                fireStoreHelper.getFirebaseAuth().signOut();
+                finish();
+            }
 
-        }
+
+        });
         return false;
     }
-
-
 }
+
+
+

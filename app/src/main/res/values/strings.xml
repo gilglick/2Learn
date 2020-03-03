@@ -26,10 +26,11 @@
     <string name="close">close</string>
     <string name="open">open</string>
     <string name="about">About</string>
+    <string name="needHelpList">Need help</string>
+    <string name="offerHelpList">Offer help</string>
+
     <string name="description">
-        A self-starter and quick learner. Versatile skill set with experience in customer service,
-        sales, and written and oral communication. Received multiple awards for excellence in customer service.
-        Recognized skills in mentoring, mediating between employees, and in leading team projects.
+        Add new courses to your list
     </string>
     <!-- Drawer menu   -->
     <string name="home_menu">Home</string>
@@ -41,5 +42,16 @@
     <string name="israel_kfar_saba">Israel - kfar saba</string>
 
 
+    <string-array name="courses">
+
+        <item>Introduction to computer science</item>
+        <item>Linear Algebra</item>
+        <item>Computer architecture</item>
+        <item>Discrete mathematics</item>
+        <item>Operating system</item>
+        <item>Data Structure</item>
+        <item>Algorithm</item>
+        <item>Computer design</item>
+    </string-array>
 </resources>
 
