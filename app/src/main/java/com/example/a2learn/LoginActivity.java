@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             final String userEmail = email.getText().toString();
             final String userPassword = password.getText().toString();
-            mAuth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(authResult -> {
+            mAuth.signInWithEmailAndPassword(userEmail, userPassword).addOnSuccessListener(authResult -> {
                 startActivity(new Intent(LoginActivity.this, UserContainerActivity.class).putExtra("userId", email.getText().toString()));
             }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this, "Sign in failed, forget your password?", Toast.LENGTH_LONG).show());
         });
