@@ -1,36 +1,38 @@
-//implement the onFlingListener
 package com.example.a2learn;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity {
-    private ArrayList<String> al;
-    private ArrayAdapter<String> arrayAdapter;
+//    private Card[] cards_data;
+    private ArrayAdapter arrayAdapter;
     private int i;
 
+    ListView listView;
+    List<Card> rowItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.swipecard_activity);
 
-        al = new ArrayList<>();
-        al.add("php");
-        al.add("c");
-        al.add("python");
-        al.add("java");
-
         //choose your favorite adapter
-        arrayAdapter = new ArrayAdapter<>(this, R.layout.item, R.id.helloText, al);
-        SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+
+        rowItems = new ArrayList<Card>();
+        rowItems.add(new Card("12341234","Aviv"));
+        rowItems.add(new Card("123","Jonathna"));
+        rowItems.add(new Card("458","Gil"));
+
+        arrayAdapter = new ArrayAdapter(this, R.layout.item, rowItems);
+        SwipeFlingAdapterView flingContainer = findViewById(R.id.frame);
 
 
         //set the listener and the adapter
@@ -40,7 +42,7 @@ public class MainActivity extends Activity {
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
-                al.remove(0);
+                rowItems.remove(0);
                 arrayAdapter.notifyDataSetChanged();
             }
 
@@ -60,7 +62,8 @@ public class MainActivity extends Activity {
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 // Ask for more data here
-                al.add("XML ".concat(String.valueOf(i)));
+                Card item = new Card("Gil","Gil");
+                rowItems.add(item);
                 arrayAdapter.notifyDataSetChanged();
                 Log.d("LIST", "notified");
                 i++;

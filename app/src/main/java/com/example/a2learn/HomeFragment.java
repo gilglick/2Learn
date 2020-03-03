@@ -24,7 +24,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.swipecard_activity,container,false);
+        View view = inflater.inflate(R.layout.home_fragment,container,false);
 
         al = new ArrayList<>();
             al.add("php");
@@ -33,8 +33,8 @@ public class HomeFragment extends Fragment {
             al.add("java");
 
             //choose your favorite adapter
-            arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.item, R.id.helloText, al);
-            SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) view.findViewById(R.id.frame);
+            arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.item, al);
+            SwipeFlingAdapterView flingContainer = view.findViewById(R.id.frame);
 
 
             //set the listener and the adapter
