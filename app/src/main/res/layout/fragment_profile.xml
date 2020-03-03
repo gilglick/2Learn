@@ -50,8 +50,8 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:fontFamily="sans-serif-light"
             android:background="@android:color/transparent"
+            android:fontFamily="sans-serif-light"
 
             android:text="@string/user_name"
             android:textColor="@color/colorPrimaryDark"
@@ -75,8 +75,8 @@
                 android:id="@+id/userLocationProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
                 android:background="@android:color/transparent"
+                android:fontFamily="sans-serif-light"
 
                 android:paddingStart="12dp"
                 android:text="@string/israel_kfar_saba"
@@ -216,8 +216,8 @@
                         android:id="@+id/phoneNumberProfile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
                         android:background="@android:color/transparent"
+                        android:fontFamily="sans-serif-light"
 
                         android:inputType="phone"
                         android:text="@string/phone_number"
@@ -250,10 +250,10 @@
                         android:id="@+id/dateOfBirthProfile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
                         android:background="@android:color/transparent"
-                        android:inputType="date"
                         android:drawableEnd="@drawable/ic_date_range_black_24dp"
+                        android:fontFamily="sans-serif-light"
+                        android:inputType="date"
                         android:text="@string/date_of_birth"
                         android:textColor="#000000"
                         android:textSize="14sp" />
@@ -267,7 +267,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/userAboutLayout"
+                    android:id="@+id/offerHelpListLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -275,16 +275,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/about"
+                        android:text="@string/offerHelpList"
                         android:textColor="@color/headings"
                         android:textSize="12sp" />
 
-                    <EditText
-                        android:id="@+id/userAboutProfile"
+                    <TextView
+                        android:id="@+id/offerHelpList"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
                         android:background="@android:color/transparent"
+                        android:fontFamily="sans-serif-light"
                         android:inputType="none"
                         android:text="@string/description"
                         android:textColor="#000000"
@@ -296,84 +296,49 @@
                         android:layout_marginTop="15dp"
                         android:background="@color/grey" />
 
-                    <Button
-                        android:id="@+id/editButton"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="end"
-                        android:layout_margin="9dp"
-                        android:background="@drawable/edit"
-                        android:contentDescription="@string/user_image_content"
-                        android:padding="3dp" />
+                    <LinearLayout
+                        android:id="@+id/needHelpLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/needHelpList"
+                            android:textColor="@color/headings"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/needHelpList"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="sans-serif-light"
+                            android:inputType="none"
+                            android:text="@string/description"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="15dp"
+                            android:background="@color/grey" />
+
+                        <Button
+                            android:id="@+id/editButton"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="end"
+                            android:layout_margin="9dp"
+                            android:background="@drawable/edit"
+                            android:contentDescription="@string/user_image_content"
+                            android:padding="3dp" />
+                    </LinearLayout>
                 </LinearLayout>
-
-
             </LinearLayout>
-
-
         </RelativeLayout>
-
-
     </ScrollView>
-
-
-
 </LinearLayout>
 
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginTop="15dp"-->
-    <!--android:orientation="vertical">-->
-
-    <!--<TextView-->
-    <!--    android:layout_width="wrap_content"-->
-    <!--    android:layout_height="wrap_content"-->
-    <!--    android:text="Give help"-->
-    <!--    android:textColor="@color/headings"-->
-    <!--    android:textSize="12sp" />-->
-
-    <!--<Spinner-->
-    <!--    android:id="@+id/giveHelp"-->
-    <!--    android:layout_width="match_parent"-->
-    <!--    android:layout_height="wrap_content"-->
-    <!--    android:background="@android:drawable/btn_dropdown"-->
-    <!--    android:spinnerMode="dropdown" />-->
-
-    <!--<View-->
-    <!--    android:layout_width="match_parent"-->
-    <!--    android:layout_height="1dp"-->
-    <!--    android:layout_marginTop="15dp"-->
-    <!--    android:background="@color/grey" />-->
-
-    <!--</LinearLayout>-->
-
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginTop="15dp"-->
-    <!--android:orientation="vertical">-->
-
-    <!--<TextView-->
-    <!--    android:layout_width="wrap_content"-->
-    <!--    android:layout_height="wrap_content"-->
-    <!--    android:text="Need help"-->
-    <!--    android:textColor="@color/headings"-->
-    <!--    android:textSize="12sp" />-->
-
-    <!--<Spinner-->
-    <!--    android:id="@+id/spinner1"-->
-    <!--    android:layout_width="match_parent"-->
-    <!--    android:layout_height="wrap_content"-->
-    <!--    android:background="@android:drawable/btn_dropdown"-->
-    <!--    android:spinnerMode="dropdown" />-->
-
-    <!--<View-->
-    <!--    android:layout_width="match_parent"-->
-    <!--    android:layout_height="1dp"-->
-    <!--    android:layout_marginTop="15dp"-->
-    <!--    android:background="@color/grey" />-->
-
-    <!--</LinearLayout>-->

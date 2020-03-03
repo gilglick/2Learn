@@ -10,20 +10,19 @@ public class Student {
     private String phoneNumber;
     private String dateOfBirth;
     private String location;
-    private String description;
-    private List<Course> giveHelpList;
-    private List<Course> needHelpList;
+    private List<String> giveHelpList;
+    private List<String> needHelpList;
 
-    public Student(){
+    public Student() {
 
     }
+
     public Student(String fullName, String email, String location, String dateOfBirth, String phoneNumber) {
         this.fullName = fullName;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.location = location;
-        this.description = "";
         giveHelpList = new ArrayList<>();
         needHelpList = new ArrayList<>();
     }
@@ -44,45 +43,37 @@ public class Student {
         return phoneNumber;
     }
 
-    public String getDescription() {
-        return description;
-    }
 
-    public List<Course> getGiveHelpList() {
+    public List<String> getGiveHelpList() {
         return giveHelpList;
     }
 
-    public List<Course> getNeedHelpList() {
+    public List<String> getNeedHelpList() {
         return needHelpList;
+    }
+
+    public void setGiveHelpList(List<String> giveHelpList) {
+        this.giveHelpList = giveHelpList;
+    }
+
+    public void setNeedHelpList(List<String> needHelpList) {
+        this.needHelpList = needHelpList;
     }
 
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
-    public void setGiveHelpList(List<Course> giveHelpList) {
-        this.giveHelpList = giveHelpList;
-    }
 
     public void setLocation(String location) {
         this.location = location;
     }
 
-    public void setNeedHelpList(List<Course> needHelpList) {
-        this.needHelpList = needHelpList;
-    }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
@@ -122,5 +113,19 @@ public class Student {
                 + "student description: " + "\n";
     }
 
+    public String userNeedHelpListStringFormat() {
+        StringBuilder sb = new StringBuilder();
+        for (String course : needHelpList) {
+            sb.append(course).append("\n");
+        }
+        return sb.toString();
+    }
 
+    public String userOfferListStringFormat() {
+        StringBuilder sb = new StringBuilder();
+        for (String course : giveHelpList) {
+            sb.append(course).append("\n");
+        }
+        return sb.toString();
+    }
 }

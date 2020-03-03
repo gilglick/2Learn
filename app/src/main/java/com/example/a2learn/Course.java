@@ -1,49 +1,36 @@
 package com.example.a2learn;
 
 
-public class Course implements Comparable<Course> {
+import java.io.Serializable;
+
+public class Course implements Serializable {
 
     private String courseName;
     private String courseNumber;
 
-    public Course(Builder builder) {
-        this.courseName = builder.courseName;
-        this.courseNumber = builder.courseNumber;
+    public Course() {
+
     }
 
-    @Override
-    public int compareTo(Course o) {
-
-        return 0;
-    }
-
-    public static class Builder {
-        private String courseName;
-        private String courseNumber;
-
-        public Builder setCourseName(String courseName) {
-            this.courseName = courseName;
-            return this;
-        }
-
-        public Builder setCourseNumber(String courseNumber) {
-            this.courseNumber = courseNumber;
-            return this;
-        }
-
-
-        public Course build() {
-            return new Course(this);
-        }
+    public Course(String courseName, String courseNumber) {
+        this.courseName = courseName;
+        this.courseNumber = courseNumber;
     }
 
     public String getCourseName() {
         return courseName;
     }
 
-
     public String getCourseNumber() {
         return courseNumber;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public void setCourseNumber(String courseNumber) {
+        this.courseNumber = courseNumber;
     }
 
     @Override

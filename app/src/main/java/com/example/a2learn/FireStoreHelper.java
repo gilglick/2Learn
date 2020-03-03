@@ -15,16 +15,15 @@ public final class FireStoreHelper {
     static final String LOCATION = "location";
     static final String PHONE_NUMBER = "phoneNumber";
     static final String DATE_OF_BIRTH = "dateOfBirth";
-    static final String GIVE_HELP_LIST = "giveHelpCourse";
-    static final String NEED_HELP_LIST = "needHelpCourse";
-    static final String DESCRIPTION = "description";
+    static final String GIVE_HELP_LIST = "giveHelpList";
+    static final String NEED_HELP_LIST = "needHelpList";
     static final String PROFILE_STORAGE = "profileImages";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference collectionReference = db.collection("profiles");
     private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
 
-    public  CollectionReference getCollectionReference() {
+    public CollectionReference getCollectionReference() {
         return collectionReference;
     }
 
@@ -52,8 +51,8 @@ public final class FireStoreHelper {
         collectionReference.document(docId).update(field, FieldValue.arrayUnion(newValue));
     }
 
-    public void writeImageToStorage(){
-
+    public void removeListField(String docId, String field, String newValue) {
+        collectionReference.document(docId).update(field, FieldValue.arrayRemove(newValue));
     }
 
 
