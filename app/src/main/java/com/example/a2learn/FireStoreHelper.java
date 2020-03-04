@@ -9,6 +9,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.List;
+
+// change singleton - from aviv
 public final class FireStoreHelper {
     private static final String TAG = "FireStoreHelper";
     static final String FULL_NAME = "fullName";
@@ -55,6 +58,13 @@ public final class FireStoreHelper {
         collectionReference.document(docId).update(field, FieldValue.arrayRemove(newValue));
     }
 
+    public void getAllStudents(FireStoreHelperCallback<List<Student>> callback){
+        //Logic ve balagan
+        //->result-> callback.onFinish(result);
+    }
 
+    public interface FireStoreHelperCallback<T>{
+        void onFinish(T result);
+    }
 }
 
