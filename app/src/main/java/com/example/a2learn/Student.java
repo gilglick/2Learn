@@ -10,6 +10,7 @@ public class Student {
     private String phoneNumber;
     private String dateOfBirth;
     private String location;
+    private String uri;
     private List<String> giveHelpList;
     private List<String> needHelpList;
 
@@ -23,6 +24,7 @@ public class Student {
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
         this.location = location;
+        this.uri = "";
         giveHelpList = new ArrayList<>();
         needHelpList = new ArrayList<>();
     }
@@ -127,5 +129,13 @@ public class Student {
             sb.append(course).append("\n");
         }
         return sb.toString();
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public String getUri() {
+        return uri;
     }
 }

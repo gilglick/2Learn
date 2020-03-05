@@ -28,8 +28,8 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.swipecard_activity, container, false);
         SwipeFlingAdapterView flingContainer = view.findViewById(R.id.frame);
         rowItems = new ArrayList<>();
-        Card item = new Card(new Student("aviv","aviv","aviv","aviv","aviv"));
-        rowItems.add(item);
+//        Card item = new Card(new Student("aviv", "aviv", "aviv", "aviv", "aviv"));
+//        rowItems.add(item);
 
         arrayAdapter = new CardArrayAdapter(getActivity(), R.layout.item, rowItems);
         flingContainer.setAdapter(arrayAdapter);
@@ -57,15 +57,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 // Ask for more data here
-                List<String> askHelp = new ArrayList<>();
-                askHelp.add("Aviv");
-                List<String> offerHelp = new ArrayList<>();
-                offerHelp.add("Aviv");
-
-                Card item = new Card(new Student("aviv","aviv","aviv","aviv","aviv"));
-                item.getStudent().setNeedHelpList(askHelp);
-                item.getStudent().setGiveHelpList(offerHelp);
-                rowItems.add(item);
+//                List<String> askHelp = new ArrayList<>();
+//                askHelp.add("Aviv");
+//                List<String> offerHelp = new ArrayList<>();
+//                offerHelp.add("Aviv");
+//
+//                Card item = new Card(new Student("aviv", "aviv", "aviv", "aviv", "aviv"));
+//                item.getStudent().setNeedHelpList(askHelp);
+//                item.getStudent().setGiveHelpList(offerHelp);
+//                rowItems.add(item);
                 arrayAdapter.notifyDataSetChanged();
                 Log.d("LIST", "notified");
             }
@@ -78,12 +78,12 @@ public class HomeFragment extends Fragment {
 
         // Optionally add an OnItemClickListener
         flingContainer.setOnItemClickListener((itemPosition, dataObject) -> Toast.makeText(getActivity(), "Clicked!", Toast.LENGTH_SHORT).show());
-FireStoreHelper fireStoreHelper = new FireStoreHelper();
-fireStoreHelper.getAllStudents((result) -> {
-    result.forEach(student->rowItems.add(new Card(student)));
-    arrayAdapter.clear();
-    arrayAdapter.notifyDataSetChanged();
-});
+        FireStoreHelper fireStoreHelper = new FireStoreHelper();
+        fireStoreHelper.getAllStudents((result) -> {
+            result.forEach(student -> rowItems.add(new Card(student)));
+            arrayAdapter.notifyDataSetChanged();
+        });
+
         return view;
     }
 

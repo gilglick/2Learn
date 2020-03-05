@@ -28,16 +28,25 @@ import androidx.fragment.app.Fragment;
 
 import com.example.a2learn.com.exmaple.a2learn.utility.CircleTransform;
 import com.example.a2learn.com.exmaple.a2learn.utility.CompressImageHelper;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
     private FireStoreHelper fireStoreHelper = new FireStoreHelper();
-    private StorageReference ref = fireStoreHelper.getmStorageRef().child(FireStoreHelper.PROFILE_STORAGE);
+    private StorageReference storageReference = FirebaseStorage.getInstance().getReference(FireStoreHelper.PROFILE_STORAGE);
+
     private Student student;
+
     private Button editButton;
     private TextView userEmail;
     private EditText userName;
@@ -54,7 +63,6 @@ public class ProfileFragment extends Fragment {
 
     ProfileFragment(Student student) {
         this.student = student;
-
     }
 
     @Nullable
@@ -123,15 +131,13 @@ public class ProfileFragment extends Fragment {
         builder.setTitle("Choose your profile picture");
         builder.setItems(options, (dialog, item) -> {
             if (options[item].equals("Take Photo")) {
-                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                takePicture.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                //Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
             } else if (options[item].equals("Choose from Gallery")) {
                 Intent gallery = new Intent();
                 gallery.setType("image/*");
                 gallery.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(gallery, "Sellect Picture"), PICK_IMAGE_GALLERY);
+                startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_IMAGE_GALLERY);
             } else if (options[item].equals("Cancel")) {
                 dialog.dismiss();
             }
@@ -147,20 +153,20 @@ public class ProfileFragment extends Fragment {
             switch (requestCode) {
                 case PICK_IMAGE_GALLERY:
                     imageUri = data.getData();
-                    Toast.makeText(getActivity(), "from camera", Toast.LENGTH_SHORT).show();
-                    updateUserImageInStorage();
-                    getUserImageFromStorage();
+                    Picasso.get().load(imageUri).transform(new CircleTransform()).into(userImage);
+                    writeToDatabase();
                     break;
                 case PICK_IMAGE_CAMERA:
-//                    imageUri = data.getData();
-//                    Picasso.get().load(imageUri).transform(new CircleTransform()).into(userImage);
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    if (photo != null)
+                        Picasso.get().load(getImageUri(photo)).transform(new CircleTransform()).into(userImage);
                     break;
             }
         }
     }
 
     private void initializeUserProfile() {
-        getUserImageFromStorage();
+        getImageFromDatabase();
         userName.setText(student.getFullName());
         userEmail.setText(student.getEmail());
         userLocation.setText(student.getLocation());
@@ -169,6 +175,10 @@ public class ProfileFragment extends Fragment {
         userOfferHelpTextView.setText(student.userOfferListStringFormat());
         userNeedHelpTextView.setText(student.userNeedHelpListStringFormat());
 
+    }
+
+    private void updateUserUriField(String uri) {
+        fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.IMAGE_URI, uri);
     }
 
     private void updateUserField() {
@@ -191,30 +201,47 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.P)
-    private void updateUserImageInStorage() {
-        StorageReference reference = ref.child(student.getEmail());
-        byte[] byteStream = CompressImageHelper.compressImage(getActivity(), imageUri);
-        if (byteStream != null) {
-            UploadTask uploadTask = reference.putBytes(byteStream);
-            uploadTask.addOnSuccessListener(taskSnapshot -> Toast.makeText(getActivity(), "Uploaded Failed", Toast.LENGTH_SHORT).show())
-                    .addOnFailureListener(exception -> Toast.makeText(getActivity(), "Uploaded Failed", Toast.LENGTH_SHORT).show());
-        }
+    private void writeToDatabase() {
+        storageReference = storageReference.child((student.getEmail()));
+        storageReference.putFile(imageUri).continueWithTask(task -> {
+            if (!task.isSuccessful()) {
+                Toast.makeText(getActivity(), "Upload failed", Toast.LENGTH_SHORT).show();
+            }
+            return storageReference.getDownloadUrl();
+        }).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Uri downloadUri = task.getResult();
+                if (downloadUri != null) {
+                    student.setUri(downloadUri.toString());
+                    updateUserUriField(downloadUri.toString());
+                }
+            }
+        });
     }
 
-    private void getUserImageFromStorage() {
-        StorageReference reference = ref.child(student.getEmail());
-        reference.getDownloadUrl().
-                addOnSuccessListener(uri -> Picasso.get().load(uri).
-                transform(new CircleTransform()).into(userImage))
-                .addOnFailureListener(e -> Toast.makeText(getActivity(), "Falied get the image", Toast.LENGTH_SHORT).show());
+    private void getImageFromDatabase() {
+        storageReference = storageReference.child((student.getEmail()));
+        storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri uri = task.getResult();
+                    Picasso.get().load(uri).transform(new CircleTransform()).into(userImage);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "Download image failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        //updateUserField();
-
+    public Uri getImageUri(Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 }
 
