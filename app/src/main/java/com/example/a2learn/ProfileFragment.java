@@ -9,13 +9,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,47 +22,41 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.a2learn.com.exmaple.a2learn.utility.CircleTransform;
-import com.example.a2learn.com.exmaple.a2learn.utility.CompressImageHelper;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
+
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements ProfileEditDialog.UpdateCallback {
     private FireStoreHelper fireStoreHelper = new FireStoreHelper();
     private StorageReference storageReference = FirebaseStorage.getInstance().getReference(FireStoreHelper.PROFILE_STORAGE);
 
     private Student student;
-
-    private Button editButton;
     private TextView userEmail;
-    private EditText userName;
-    private EditText userLocation;
-    private EditText userPhoneNumber;
-    private EditText userDate;
+    private TextView userName;
+    private TextView userLocation;
+    private TextView userPhoneNumber;
+    private TextView userDate;
     private TextView userNeedHelpTextView;
     private TextView userOfferHelpTextView;
     private ImageView userImage;
-    private boolean editMode = false;
     private static Uri imageUri;
     private static final int PICK_IMAGE_GALLERY = 1;
     private static final int PICK_IMAGE_CAMERA = 0;
+
 
     ProfileFragment(Student student) {
         this.student = student;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -72,7 +64,7 @@ public class ProfileFragment extends Fragment {
         userImage = view.findViewById(R.id.userImage);
         Button cameraButton = view.findViewById(R.id.cameraButton);
         userEmail = view.findViewById(R.id.emailTextView);
-        editButton = view.findViewById(R.id.editButton);
+        CardView editButton = view.findViewById(R.id.editButton);
         userName = view.findViewById(R.id.userNameProfile);
         userLocation = view.findViewById(R.id.userLocationProfile);
         userPhoneNumber = view.findViewById(R.id.phoneNumberProfile);
@@ -82,46 +74,34 @@ public class ProfileFragment extends Fragment {
         ImageView facebookImage = view.findViewById(R.id.facebook);
         ImageView twitterImage = view.findViewById(R.id.twitter);
         ImageView linkedin = view.findViewById(R.id.linkedin);
-        initializeUserProfile();
-        setEditPermissions(false);
+        ProfileEditDialog profileEditDialog = new ProfileEditDialog(Objects.requireNonNull(getActivity()));
+        initializeProfile();
         editButton.setOnClickListener(v -> {
-            if (editMode) {
-                updateUserField();
-            }
-            editMode = !editMode;
-            setEditPermissions(editMode);
+            profileEditDialog.setCallback(this);
+            profileEditDialog.show();
         });
-
         cameraButton.setOnClickListener(v -> selectImage(getContext()));
-        facebookImage.setOnClickListener(v -> Toast.makeText(getActivity(), "Facebook", Toast.LENGTH_SHORT).show());
-        twitterImage.setOnClickListener(v -> Toast.makeText(getActivity(), "Twitter", Toast.LENGTH_SHORT).show());
-        linkedin.setOnClickListener(v -> Toast.makeText(getActivity(), "Linkedin", Toast.LENGTH_SHORT).show());
-        return view;
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void setEditPermissions(boolean editMode) {
-        editButton.setBackgroundResource(editMode ? R.drawable.edit_mode : R.drawable.edit);
-        userName.setEnabled(editMode);
-        userLocation.setEnabled(editMode);
-        userPhoneNumber.setEnabled(editMode);
-        userDate.setEnabled(editMode);
-        userDate.setCompoundDrawablesWithIntrinsicBounds(0, 0, editMode ? R.drawable.ic_date_range_black_24dp : 0, 0);
-        userDate.setOnTouchListener((v, event) ->
-        {
-            final int DRAWABLE_RIGHT = 2;
-            if (event.getAction() == MotionEvent.ACTION_UP && userDate.getCompoundDrawables()[DRAWABLE_RIGHT] != null) {
-                if (event.getRawX() >= (userDate.getRight() - userDate.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                    DateDialog.createCalender(getActivity()).show();
-                    return true;
-                }
-            }
-            return false;
+        facebookImage.setOnClickListener(v -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com"));
+            startActivity(browserIntent);
         });
-        DateDialog.mDateSetListener = (datePicker, year, month, day) -> {
-            month = month + 1;
-            userDate.setText(DateDialog.dateFormat(year, month, day));
-        };
+        twitterImage.setOnClickListener(v -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.twitter.com"));
+            startActivity(browserIntent);
+        });
+        linkedin.setOnClickListener(v -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.linkedin.com"));
+            startActivity(browserIntent);
+        });
+        view.setOnTouchListener((v, event) -> {
+            InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Activity.INPUT_METHOD_SERVICE);
+            View view12 = getActivity().getCurrentFocus();
+            if (imm != null && view12 != null) {
+                imm.hideSoftInputFromWindow(view12.getWindowToken(), 0);
+            }
+            return true;
+        });
+        return view;
     }
 
 
@@ -157,15 +137,14 @@ public class ProfileFragment extends Fragment {
                     writeToDatabase();
                     break;
                 case PICK_IMAGE_CAMERA:
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    if (photo != null)
-                        Picasso.get().load(getImageUri(photo)).transform(new CircleTransform()).into(userImage);
+                    Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+                    userImage.setImageBitmap(photo);
                     break;
             }
         }
     }
 
-    private void initializeUserProfile() {
+    private void initializeProfile() {
         getImageFromDatabase();
         userName.setText(student.getFullName());
         userEmail.setText(student.getEmail());
@@ -181,25 +160,6 @@ public class ProfileFragment extends Fragment {
         fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.IMAGE_URI, uri);
     }
 
-    private void updateUserField() {
-        if (!userName.getText().toString().equals(student.getFullName())) {
-            student.setFullName(userName.getText().toString());
-            fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.FULL_NAME, userName.getText().toString());
-        }
-        if (!userLocation.getText().toString().equals(student.getLocation())) {
-            student.setLocation(userLocation.getText().toString());
-            fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.LOCATION, userLocation.getText().toString());
-        }
-        if (!userPhoneNumber.getText().toString().equals(student.getPhoneNumber())) {
-            student.setPhoneNumber(userPhoneNumber.getText().toString());
-            fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.PHONE_NUMBER, userPhoneNumber.getText().toString());
-        }
-        if (!userDate.getText().toString().equals(student.getDateOfBirth())) {
-            student.setDateOfBirth(userDate.getText().toString());
-            fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.DATE_OF_BIRTH, userDate.getText().toString());
-        }
-
-    }
 
     private void writeToDatabase() {
         storageReference = storageReference.child((student.getEmail()));
@@ -221,29 +181,40 @@ public class ProfileFragment extends Fragment {
 
     private void getImageFromDatabase() {
         storageReference = storageReference.child((student.getEmail()));
-        storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    Uri uri = task.getResult();
-                    Picasso.get().load(uri).transform(new CircleTransform()).into(userImage);
-                }
+        storageReference.getDownloadUrl().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Uri uri = task.getResult();
+                Picasso.get().load(uri).transform(new CircleTransform()).into(userImage);
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(), "Download image failed", Toast.LENGTH_SHORT).show();
-            }
-        });
+        }).addOnFailureListener(e -> Toast.makeText(getActivity(), "Download image failed", Toast.LENGTH_SHORT).show());
     }
 
-    public Uri getImageUri(Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
+    @Override
+    public void notifyProfileOnUpdate(int fieldToUpdate, String newValue) {
+        switch (fieldToUpdate) {
+            case Utility.USER_NAME_INDICATOR:
+                student.setFullName(userName.getText().toString());
+                fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.FULL_NAME, newValue);
+                userName.setText(newValue);
+                break;
+            case Utility.PHONE_NUMBER_INDICATOR:
+                student.setPhoneNumber(userPhoneNumber.getText().toString());
+                fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.PHONE_NUMBER, newValue);
+                userPhoneNumber.setText(newValue);
+                break;
+            case Utility.FACEBOOK_INDICATOR:
+                break;
+            case Utility.TWITTER_INDICATOR:
+                break;
+            case Utility.LINKEDIN_INDICATOR:
+                break;
+        }
+
+
     }
+
 }
+
 
 
 
