@@ -32,15 +32,35 @@ public final class Validation {
         return matcher.matches() && emailStr.trim().length() != 0;
     }
 
-    public static boolean isValidName(String name){
+    public static boolean isValidFacebookUrl(String facebookUrl) {
+        final Pattern VALID_FACEBOOK_URL = Pattern.compile("((http|https)://)?(www[.])?facebook.com/.+", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = VALID_FACEBOOK_URL.matcher(facebookUrl);
+        return matcher.matches() && facebookUrl.trim().length() != 0;
+    }
+
+    public static boolean isValidTwitterUrl(String twitterUrl) {
+        final Pattern VALID_FACEBOOK_URL = Pattern.compile("((http|https)://)?(www[.])?twitter.com/.+", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = VALID_FACEBOOK_URL.matcher(twitterUrl);
+        return matcher.matches() && twitterUrl.trim().length() != 0;
+    }
+
+    public static boolean isValidLinkedinkUrl(String linkedinUrl) {
+        final Pattern VALID_FACEBOOK_URL = Pattern.compile("((http|https)://)?(www[.])?linkedin.com/.+", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = VALID_FACEBOOK_URL.matcher(linkedinUrl);
+        return matcher.matches() && linkedinUrl.trim().length() != 0;
+    }
+
+    public static boolean isValidName(String name) {
         return !name.trim().matches("");
     }
 
-    public static boolean isValidDate(String date){
+    public static boolean isValidDate(String date) {
         return !date.trim().matches("");
     }
 
-
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber.trim().length() != 0;
+    }
 }
 
 

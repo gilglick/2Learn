@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         android:orientation="vertical">
 
 
@@ -43,7 +45,7 @@
 
         </FrameLayout>
 
-        <EditText
+        <TextView
             android:id="@+id/userNameProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,7 +73,7 @@
                 android:background="@drawable/pin"
                 android:contentDescription="@string/user_image_content" />
 
-            <EditText
+            <TextView
                 android:id="@+id/userLocationProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -212,7 +214,7 @@
                         android:textColor="@color/headings"
                         android:textSize="12sp" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/phoneNumberProfile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -246,14 +248,12 @@
                         android:textColor="@color/headings"
                         android:textSize="12sp" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/dateOfBirthProfile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:drawableEnd="@drawable/ic_date_range_black_24dp"
                         android:fontFamily="sans-serif-light"
-                        android:inputType="date"
                         android:text="@string/date_of_birth"
                         android:textColor="#000000"
                         android:textSize="14sp" />
@@ -326,15 +326,23 @@
                             android:layout_marginTop="15dp"
                             android:background="@color/grey" />
 
-                        <Button
+                        <androidx.cardview.widget.CardView
                             android:id="@+id/editButton"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:layout_gravity="end"
-                            android:layout_margin="9dp"
-                            android:background="@drawable/edit"
-                            android:contentDescription="@string/user_image_content"
-                            android:padding="3dp" />
+                            android:layout_marginStart="30dp"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            card_view:cardCornerRadius="4dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
+                                android:background="@drawable/edit" />
+                        </androidx.cardview.widget.CardView>
+
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

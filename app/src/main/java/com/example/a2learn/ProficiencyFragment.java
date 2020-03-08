@@ -1,9 +1,15 @@
 package com.example.a2learn;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.RadioButton;
@@ -14,10 +20,11 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class ProficiencyFragment extends Fragment {
     private FireStoreHelper fireStoreHelper = new FireStoreHelper();
@@ -25,10 +32,11 @@ public class ProficiencyFragment extends Fragment {
     private boolean giveHelpActive, needHelpActive;
     private String currentCourse;
 
-    public ProficiencyFragment(Student student) {
+    ProficiencyFragment(Student student) {
         this.student = student;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,16 +47,15 @@ public class ProficiencyFragment extends Fragment {
         CardView addCourse = view.findViewById(R.id.addCourseCard);
         CardView removeCourse = view.findViewById(R.id.removeCourseCard);
         String[] courses = Objects.requireNonNull(getActivity()).getResources().getStringArray(R.array.courses);
+        List<String> courseList = Arrays.asList(courses);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.course_item, R.id.custom_list_item, courses);
         coursesEditText.setAdapter(arrayAdapter);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         coursesEditText.setAdapter(arrayAdapter);
 
         coursesEditText.setOnItemClickListener((parent, view1, position, id) -> {
-            Toast.makeText(getActivity(),
-                    arrayAdapter.getItem(position),
-                    Toast.LENGTH_SHORT).show();
             currentCourse = arrayAdapter.getItem(position);
+
         });
 
         giveHelpRadioButton.setOnClickListener(v -> {
@@ -63,53 +70,70 @@ public class ProficiencyFragment extends Fragment {
 
         });
 
-        addCourse.setOnClickListener(v -> {
-            if (giveHelpActive) {
-                fireStoreHelper.getCollectionReference().document(student.getEmail()).get().addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        student = documentSnapshot.toObject(Student.class);
-                        if (student != null && student.getNeedHelpList() != null) {
-                            if (!student.getNeedHelpList().contains(currentCourse)) {
-                                student.getGiveHelpList().add(currentCourse);
-                                fireStoreHelper.updateListField(student.getEmail(), FireStoreHelper.GIVE_HELP_LIST, currentCourse);
-                                Toast.makeText(getActivity(), "Course" + currentCourse + " added successfully. ", Toast.LENGTH_SHORT).show();
+        addCourse.setOnClickListener(v -> fireStoreHelper.getCollectionReference().document(student.getEmail()).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                student = documentSnapshot.toObject(Student.class);
+                if (student != null && courseList.contains(currentCourse)) {
+                    if (giveHelpActive) {
+                        if (!student.getNeedHelpList().contains(currentCourse)) {
+                            student.getGiveHelpList().add(currentCourse);
+                            fireStoreHelper.updateListField(student.getEmail(), FireStoreHelper.GIVE_HELP_LIST, currentCourse);
+                            Toast.makeText(getActivity(), "Course: " + "\"" + currentCourse + "\"" + " added successfully.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getActivity(), "Sorry, you are already need help in " + "\"" + currentCourse + "\"" + " course.", Toast.LENGTH_LONG).show();
+                        }
+                    } else if (needHelpActive) {
+                        if (!student.getGiveHelpList().contains(currentCourse) && !student.getNeedHelpList().contains(currentCourse)) {
+                            student.getNeedHelpList().add(currentCourse);
+                            fireStoreHelper.updateListField(student.getEmail(), FireStoreHelper.NEED_HELP_LIST, currentCourse);
+                            Toast.makeText(getActivity(), "Course" + "\"" + currentCourse + "\"" + " added successfully.", Toast.LENGTH_LONG).show();
 
-                            } else {
-                                Toast.makeText(getActivity(), "Course" + currentCourse + "already exist in your need help list", Toast.LENGTH_SHORT).show();
-                            }
+                        } else {
+                            Toast.makeText(getActivity(), "Sorry, you are already giving help in " + "\"" + currentCourse + "\"" + " course.", Toast.LENGTH_LONG).show();
                         }
                     }
-                });
-            } else if (needHelpActive) {
-                fireStoreHelper.getCollectionReference().document(student.getEmail()).get().addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        student = documentSnapshot.toObject(Student.class);
-                        if (student != null && student.getNeedHelpList() != null) {
-                            if (!student.getGiveHelpList().contains(currentCourse)) {
-                                student.getNeedHelpList().add(currentCourse);
-                                fireStoreHelper.updateListField(student.getEmail(), FireStoreHelper.NEED_HELP_LIST, currentCourse);
-                                Toast.makeText(getActivity(), "Course" + currentCourse + " added successfully. ", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }));
 
-                            } else {
-                                Toast.makeText(getActivity(), "Course" + currentCourse + "already exist in your give help list", Toast.LENGTH_SHORT).show();
-                            }
+        removeCourse.setOnClickListener(v -> fireStoreHelper.getCollectionReference().document(student.getEmail()).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                student = documentSnapshot.toObject(Student.class);
+                if (student != null && courseList.contains(currentCourse)) {
+                    if (giveHelpActive) {
+                        if (!student.getGiveHelpList().contains(currentCourse)) {
+                            Toast.makeText(getActivity(), "Course not exists in your list.", Toast.LENGTH_LONG).show();
+                        } else {
+                            fireStoreHelper.removeListField(student.getEmail(), FireStoreHelper.GIVE_HELP_LIST, currentCourse);
+                            student.getGiveHelpList().remove(currentCourse);
+                            Toast.makeText(getActivity(), "Course: " + "\"" + currentCourse + "\"" + " remove successfully from your list.", Toast.LENGTH_LONG).show();
+                        }
+                    } else if (needHelpActive) {
+                        if (!student.getNeedHelpList().contains(currentCourse)) {
+                            Toast.makeText(getActivity(), "Sorry you don't need help in " + "\"" + currentCourse + "\"" + " course.", Toast.LENGTH_LONG).show();
+                        } else {
+                            fireStoreHelper.removeListField(student.getEmail(), FireStoreHelper.NEED_HELP_LIST, currentCourse);
+                            student.getNeedHelpList().remove(currentCourse);
+                            Toast.makeText(getActivity(), "Course: " + "\"" + currentCourse + "\"" + " remove successfully list.", Toast.LENGTH_LONG).show();
                         }
                     }
-                });
+                }
             }
-        });
-        removeCourse.setOnClickListener(v -> {
-            if (giveHelpActive) {
-                fireStoreHelper.removeListField(student.getEmail(), FireStoreHelper.GIVE_HELP_LIST, currentCourse);
-                Toast.makeText(getActivity(), "Course: " + currentCourse + " remove successfully from your helping list", Toast.LENGTH_LONG).show();
-            } else if (needHelpActive) {
-                fireStoreHelper.removeListField(student.getEmail(), FireStoreHelper.NEED_HELP_LIST, currentCourse);
-                Toast.makeText(getActivity(), "Course: " + currentCourse + " remove successfully from your giving help list", Toast.LENGTH_LONG).show();
+        }));
+
+        view.setOnTouchListener((v, event) -> {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            View view12 = getActivity().getCurrentFocus();
+            if (imm != null && view12 != null) {
+                imm.hideSoftInputFromWindow(view12.getWindowToken(), 0);
             }
+            return true;
         });
 
         return view;
+
     }
 
 
 }
+

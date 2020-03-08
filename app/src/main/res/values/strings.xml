@@ -57,5 +57,17 @@
         <item>Algorithm</item>
         <item>Computer design</item>
     </string-array>
+
+    <string name="edit_user_name">User name</string>
+    <string name="edit_phone_number">Phone number</string>
+    <string name="edit_facebook_url">Facebook</string>
+    <string name="edit_twitter_url">Twitter</string>
+    <string name="edit_linkedin_url">Linkedin</string>
+    <string name="setting">Edit Details</string>
+    <string name="hint_facebook">https://www.facebook.com</string>
+    <string name="hint_twitter">https://www.twitter.com/</string>
+    <string name="hint_linkedin">https://www.linkedin.com</string>
+
+
 </resources>
 
