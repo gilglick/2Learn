@@ -38,43 +38,17 @@ public class CardArrayAdapter extends android.widget.ArrayAdapter<Card> {
         }
         TextView name = convertView.findViewById(R.id.name);
         TextView askForHelp = convertView.findViewById(R.id.AskHelpTextView);
-        TextView offerForHelp= convertView.findViewById(R.id.OfferHelpTextView);
+        TextView offerForHelp = convertView.findViewById(R.id.OfferHelpTextView);
         ImageView image = convertView.findViewById(R.id.image);
-        if(card_item != null) {
+        if (card_item != null) {
             name.setText(card_item.getFullName());
             askForHelp.setText(card_item.getUserNeedHelpListStringFormat());
             offerForHelp.setText(card_item.getUserOfferListStringFormat());
             Picasso.get().load(card_item.getStudent().getUri()).into(image);
-            //image.setImageResource(R.drawable.img);
-//            downloadFromDatabase(new FireStoreHelperCallback<Uri>() {
-//
-//                @Override
-//                public void onFinish(Uri result) {
-//                    Picasso.get().load(result.toString()).into(image);
-//                    Toast.makeText(getContext(), "" +result.getPath(), Toast.LENGTH_SHORT).show();
-//
-//                }
-//            },card_item.getEmail(),image);
-
         }
 
         return convertView;
     }
 
- //   public void downloadFromDatabase(FireStoreHelperCallback<Uri> callback, String email, ImageView image) {
-//        Log.i(TAG, "downloadFromDatabase: " + email);
-//        FireStoreHelper fireStoreHelper = new FireStoreHelper();
-//        StorageReference storageReference = fireStoreHelper.getmStorageRef().child(FireStoreHelper.PROFILE_STORAGE);
-//        storageReference.child(email).getDownloadUrl().addOnCompleteListener(task -> {
-//            if (task.isSuccessful() && task.getResult() != null) {
-//                Uri uri = task.getResult();
-//                callback.onFinish(uri);
-//            }
-//        });
-//    }
-//
-//    public interface FireStoreHelperCallback<T>{
-//        void onFinish(T result);
-//    }
 
 }

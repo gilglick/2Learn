@@ -21,6 +21,7 @@ import java.util.List;
 // change singleton - from aviv
 public final class FireStoreHelper {
     private List<Student> studentList = new ArrayList<>();
+    private List<Student> watchedStudentList = new ArrayList<>();
     private static final String TAG = "FireStoreHelper";
     static final String FULL_NAME = "fullName";
     static final String LOCATION = "location";
@@ -76,7 +77,6 @@ public final class FireStoreHelper {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Student student = document.toObject(Student.class);
                             studentList.add(student);
-                            //readStudentImageFromDB(student.getEmail());
                         }
                         callback.onFinish(studentList);
                         for(Student student : studentList){

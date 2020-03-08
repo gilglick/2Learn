@@ -41,6 +41,10 @@
     <string name="my_match">Log out</string>
     <string name="israel_kfar_saba">Israel - kfar saba</string>
 
+    <!-- Home String   -->
+    <string name="refresh">Refresh</string>
+    <string name="come_back_in_another_time">I\'\ll be back in another time</string>
+
 
     <string-array name="courses">
 

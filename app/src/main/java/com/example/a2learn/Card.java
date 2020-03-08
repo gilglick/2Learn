@@ -1,5 +1,7 @@
 package com.example.a2learn;
 
+import android.widget.ImageView;
+
 public class Card {
     private Student student;
 

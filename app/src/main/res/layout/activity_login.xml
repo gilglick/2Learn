@@ -90,20 +90,11 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="5dp"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"
-        android:background="@drawable/login_gradient_white"
+        android:src="@drawable/application_logo"
         android:padding="5dp"
-        android:layout_width="70dp"
-        android:layout_height="70dp" />
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
 
-    <TextView
-        android:textSize="20sp"
-        android:textColor="#FFF"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/imageVIew"
-        android:text="@string/app_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <TextView
         android:textSize="12sp"
