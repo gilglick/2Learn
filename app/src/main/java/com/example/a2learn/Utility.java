@@ -11,18 +11,22 @@ public final class Utility {
 
     public static final String FACEBOOK_URL_FORMAT = "Invalid facebook site";
 
-    public static final String  TWITTER_URL_FORMAT = "Invalid twitter site";
+    public static final String TWITTER_URL_FORMAT = "Invalid twitter site";
 
     public static final String LINKEDIN_URL_FORMAT = "Invalid linkedin site";
 
-    public static final int USER_NAME_INDICATOR = 0;
+    public static final String FACEBOOK_URL = "https://www.facebook.com";
 
-    public static final int PHONE_NUMBER_INDICATOR = 1;
+    public static final String TWITTER_URL = "https://www.twitter.com";
 
-    public static final int FACEBOOK_INDICATOR = 2;
+    public static final String LINKEDIN_URL = "https://www.linkedin.com";
 
-    public static final int TWITTER_INDICATOR = 3;
+    public static final int PHONE_NUMBER_INDICATOR = 0;
 
-    public static final int LINKEDIN_INDICATOR = 4;
+    public static final int FACEBOOK_INDICATOR = 1;
+
+    public static final int TWITTER_INDICATOR = 2;
+
+    public static final int LINKEDIN_INDICATOR = 3;
 
 }

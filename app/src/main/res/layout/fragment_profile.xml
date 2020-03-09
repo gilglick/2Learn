@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -15,7 +15,7 @@
 
         <FrameLayout
             android:id="@+id/profileImageContainer"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
@@ -34,7 +34,7 @@
                 android:id="@+id/cameraButton"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center|right"
+                android:layout_gravity="start|center"
                 android:background="@drawable/camera"
                 android:shadowColor="#A8A8A8"
                 android:shadowDx="0"
@@ -43,6 +43,23 @@
                 android:textColor="#FFFFFF"
                 android:textSize="30sp" />
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/editButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="end"
+                android:layout_margin="5dp"
+                android:clickable="true"
+                card_view:cardBackgroundColor="@android:color/transparent"
+                android:foreground="?android:attr/selectableItemBackground"
+                card_view:cardCornerRadius="4dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_settings" />
+            </androidx.cardview.widget.CardView>
         </FrameLayout>
 
         <TextView
@@ -326,22 +343,6 @@
                             android:layout_marginTop="15dp"
                             android:background="@color/grey" />
 
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/editButton"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="end"
-                            android:layout_marginStart="30dp"
-                            android:clickable="true"
-                            android:foreground="?android:attr/selectableItemBackground"
-                            card_view:cardCornerRadius="4dp">
-
-                            <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_gravity="center"
-                                android:background="@drawable/edit" />
-                        </androidx.cardview.widget.CardView>
 
                     </LinearLayout>
                 </LinearLayout>

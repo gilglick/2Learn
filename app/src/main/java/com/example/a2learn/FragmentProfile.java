@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,19 +27,18 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.a2learn.com.exmaple.a2learn.utility.CircleTransform;
-
-
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
-public class ProfileFragment extends Fragment implements ProfileEditDialog.UpdateCallback {
-    private FireStoreHelper fireStoreHelper = new FireStoreHelper();
-    private StorageReference storageReference = FirebaseStorage.getInstance().getReference(FireStoreHelper.PROFILE_STORAGE);
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
+public class FragmentProfile extends Fragment implements DialogSetting.UpdateCallback {
+    private FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
     private Student student;
+    private SocialMedia socialMedia;
+    private StudentSetting studentSetting;
     private TextView userEmail;
     private TextView userName;
     private TextView userLocation;
@@ -47,13 +47,14 @@ public class ProfileFragment extends Fragment implements ProfileEditDialog.Updat
     private TextView userNeedHelpTextView;
     private TextView userOfferHelpTextView;
     private ImageView userImage;
-    private static Uri imageUri;
+    private Uri imageUri;
+    private DialogSetting dialogSetting;
     private static final int PICK_IMAGE_GALLERY = 1;
     private static final int PICK_IMAGE_CAMERA = 0;
 
-
-    ProfileFragment(Student student) {
+    FragmentProfile(Student student) {
         this.student = student;
+        this.studentSetting = new StudentSetting();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -74,25 +75,23 @@ public class ProfileFragment extends Fragment implements ProfileEditDialog.Updat
         ImageView facebookImage = view.findViewById(R.id.facebook);
         ImageView twitterImage = view.findViewById(R.id.twitter);
         ImageView linkedin = view.findViewById(R.id.linkedin);
-        ProfileEditDialog profileEditDialog = new ProfileEditDialog(Objects.requireNonNull(getActivity()));
+
+
         initializeProfile();
-        editButton.setOnClickListener(v -> {
-            profileEditDialog.setCallback(this);
-            profileEditDialog.show();
-        });
+      //  DialogSetting dialogSetting;//= new DialogSetting(Objects.requireNonNull(getActivity()),studentSetting);
         cameraButton.setOnClickListener(v -> selectImage(getContext()));
-        facebookImage.setOnClickListener(v -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com"));
-            startActivity(browserIntent);
+        facebookImage.setOnClickListener(v -> openWebPage(socialMedia.getFacebook()));
+        twitterImage.setOnClickListener(v -> openWebPage(socialMedia.getTwitter()));
+        linkedin.setOnClickListener(v -> openWebPage(socialMedia.getLinkedin()));
+
+        editButton.setOnClickListener(v -> {
+            if(dialogSetting == null){
+                dialogSetting = new DialogSetting(Objects.requireNonNull(getActivity()), studentSetting);
+            }
+            dialogSetting.setCallback(this);
+            dialogSetting.show();
         });
-        twitterImage.setOnClickListener(v -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.twitter.com"));
-            startActivity(browserIntent);
-        });
-        linkedin.setOnClickListener(v -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.linkedin.com"));
-            startActivity(browserIntent);
-        });
+
         view.setOnTouchListener((v, event) -> {
             InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Activity.INPUT_METHOD_SERVICE);
             View view12 = getActivity().getCurrentFocus();
@@ -146,6 +145,8 @@ public class ProfileFragment extends Fragment implements ProfileEditDialog.Updat
 
     private void initializeProfile() {
         getImageFromDatabase();
+        readSocialMediaFromStorage();
+        readUserSettingFromStorage();
         userName.setText(student.getFullName());
         userEmail.setText(student.getEmail());
         userLocation.setText(student.getLocation());
@@ -153,16 +154,11 @@ public class ProfileFragment extends Fragment implements ProfileEditDialog.Updat
         userDate.setText(student.getDateOfBirth());
         userOfferHelpTextView.setText(student.userOfferListStringFormat());
         userNeedHelpTextView.setText(student.userNeedHelpListStringFormat());
-
-    }
-
-    private void updateUserUriField(String uri) {
-        fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.IMAGE_URI, uri);
     }
 
 
     private void writeToDatabase() {
-        storageReference = storageReference.child((student.getEmail()));
+        StorageReference storageReference = fireStoreDatabase.getStorageDatabase().getReference(FireStoreDatabase.PROFILE_IMAGES_STORAGE).child((student.getEmail()));
         storageReference.putFile(imageUri).continueWithTask(task -> {
             if (!task.isSuccessful()) {
                 Toast.makeText(getActivity(), "Upload failed", Toast.LENGTH_SHORT).show();
@@ -173,14 +169,14 @@ public class ProfileFragment extends Fragment implements ProfileEditDialog.Updat
                 Uri downloadUri = task.getResult();
                 if (downloadUri != null) {
                     student.setUri(downloadUri.toString());
-                    updateUserUriField(downloadUri.toString());
+                    fireStoreDatabase.updateField(student.getEmail(), FireStoreDatabase.STUDENT_STORAGE, FireStoreDatabase.IMAGE_URI, downloadUri.toString());
                 }
             }
         });
     }
 
     private void getImageFromDatabase() {
-        storageReference = storageReference.child((student.getEmail()));
+        StorageReference storageReference = fireStoreDatabase.getStorageDatabase().getReference(FireStoreDatabase.PROFILE_IMAGES_STORAGE).child((student.getEmail()));
         storageReference.getDownloadUrl().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Uri uri = task.getResult();
@@ -189,29 +185,86 @@ public class ProfileFragment extends Fragment implements ProfileEditDialog.Updat
         }).addOnFailureListener(e -> Toast.makeText(getActivity(), "Download image failed", Toast.LENGTH_SHORT).show());
     }
 
+    private void readSocialMediaFromStorage() {
+        fireStoreDatabase.getDatabase()
+                .collection(FireStoreDatabase.SOCIAL_MEDIA_STORAGE)
+                .document(student.getEmail())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        socialMedia = documentSnapshot.toObject(SocialMedia.class);
+                    } else {
+                        socialMedia = new SocialMedia(Utility.FACEBOOK_URL, Utility.TWITTER_URL, Utility.LINKEDIN_URL);
+                        fireStoreDatabase.writeSocialMediaSetting(student.getEmail(), socialMedia);
+                    }
+                }).addOnFailureListener(e -> Log.d(TAG, "onFailure: "));
+    }
+
+
+    private void readUserSettingFromStorage() {
+        fireStoreDatabase.getDatabase()
+                .collection(FireStoreDatabase.SETTING_STORAGE)
+                .document(student.getEmail())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        studentSetting = documentSnapshot.toObject(StudentSetting.class);
+
+                    } else {
+                        studentSetting = new StudentSetting();
+                        fireStoreDatabase.writeUserSetting(student.getEmail(), studentSetting);
+                    }
+                }).addOnFailureListener(e -> Log.d(TAG, "onFailure: "));
+    }
+
+
+    private void openWebPage(String url) {
+
+        Uri webPage = Uri.parse(url);
+
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            webPage = Uri.parse("http://" + url);
+        }
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, webPage);
+        startActivity(browserIntent);
+
+    }
+
     @Override
     public void notifyProfileOnUpdate(int fieldToUpdate, String newValue) {
         switch (fieldToUpdate) {
-            case Utility.USER_NAME_INDICATOR:
-                student.setFullName(userName.getText().toString());
-                fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.FULL_NAME, newValue);
-                userName.setText(newValue);
-                break;
             case Utility.PHONE_NUMBER_INDICATOR:
                 student.setPhoneNumber(userPhoneNumber.getText().toString());
-                fireStoreHelper.updateField(student.getEmail(), FireStoreHelper.PHONE_NUMBER, newValue);
+                fireStoreDatabase.updateField(student.getEmail(), FireStoreDatabase.STUDENT_STORAGE, FireStoreDatabase.PHONE_NUMBER, newValue);
                 userPhoneNumber.setText(newValue);
                 break;
             case Utility.FACEBOOK_INDICATOR:
+                fireStoreDatabase.updateField(student.getEmail(), FireStoreDatabase.SOCIAL_MEDIA_STORAGE, FireStoreDatabase.FACEBOOK, newValue);
+                socialMedia.setFacebook(newValue);
                 break;
             case Utility.TWITTER_INDICATOR:
+                fireStoreDatabase.updateField(student.getEmail(), FireStoreDatabase.SOCIAL_MEDIA_STORAGE, FireStoreDatabase.TWITTER, newValue);
+                socialMedia.setTwitter(newValue);
                 break;
             case Utility.LINKEDIN_INDICATOR:
+                fireStoreDatabase.updateField(student.getEmail(), FireStoreDatabase.SOCIAL_MEDIA_STORAGE, FireStoreDatabase.LINKEDIN, newValue);
+                socialMedia.setLinkedin(newValue);
                 break;
         }
 
 
     }
+
+    @Override
+    public void notifyOnUserPreferenceChanged(String field, boolean checked) {
+        fireStoreDatabase.getDatabase()
+                .collection(FireStoreDatabase.SETTING_STORAGE)
+                .document(student.getEmail())
+                .update(field, checked)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "onSuccess: field update successfully. "))
+                .addOnFailureListener(e -> Log.d(TAG, "onFailure: failed to change the field. "));
+    }
+
 
 }
 

@@ -8,7 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import java.util.Calendar;
 import java.util.Objects;
 
-public final class DateDialog {
+public final class DialogDate {
     public static DatePickerDialog.OnDateSetListener mDateSetListener;
 
     public static String dateFormat(int year, int month, int day) {

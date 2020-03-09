@@ -67,6 +67,11 @@
     <string name="hint_facebook">https://www.facebook.com</string>
     <string name="hint_twitter">https://www.twitter.com/</string>
     <string name="hint_linkedin">https://www.linkedin.com</string>
+    <string name="display_your_phone_number">Display your phone number</string>
+    <string name="display_your_email">Display your Email</string>
+    <string name="display_your_date_of_birth">Display your date of birth</string>
+    <string name="visible_to_people_who_view_your_profile">Visible to people who view your profile</string>
+    <string name="edit_your_profile">Edit your profile</string>
 
 
 </resources>
