@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
-    android:layout_height="500dp"
+    android:layout_width="380dp"
+    android:layout_height="550dp"
     android:layout_gravity="center"
     android:background="@drawable/rounded_dialog_bg"
     android:orientation="vertical">
@@ -11,50 +11,90 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gradStart">
+        android:background="@color/colorPrimary">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:drawableEnd="@drawable/ic_edit_black_24dp"
             android:text="@string/setting"
             android:textSize="20sp"
             tools:ignore="PrivateResource" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/userNameLayout"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
+        android:layout_margin="5dp"
+        android:text="@string/visible_to_people_who_view_your_profile"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/edit_user_name" />
-
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/userNameDialogEditText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:enabled="false"
-                android:inputType="text" />
+            <CheckBox
+                android:id="@+id/emailCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-            <Switch
-                android:id="@+id/userNameDialogSwitch"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.1" />
+                android:text="@string/display_your_email" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/phoneNumberCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/display_your_phone_number" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/dateOfBirthCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/display_your_date_of_birth" />
         </LinearLayout>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/grey" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="@string/edit_your_profile"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:id="@+id/phoneNumberLayout"
@@ -79,7 +119,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:enabled="false"
-                android:inputType="phone" />
+                android:inputType="phone"
+                 />
 
             <Switch
                 android:id="@+id/phoneNumberDialogSwitch"
@@ -111,10 +152,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
+                android:enabled="false"
                 android:hint="@string/hint_facebook"
                 android:inputType="text"
                 android:textSize="12sp"
-                android:enabled="false"/>
+                android:autofillHints="@string/hint_facebook" />
 
             <Switch
                 android:id="@+id/facebookDialogSwitch"

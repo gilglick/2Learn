@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.SparseArray;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Switch;
 
@@ -17,17 +18,22 @@ import androidx.cardview.widget.CardView;
 import java.util.Objects;
 
 // In this class i need to fix the error message which right now is not correct
-public class ProfileEditDialog extends Dialog {
-    private EditText userName;
+public class DialogSetting extends Dialog {
     private EditText userPhoneNumber;
     private EditText userFacebook;
     private EditText userTwitter;
     private EditText userLinkedin;
+    private CheckBox emailCheckBox;
+    private CheckBox phoneNumberCheckBox;
+    private CheckBox dateOfBirthCheckBox;
+    private StudentSetting studentSetting;
+
     private UpdateCallback updateCallback;
     private SparseArray<String> sparseArray = new SparseArray<>();
 
-    ProfileEditDialog(@NonNull Context context) {
+    DialogSetting(@NonNull Context context, StudentSetting studentSetting) {
         super(context);
+        this.studentSetting = studentSetting;
     }
 
     @Override
@@ -37,8 +43,6 @@ public class ProfileEditDialog extends Dialog {
         setCanceledOnTouchOutside(false);
 
         Objects.requireNonNull(getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        userName = findViewById(R.id.userNameDialogEditText);
-        Switch userNameSwitch = findViewById(R.id.userNameDialogSwitch);
         userPhoneNumber = findViewById(R.id.phoneNumberDialogEditText);
         Switch userPhoneNumberSwitch = findViewById(R.id.phoneNumberDialogSwitch);
         userFacebook = findViewById(R.id.facebookDialogEditText);
@@ -49,21 +53,29 @@ public class ProfileEditDialog extends Dialog {
         Switch userLinkedinSwitch = findViewById(R.id.linkedinDialogSwitch);
         CardView confirmEdit = findViewById(R.id.confirmChangesButton);
         CardView exitExit = findViewById(R.id.cancelChanges);
-        Switch[] switches = {userNameSwitch, userPhoneNumberSwitch, userFacebookSwitch, userTwitterSwitch, userLinkedinSwitch};
-        EditText[] editTexts = {userName, userPhoneNumber, userFacebook, userTwitter, userLinkedin};
+        emailCheckBox = findViewById(R.id.emailCheckBox);
+        phoneNumberCheckBox = findViewById(R.id.phoneNumberCheckBox);
+        dateOfBirthCheckBox = findViewById(R.id.dateOfBirthCheckBox);
+
+        Switch[] switches = {userPhoneNumberSwitch, userFacebookSwitch, userTwitterSwitch, userLinkedinSwitch};
+        EditText[] editTexts = {userPhoneNumber, userFacebook, userTwitter, userLinkedin};
         initSwitches(switches);
         initEditTexts(editTexts);
-        userNameSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> userName.setEnabled(isChecked));
+        initUserSetting();
         userPhoneNumberSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> userPhoneNumber.setEnabled(isChecked));
         userFacebookSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> userFacebook.setEnabled(isChecked));
         userTwitterSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> userTwitter.setEnabled(isChecked));
         userLinkedinSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> userLinkedin.setEnabled(isChecked));
+        emailCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> updateCallback.notifyOnUserPreferenceChanged(FireStoreDatabase.DISPLAY_EMAIL,isChecked));
+        phoneNumberCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> updateCallback.notifyOnUserPreferenceChanged(FireStoreDatabase.DISPLAY_PHONE,isChecked));
+        dateOfBirthCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> updateCallback.notifyOnUserPreferenceChanged(FireStoreDatabase.DISPLAY_DATA,isChecked));
+
 
         confirmEdit.setOnClickListener(v -> {
             boolean hasChanged = false, hasError = false;
             for (int i = 0; i < switches.length; i++) {
                 if (switches[i].isChecked()) {
-                    if (!changeField(switches[i], editTexts[i], i)) {
+                    if (!validField(switches[i], editTexts[i], i)) {
                         hasError = true;
                     } else {
                         hasChanged = true;
@@ -78,6 +90,7 @@ public class ProfileEditDialog extends Dialog {
                 displayUpdateAlert();
             }
         });
+
         exitExit.setOnClickListener(v -> {
             initSwitches(switches);
             initEditTexts(editTexts);
@@ -86,16 +99,32 @@ public class ProfileEditDialog extends Dialog {
 
 
     }
+    private void initSwitches(Switch[] switches) {
+        for (Switch s : switches) {
+            s.setChecked(false);
+        }
+    }
 
+    private void initEditTexts(EditText[] editTexts) {
+        for (EditText editText : editTexts) {
+            editText.getText().clear();
+            editText.setEnabled(false);
+            editText.setError(null);
+        }
+    }
+    private void initUserSetting(){
+        if(studentSetting != null){
+            emailCheckBox.setChecked(studentSetting.isDisplayEmail());
+            phoneNumberCheckBox.setChecked(studentSetting.isDisplayPhone());
+            dateOfBirthCheckBox.setChecked(studentSetting.isDisplayDate());
+        }
+    }
 
-    private boolean changeField(Switch userSwitch, EditText editText, int indicator) {
+    private boolean validField(Switch userSwitch, EditText editText, int indicator) {
         boolean validData = false;
         if (userSwitch.isChecked() && updateCallback != null) {
             String newValue = editText.getText().toString();
             switch (indicator) {
-                case Utility.USER_NAME_INDICATOR:
-                    validData = Validation.isValidName(newValue);
-                    break;
                 case Utility.PHONE_NUMBER_INDICATOR:
                     validData = Validation.isValidPhoneNumber(newValue);
                     break;
@@ -130,19 +159,6 @@ public class ProfileEditDialog extends Dialog {
         alert.show();
     }
 
-    private void initSwitches(Switch[] switches) {
-        for (Switch s : switches) {
-            s.setChecked(false);
-        }
-    }
-
-    private void initEditTexts(EditText[] editTexts) {
-        for (EditText editText : editTexts) {
-            editText.getText().clear();
-            editText.setEnabled(false);
-            editText.setError(null);
-        }
-    }
 
     void setCallback(UpdateCallback update) {
         this.updateCallback = update;
@@ -151,6 +167,7 @@ public class ProfileEditDialog extends Dialog {
 
     interface UpdateCallback {
         void notifyProfileOnUpdate(int field, String newValue);
+        void notifyOnUserPreferenceChanged(String field,boolean checked);
     }
 
 

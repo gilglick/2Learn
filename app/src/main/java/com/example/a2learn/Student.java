@@ -4,6 +4,7 @@ package com.example.a2learn;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 public class Student {
     private String fullName;
     private String email;
@@ -94,15 +95,11 @@ public class Student {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Student other = (Student) obj;
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return email.equals(student.email);
     }
 
     @Override

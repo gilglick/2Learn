@@ -3,6 +3,7 @@ package com.example.a2learn;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("WeakerAccess")
 public final class Validation {
 
     public static boolean isValidPassword(final String password) {

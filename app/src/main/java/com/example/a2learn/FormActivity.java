@@ -2,10 +2,7 @@ package com.example.a2learn;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -19,9 +16,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Calendar;
-import java.util.Objects;
 
 
 public class FormActivity extends AppCompatActivity {
@@ -82,8 +76,8 @@ public class FormActivity extends AppCompatActivity {
                 Log.i("tag", stud + "");
                 firebaseAuth.createUserWithEmailAndPassword(mEmail.getText().toString(),
                         mPassword.getText().toString()).addOnSuccessListener(authResult -> {
-                    FireStoreHelper fireStoreHelper = new FireStoreHelper();
-                    fireStoreHelper.addStudent(stud);
+                    FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
+                    fireStoreDatabase.addStudent(stud);
                     startActivity(new Intent(this, LoginActivity.class));
                 }).addOnFailureListener(e1 ->
                         Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT).show());
@@ -97,16 +91,16 @@ public class FormActivity extends AppCompatActivity {
             final int DRAWABLE_RIGHT = 2;
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (event.getRawX() >= (mDateOfBirth.getRight() - mDateOfBirth.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                    DateDialog.createCalender(this).show();
+                    DialogDate.createCalender(this).show();
                     return true;
                 }
             }
             return false;
         });
 
-        DateDialog.mDateSetListener = (datePicker, year, month, day) -> {
+        DialogDate.mDateSetListener = (datePicker, year, month, day) -> {
             month = month + 1;
-            String date = DateDialog.dateFormat(year, month, day);
+            String date = DialogDate.dateFormat(year, month, day);
             mDateOfBirth.setText(date);
         };
     }

@@ -14,12 +14,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class UserContainerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    FireStoreHelper fireStoreHelper = new FireStoreHelper();
+public class ContainerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = "";
+    FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle anActionBarDrawerToggle;
     Toolbar toolbar;
@@ -45,12 +46,12 @@ public class UserContainerActivity extends AppCompatActivity implements Navigati
         anActionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         anActionBarDrawerToggle.syncState();
 
-        fireStoreHelper.getCollectionReference().document(userId).get().addOnSuccessListener(documentSnapshot -> {
+        firebaseFirestore.collection(FireStoreDatabase.STUDENT_STORAGE).document(userId).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 Student stud = documentSnapshot.toObject(Student.class);
                 fragmentManager = getSupportFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container_fragment, new ProfileFragment(stud));
+                fragmentTransaction.replace(R.id.container_fragment, new FragmentProfile(stud));
                 fragmentTransaction.commit();
             }
         });
@@ -61,26 +62,26 @@ public class UserContainerActivity extends AppCompatActivity implements Navigati
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawerLayout.closeDrawer(GravityCompat.START);
 
-        fireStoreHelper.getCollectionReference().document(userId).get().addOnSuccessListener(documentSnapshot -> {
+        fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE).document(userId).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 Student student = documentSnapshot.toObject(Student.class);
                 switch (item.getItemId()) {
                     case R.id.nav_home:
                         fragmentManager = getSupportFragmentManager();
                         fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.container_fragment, new HomeFragment());
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentHome());
                         fragmentTransaction.commit();
                         break;
                     case R.id.nav_profile:
                         fragmentManager = getSupportFragmentManager();
                         fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.container_fragment, new ProfileFragment(student));
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentProfile(student));
                         fragmentTransaction.commit();
                         break;
                     case R.id.proficiency:
                         fragmentManager = getSupportFragmentManager();
                         fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.container_fragment, new ProficiencyFragment(student));
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentProficiency(student));
                         fragmentTransaction.commit();
                         break;
                 }
@@ -88,7 +89,7 @@ public class UserContainerActivity extends AppCompatActivity implements Navigati
             }
             if (item.getItemId() == R.id.logOut) {
                 startActivity(new Intent(this, LoginActivity.class));
-                fireStoreHelper.getFirebaseAuth().signOut();
+                fireStoreDatabase.getFirebaseAuth().signOut();
                 finish();
             }
 

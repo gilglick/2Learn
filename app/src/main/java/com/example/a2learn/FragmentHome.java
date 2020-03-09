@@ -1,18 +1,12 @@
 package com.example.a2learn;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,21 +14,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
-import org.w3c.dom.Document;
+import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class FragmentHome extends Fragment {
     private CardArrayAdapter arrayAdapter;
     private List<Card> rowItems;
     private List<Card> yoni;
-    private FireStoreHelper fireStoreHelper = new FireStoreHelper();
+    private FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
 
     @Nullable
     @Override
@@ -46,7 +36,7 @@ public class HomeFragment extends Fragment {
 
         rowItems = new ArrayList<>();
         yoni = new ArrayList<>();
-        fireStoreHelper.getAllStudents((result) -> {
+        fireStoreDatabase.getAllStudents((result) -> {
             arrayAdapter = new CardArrayAdapter(getActivity(), R.layout.item, rowItems);
             flingContainer.setAdapter(arrayAdapter);
             result.forEach(student -> rowItems.add(new Card(student)));
@@ -78,12 +68,9 @@ public class HomeFragment extends Fragment {
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 // Ask for more data here
                 if (itemsInAdapter == 0) {
-                    new AlertDialog.Builder(getActivity()).setTitle("Oops!").setMessage("You watched all your currently optional matches.").setPositiveButton(R.string.refresh, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            rowItems.addAll(yoni);
-                            arrayAdapter.notifyDataSetChanged();
-                        }
+                    new AlertDialog.Builder(getActivity()).setTitle("Oops!").setMessage("You watched all your currently optional matches.").setPositiveButton(R.string.refresh, (dialog, which) -> {
+                        rowItems.addAll(yoni);
+                        arrayAdapter.notifyDataSetChanged();
                     }).setNegativeButton(R.string.come_back_in_another_time, null).setIcon(android.R.drawable.ic_dialog_alert).show();
                 }
             }
@@ -104,15 +91,12 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (getActivity() != null) {
-            fireStoreHelper.getCollectionReference().addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                    List<DocumentChange> list = null;
-                    if (queryDocumentSnapshots != null) {
-                        list = queryDocumentSnapshots.getDocumentChanges();
-                        for(DocumentChange doc : list){
-                            yoni.add(new Card(doc.getDocument().toObject(Student.class)));
-                        }
+            fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE).addSnapshotListener((queryDocumentSnapshots, e) -> {
+                List<DocumentChange> list = null;
+                if (queryDocumentSnapshots != null) {
+                    list = queryDocumentSnapshots.getDocumentChanges();
+                    for (DocumentChange doc : list) {
+                        yoni.add(new Card(doc.getDocument().toObject(Student.class)));
                     }
                 }
             });
