@@ -41,7 +41,6 @@
             android:id="@+id/email"
             android:drawablePadding="20dp"
             android:drawableEnd="@drawable/ic_person"
-            android:hint="@string/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <TextView
@@ -53,12 +52,11 @@
             android:id="@+id/password"
             android:drawablePadding="20dp"
             android:drawableEnd="@drawable/password"
-            android:hint="@string/hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/signIn"
-            android:textColor="#FFF"
+            android:textColor="#000"
             android:background="@drawable/sign_in_up_button_gradient"
             android:layout_marginTop="20dp"
             android:textAllCaps="false"
@@ -67,7 +65,7 @@
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/signUp"
-            android:textColor="#FFF"
+            android:textColor="#000"
             android:background="@drawable/sign_in_up_button_gradient"
             android:layout_marginTop="20dp"
             android:textAllCaps="false"
@@ -92,13 +90,14 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/application_logo"
         android:padding="5dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_width="150dp"
+        android:layout_height="150dp" />
 
 
     <TextView
         android:textSize="12sp"
         android:textColor="#000"
+        android:paddingTop="10dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/layoutInput"
         android:text="@string/forget_password"

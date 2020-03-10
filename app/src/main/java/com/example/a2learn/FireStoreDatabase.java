@@ -3,6 +3,7 @@ package com.example.a2learn;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -23,6 +24,7 @@ public final class FireStoreDatabase {
 
     // Student attributes
     private List<Student> studentList = new ArrayList<>();
+    private List<Student> updateData = new ArrayList<>();
     static final String FULL_NAME = "fullName";
     static final String LOCATION = "location";
     static final String PHONE_NUMBER = "phoneNumber";
@@ -94,6 +96,18 @@ public final class FireStoreDatabase {
         getDatabase().collection(path).document(docId).update(field, FieldValue.arrayRemove(newValue));
     }
 
+    public void getUpdateData(FireStoreHelperCallback<List<Student>> callback) {
+            getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE).addSnapshotListener((queryDocumentSnapshots, e) -> {
+                List<DocumentChange> list = null;
+                if (queryDocumentSnapshots != null) {
+                    list = queryDocumentSnapshots.getDocumentChanges();
+                    for (DocumentChange doc : list) {
+                        updateData.add(doc.getDocument().toObject(Student.class));
+                    }
+                    callback.onFinish(updateData);
+                }
+            });
+    }
     public void getAllStudents(FireStoreHelperCallback<List<Student>> callback) {
         getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE).get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {

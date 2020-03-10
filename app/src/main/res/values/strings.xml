@@ -10,11 +10,11 @@
     <string name="hint">********</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_with_facebook">Sign up facebook</string>
-    <string name="forget_password">Forget your password?</string>
+    <string name="forget_password">Forgot your password ?</string>
 
     <!-- Register form string  -->
     <string name="full_name">Full Name</string>
-    <string name="email">Email</string>
+    <string name="email">Email Address</string>
     <string name="confirm_password">Confirm password</string>
     <string name="date_of_birth">Date of birth</string>
     <string name="phone_number">Phone number</string>

@@ -23,7 +23,7 @@ import java.util.List;
 public class FragmentHome extends Fragment {
     private CardArrayAdapter arrayAdapter;
     private List<Card> rowItems;
-    private List<Card> yoni;
+    private List<Student> update;
     private FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
 
     @Nullable
@@ -33,16 +33,17 @@ public class FragmentHome extends Fragment {
         ImageButton likeButton = view.findViewById(R.id.likebtn);
         ImageButton disLikeButton = view.findViewById(R.id.dislikebtn);
         SwipeFlingAdapterView flingContainer = view.findViewById(R.id.frame);
-
         rowItems = new ArrayList<>();
-        yoni = new ArrayList<>();
-        fireStoreDatabase.getAllStudents((result) -> {
-            arrayAdapter = new CardArrayAdapter(getActivity(), R.layout.item, rowItems);
-            flingContainer.setAdapter(arrayAdapter);
-            result.forEach(student -> rowItems.add(new Card(student)));
-            arrayAdapter.notifyDataSetChanged();
-        });
+        arrayAdapter = new CardArrayAdapter(getActivity(), R.layout.item, rowItems);
+        flingContainer.setAdapter(arrayAdapter);
 
+//        fireStoreDatabase.getAllStudents((result) -> {
+//            arrayAdapter = new CardArrayAdapter(getActivity(), R.layout.item, rowItems);
+////            flingContainer.setAdapter(arrayAdapter);
+////            result.forEach(student -> rowItems.add(new Card(student)));
+//            arrayAdapter.notifyDataSetChanged();
+ //   });
+        getUpdateData();
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
             public void removeFirstObjectInAdapter() {
@@ -67,10 +68,8 @@ public class FragmentHome extends Fragment {
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 // Ask for more data here
-                if (itemsInAdapter == 0) {
+                if (itemsInAdapter == 0  || rowItems.size() == 0) {
                     new AlertDialog.Builder(getActivity()).setTitle("Oops!").setMessage("You watched all your currently optional matches.").setPositiveButton(R.string.refresh, (dialog, which) -> {
-                        rowItems.addAll(yoni);
-                        arrayAdapter.notifyDataSetChanged();
                     }).setNegativeButton(R.string.come_back_in_another_time, null).setIcon(android.R.drawable.ic_dialog_alert).show();
                 }
             }
@@ -86,21 +85,21 @@ public class FragmentHome extends Fragment {
 
         return view;
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (getActivity() != null) {
-            fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE).addSnapshotListener((queryDocumentSnapshots, e) -> {
-                List<DocumentChange> list = null;
-                if (queryDocumentSnapshots != null) {
-                    list = queryDocumentSnapshots.getDocumentChanges();
-                    for (DocumentChange doc : list) {
-                        yoni.add(new Card(doc.getDocument().toObject(Student.class)));
+    public void getUpdateData() {
+        fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE)
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    Toast.makeText(getActivity(), "Something changed", Toast.LENGTH_SHORT).show();
+                    List<DocumentChange> list = null;
+                    if (queryDocumentSnapshots != null) {
+                        list = queryDocumentSnapshots.getDocumentChanges();
+                        for (DocumentChange doc : list) {
+                            Student student = doc.getDocument().toObject(Student.class);
+                            rowItems.add(new Card(student));
+                        }
                     }
-                }
-            });
-        }
-    }
+                    if(arrayAdapter != null)
+                        arrayAdapter.notifyDataSetChanged();
 
+        });
+    }
 }
