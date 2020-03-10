@@ -35,10 +35,10 @@
     <!-- Drawer menu   -->
     <string name="home_menu">Home</string>
     <string name="prfile_menu">Profile</string>
-    <string name="chat_menu">Chat</string>
+    <string name="my_matches">My matches</string>
     <string name="proficiency">My proficiency</string>
     <string name="add_proficiency">Add Proficiency</string>
-    <string name="my_match">Log out</string>
+    <string name="log_out">Log out</string>
     <string name="israel_kfar_saba">Israel - kfar saba</string>
 
     <!-- Home String   -->
@@ -72,6 +72,9 @@
     <string name="display_your_date_of_birth">Display your date of birth</string>
     <string name="visible_to_people_who_view_your_profile">Visible to people who view your profile</string>
     <string name="edit_your_profile">Edit your profile</string>
+    <string name="chat">Chat</string>
+    <string name="match">Match</string>
+    <string name="type_a_message">Type a message...</string>
 
 
 </resources>

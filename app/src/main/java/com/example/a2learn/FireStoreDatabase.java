@@ -116,9 +116,6 @@ public final class FireStoreDatabase {
                     studentList.add(student);
                 }
                 callback.onFinish(studentList);
-                for (Student student : studentList) {
-                    Log.i("TAG", "onComplete: " + student);
-                }
             }
         });
     }

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryDark"
+    android:background="@drawable/login_gradient_background"
     android:orientation="vertical">
 
 
@@ -11,29 +11,11 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:adjustViewBounds="true"
-        android:background="@color/colorPrimaryDark"
         android:contentDescription="@string/user_image_content"
         android:padding="5dp"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_user" />
+        android:src="@drawable/application_logo" />
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:padding="5dp"
-        android:text="@string/user_name"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:padding="5dp"
-        android:text="@string/email_login"
-        android:textColor="@color/white"
-        android:textSize="12sp" />
 
 </LinearLayout>

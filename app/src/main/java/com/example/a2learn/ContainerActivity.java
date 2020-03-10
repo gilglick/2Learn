@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,6 +29,8 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     private String userId;
+    private FragmentMatch fragmentMatch = new FragmentMatch();
+    private FragmentProfile fragmentProfile = new FragmentProfile();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,8 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
         userId = getIntent().getStringExtra("userId");
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
 
         drawerLayout = findViewById(R.id.drawer);
         navigationView = findViewById(R.id.navigationView);
@@ -45,13 +50,12 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
         drawerLayout.addDrawerListener(anActionBarDrawerToggle);
         anActionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         anActionBarDrawerToggle.syncState();
+        Toast.makeText(this, "on create", Toast.LENGTH_SHORT).show();
 
         firebaseFirestore.collection(FireStoreDatabase.STUDENT_STORAGE).document(userId).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 Student stud = documentSnapshot.toObject(Student.class);
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container_fragment, new FragmentProfile(stud));
+                fragmentTransaction.replace(R.id.container_fragment,new FragmentProfile(stud));
                 fragmentTransaction.commit();
             }
         });
@@ -61,31 +65,28 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawerLayout.closeDrawer(GravityCompat.START);
-
+        Toast.makeText(this, "onNavigation active", Toast.LENGTH_SHORT).show();
+        fragmentManager.popBackStack();
         fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE).document(userId).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 Student student = documentSnapshot.toObject(Student.class);
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-                        fragmentManager = getSupportFragmentManager();
-                        fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.container_fragment, new FragmentHome());
-                        fragmentTransaction.commit();
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentHome()).commit();
                         break;
                     case R.id.nav_profile:
-                        fragmentManager = getSupportFragmentManager();
-                        fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.container_fragment, new FragmentProfile(student));
-                        fragmentTransaction.commit();
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentProfile(student)).commit();
                         break;
                     case R.id.proficiency:
-                        fragmentManager = getSupportFragmentManager();
-                        fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.container_fragment, new FragmentProficiency(student));
-                        fragmentTransaction.commit();
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentProficiency(student)).commit();
                         break;
-                }
+                    case R.id.nav_chat:
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentMatch()).commit();
+                        break;
 
+                }
             }
             if (item.getItemId() == R.id.logOut) {
                 startActivity(new Intent(this, LoginActivity.class));
@@ -97,6 +98,7 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
         });
         return false;
     }
+
 }
 
 

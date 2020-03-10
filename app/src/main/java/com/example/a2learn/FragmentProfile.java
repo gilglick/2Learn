@@ -26,7 +26,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.example.a2learn.com.exmaple.a2learn.utility.CircleTransform;
+import com.example.a2learn.utility.CircleTransform;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
@@ -56,11 +56,14 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
         this.student = student;
         this.studentSetting = new StudentSetting();
     }
+    FragmentProfile(){
 
+    }
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         userImage = view.findViewById(R.id.userImage);
         Button cameraButton = view.findViewById(R.id.cameraButton);
@@ -78,14 +81,14 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
 
 
         initializeProfile();
-      //  DialogSetting dialogSetting;//= new DialogSetting(Objects.requireNonNull(getActivity()),studentSetting);
+        //  DialogSetting dialogSetting;//= new DialogSetting(Objects.requireNonNull(getActivity()),studentSetting);
         cameraButton.setOnClickListener(v -> selectImage(getContext()));
         facebookImage.setOnClickListener(v -> openWebPage(socialMedia.getFacebook()));
         twitterImage.setOnClickListener(v -> openWebPage(socialMedia.getTwitter()));
         linkedin.setOnClickListener(v -> openWebPage(socialMedia.getLinkedin()));
 
         editButton.setOnClickListener(v -> {
-            if(dialogSetting == null){
+            if (dialogSetting == null) {
                 dialogSetting = new DialogSetting(Objects.requireNonNull(getActivity()), studentSetting);
             }
             dialogSetting.setCallback(this);
@@ -178,9 +181,11 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
     private void getImageFromDatabase() {
         StorageReference storageReference = fireStoreDatabase.getStorageDatabase().getReference(FireStoreDatabase.PROFILE_IMAGES_STORAGE).child((student.getEmail()));
         storageReference.getDownloadUrl().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
+            if (task.isSuccessful() && task.getResult() != null) {
                 Uri uri = task.getResult();
                 Picasso.get().load(uri).transform(new CircleTransform()).into(userImage);
+            } else {
+                Picasso.get().load(R.drawable.no_picture_circle).transform(new CircleTransform()).into(userImage);
             }
         }).addOnFailureListener(e -> Toast.makeText(getActivity(), "Download image failed", Toast.LENGTH_SHORT).show());
     }
@@ -265,7 +270,9 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
                 .addOnFailureListener(e -> Log.d(TAG, "onFailure: failed to change the field. "));
     }
 
-
+    public void setStudent(Student student) {
+        this.student = student;
+    }
 }
 
 

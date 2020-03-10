@@ -10,7 +10,7 @@
             android:title="@string/prfile_menu"/>
         <item android:id="@+id/nav_chat"
             android:icon="@drawable/ic_chat_menu"
-            android:title="@string/chat_menu"/>
+            android:title="@string/my_matches"/>
     </group>
 
     <item android:title="@string/proficiency">
@@ -20,7 +20,7 @@
                 android:title="@string/add_proficiency"/>
             <item android:id="@+id/logOut"
                 android:icon="@drawable/ic_match"
-                android:title="@string/my_match"/>
+                android:title="@string/log_out"/>
         </menu>
     </item>
 

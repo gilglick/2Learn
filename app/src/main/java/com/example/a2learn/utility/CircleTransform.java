@@ -1,4 +1,4 @@
-package com.example.a2learn.com.exmaple.a2learn.utility;
+package com.example.a2learn.utility;
 
 
 import android.graphics.Bitmap;
