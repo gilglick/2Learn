@@ -34,6 +34,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         public ImageView userImageChat;
         public Button userChatButton;
         private View itemView;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -60,8 +61,11 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
 
         Student student = mUsers.get(position);
         holder.userNameChat.setText(student.getFullName());
-        Picasso.get().load(student.getUri()).transform(new CircleTransform()).into(holder.userImageChat);
-
+        if (!student.getUri().matches("")) {
+            Picasso.get().load(student.getUri()).transform(new CircleTransform()).into(holder.userImageChat);
+        } else {
+            Picasso.get().load(R.drawable.no_picture_circle).transform(new CircleTransform()).into(holder.userImageChat);
+        }
         holder.userChatButton.setOnClickListener(v -> {
             if (fragmentLoader != null) {
                 fragmentLoader.triggerFragment(student);

@@ -11,17 +11,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ContainerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private static final String TAG = "";
     FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle anActionBarDrawerToggle;
     Toolbar toolbar;
@@ -29,8 +24,6 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     private String userId;
-    private FragmentMatch fragmentMatch = new FragmentMatch();
-    private FragmentProfile fragmentProfile = new FragmentProfile();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +43,8 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
         drawerLayout.addDrawerListener(anActionBarDrawerToggle);
         anActionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         anActionBarDrawerToggle.syncState();
-        Toast.makeText(this, "on create", Toast.LENGTH_SHORT).show();
 
-        firebaseFirestore.collection(FireStoreDatabase.STUDENT_STORAGE).document(userId).get().addOnSuccessListener(documentSnapshot -> {
+        fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE).document(userId).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 Student stud = documentSnapshot.toObject(Student.class);
                 fragmentTransaction.replace(R.id.container_fragment,new FragmentProfile(stud));
@@ -65,7 +57,6 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawerLayout.closeDrawer(GravityCompat.START);
-        Toast.makeText(this, "onNavigation active", Toast.LENGTH_SHORT).show();
         fragmentManager.popBackStack();
         fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE).document(userId).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
@@ -74,7 +65,7 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
                 fragmentTransaction = fragmentManager.beginTransaction();
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-                        fragmentTransaction.replace(R.id.container_fragment, new FragmentHome()).commit();
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentHome(student)).commit();
                         break;
                     case R.id.nav_profile:
                         fragmentTransaction.replace(R.id.container_fragment, new FragmentProfile(student)).commit();
@@ -83,7 +74,7 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
                         fragmentTransaction.replace(R.id.container_fragment, new FragmentProficiency(student)).commit();
                         break;
                     case R.id.nav_chat:
-                        fragmentTransaction.replace(R.id.container_fragment, new FragmentMatch()).commit();
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentMatch(student)).commit();
                         break;
 
                 }

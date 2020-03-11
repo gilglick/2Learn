@@ -26,8 +26,11 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
     private StudentAdapter studentAdapter;
     private List<Student> studentList;
     private static volatile  boolean isLoaded = false;
+    private Student student;
 
-    public FragmentMatch (){
+    public FragmentMatch (Student student)
+    {
+        this.student = student;
         studentList = new ArrayList<>();
     }
 
@@ -59,10 +62,12 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
 
     private void matchesListener() {
         readAllMatchFromStorage();
-//        FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
-//        fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE)
-//                .addSnapshotListener((queryDocumentSnapshots, e)
-//                        -> Toast.makeText(getActivity(), "Fire store changed", Toast.LENGTH_SHORT).show());
+        FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
+        fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE)
+                .addSnapshotListener((queryDocumentSnapshots, e)
+                        -> {
+                    Log.i(TAG, "matchesListener: ");
+                });
 
     }
 
@@ -73,27 +78,5 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
                 .replace(R.id.container_fragment, fragmentChat)
                 .addToBackStack(null)
                 .commit();
-    }
-    
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume: ");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i(TAG, "onStop: " + studentList.size());
-        studentList.clear();
-        studentAdapter.notifyDataSetChanged();
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause: ");
     }
 }

@@ -78,6 +78,9 @@ public class FormActivity extends AppCompatActivity {
                         mPassword.getText().toString()).addOnSuccessListener(authResult -> {
                     FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
                     fireStoreDatabase.addStudent(stud);
+                    fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
+                            .document(mEmail.getText().toString())
+                            .set(new Match());
                     startActivity(new Intent(this, LoginActivity.class));
                 }).addOnFailureListener(e1 ->
                         Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT).show());

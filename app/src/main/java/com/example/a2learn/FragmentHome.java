@@ -13,11 +13,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class FragmentHome extends Fragment {
@@ -25,6 +33,13 @@ public class FragmentHome extends Fragment {
     private List<Card> rowItems;
     private List<Student> update;
     private FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
+    private ListenerRegistration listen;
+    private Student student;
+
+    //private CollectionReference collectionReference =  fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE);
+    public FragmentHome(Student student) {
+        this.student = student;
+    }
 
     @Nullable
     @Override
@@ -37,38 +52,53 @@ public class FragmentHome extends Fragment {
         arrayAdapter = new CardArrayAdapter(getActivity(), R.layout.item, rowItems);
         flingContainer.setAdapter(arrayAdapter);
 
-//        fireStoreDatabase.getAllStudents((result) -> {
-//            arrayAdapter = new CardArrayAdapter(getActivity(), R.layout.item, rowItems);
-////            flingContainer.setAdapter(arrayAdapter);
-////            result.forEach(student -> rowItems.add(new Card(student)));
-//            arrayAdapter.notifyDataSetChanged();
- //   });
         getUpdateData();
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
             public void removeFirstObjectInAdapter() {
-                Log.d("LIST", "removed object!");
-                rowItems.remove(0);
-                arrayAdapter.notifyDataSetChanged();
+
             }
 
             @Override
             public void onLeftCardExit(Object dataObject) {
-                //Do something on the left!
-                //You also have access to the original object.
-                //If you want to use it just cast it (String) dataObject
+                rowItems.remove(0);
+                arrayAdapter.notifyDataSetChanged();
                 Toast.makeText(getActivity(), "Left!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
-                Toast.makeText(getActivity(), "Right!", Toast.LENGTH_SHORT).show();
+
+                fireStoreDatabase.updateListField(student.getEmail(), FireStoreDatabase.MATCH_STORGE, "optionalMatches", rowItems.get(0).getEmail());
+                fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
+                        .document(rowItems.get(0).getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            Match match = task.getResult().toObject(Match.class);
+                            if (match != null) {
+                                List<String> list = match.getOptionalMatches();
+                                if (list.contains(student.getEmail())) {
+                                    Toast.makeText(getActivity(), "MATCH!!!!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            rowItems.remove(0);
+                            arrayAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+
+                // i add match to database
+                // if the other user also has me
+                //check if rowItems.get(0).getEmail() have student in his oppMatchArr
+                // if he does
+                // move to fragmentChat\match
             }
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 // Ask for more data here
-                if (itemsInAdapter == 0  || rowItems.size() == 0) {
+                if (itemsInAdapter == 0 || rowItems.size() == 0) {
                     new AlertDialog.Builder(getActivity()).setTitle("Oops!").setMessage("You watched all your currently optional matches.").setPositiveButton(R.string.refresh, (dialog, which) -> {
                     }).setNegativeButton(R.string.come_back_in_another_time, null).setIcon(android.R.drawable.ic_dialog_alert).show();
                 }
@@ -85,8 +115,9 @@ public class FragmentHome extends Fragment {
 
         return view;
     }
+
     public void getUpdateData() {
-        fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE)
+        listen = fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
                     Toast.makeText(getActivity(), "Something changed", Toast.LENGTH_SHORT).show();
                     List<DocumentChange> list = null;
@@ -97,9 +128,15 @@ public class FragmentHome extends Fragment {
                             rowItems.add(new Card(student));
                         }
                     }
-                    if(arrayAdapter != null)
+                    if (arrayAdapter != null)
                         arrayAdapter.notifyDataSetChanged();
 
-        });
+                });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        listen.remove();
     }
 }

@@ -21,6 +21,7 @@ public final class FireStoreDatabase {
     static final String SOCIAL_MEDIA_STORAGE = "socialMedia";
     static final String SETTING_STORAGE = "settings";
     static final String PROFILE_IMAGES_STORAGE = "profileImages";
+    static final String MATCH_STORGE = "matches";
 
     // Student attributes
     private List<Student> studentList = new ArrayList<>();
@@ -116,6 +117,7 @@ public final class FireStoreDatabase {
                     studentList.add(student);
                 }
                 callback.onFinish(studentList);
+                studentList.clear();
             }
         });
     }
