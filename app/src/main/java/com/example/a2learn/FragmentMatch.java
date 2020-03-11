@@ -63,7 +63,7 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
     private void matchesListener() {
         readAllMatchFromStorage();
         FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
-        fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE)
+        fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
                 .addSnapshotListener((queryDocumentSnapshots, e)
                         -> {
                     Log.i(TAG, "matchesListener: ");

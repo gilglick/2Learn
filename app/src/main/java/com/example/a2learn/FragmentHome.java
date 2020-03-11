@@ -21,12 +21,14 @@ import com.google.firebase.firestore.DocumentChange;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FragmentHome extends Fragment {
     private CardArrayAdapter arrayAdapter;
@@ -39,6 +41,9 @@ public class FragmentHome extends Fragment {
     //private CollectionReference collectionReference =  fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE);
     public FragmentHome(Student student) {
         this.student = student;
+        fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
+                .document(student.getEmail())
+                .set(new Match());
     }
 
     @Nullable
@@ -68,8 +73,35 @@ public class FragmentHome extends Fragment {
 
             @Override
             public void onRightCardExit(Object dataObject) {
+                HashMap<String,Object> update = new HashMap<>();
+                update.put(rowItems.get(0).getEmail(),true);
+                FieldPath field = FieldPath.of(rowItems.get(0).getEmail());
 
-                fireStoreDatabase.updateListField(student.getEmail(), FireStoreDatabase.MATCH_STORGE, "optionalMatches", rowItems.get(0).getEmail());
+                // fireStoreDatabase.updateListField(student.getEmail(), FireStoreDatabase.MATCH_STORGE, "optionalMatches", rowItems.get(0).getEmail());
+
+                fireStoreDatabase.getDatabase()
+                        .collection(FireStoreDatabase.MATCH_STORGE)
+                        .document(student.getEmail())
+                        .update(field,true);
+
+/*
+db.collection('heroes').doc(`xxxXXXxxx`).update({
+  "fantasticsFours": {
+    "humanTorch":{ ... }
+  }
+})
+ */
+//                fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
+//                        .document(rowItems.get(0).getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        if(task.isSuccessful()){
+//                            if(task.getResult().contains(rowItems.get(0).getEmail())){
+//
+//                            }
+//                        }
+//                    }
+//                })
                 fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
                         .document(rowItems.get(0).getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -77,8 +109,8 @@ public class FragmentHome extends Fragment {
                         if (task.isSuccessful() && task.getResult() != null) {
                             Match match = task.getResult().toObject(Match.class);
                             if (match != null) {
-                                List<String> list = match.getOptionalMatches();
-                                if (list.contains(student.getEmail())) {
+                                Map<String,Boolean> map = match.getOptionalMatches();
+                                if (!map.get(student.getEmail()).booleanValue()) {
                                     Toast.makeText(getActivity(), "MATCH!!!!", Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -133,7 +165,10 @@ public class FragmentHome extends Fragment {
 
                 });
     }
-
+    public String escapeDot(String userId)
+    {
+        return userId.replace('.','1');
+    }
     @Override
     public void onStop() {
         super.onStop();
