@@ -1,5 +1,6 @@
 package com.example.a2learn;
 
+@SuppressWarnings("WeakerAccess")
 public class SocialMedia {
 
     private String facebook;

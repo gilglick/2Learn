@@ -7,17 +7,6 @@ import java.util.regex.Pattern;
 public final class Validation {
 
     public static boolean isValidPassword(final String password) {
-        /*
-
-        ^                 # start-of-string
-        (?=.*[0-9])       # a digit must occur at least once
-        (?=.*[a-z])       # a lower case letter must occur at least once
-        (?=.*[A-Z])       # an upper case letter must occur at least once
-        (?=.*[@#$%^&+=])  # a special character must occur at least once
-        (?=\S+$)          # no whitespace allowed in the entire string
-        .{8,}             # anything, at least eight places though
-        $                 # end-of-string
-         */
         Pattern pattern;
         Matcher matcher;
         final String PASSWORD_PATTERN = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
@@ -52,7 +41,9 @@ public final class Validation {
     }
 
     public static boolean isValidName(String name) {
-        return !name.trim().matches("");
+        final Pattern VALID_NAME = Pattern.compile("([A-Za-z])+\\.");
+        Matcher matcher = VALID_NAME.matcher(name);
+        return matcher.matches() && !name.trim().matches("");
     }
 
     public static boolean isValidDate(String date) {
@@ -60,6 +51,7 @@ public final class Validation {
     }
 
     public static boolean isValidPhoneNumber(String phoneNumber) {
+
         return phoneNumber.trim().length() != 0;
     }
 }

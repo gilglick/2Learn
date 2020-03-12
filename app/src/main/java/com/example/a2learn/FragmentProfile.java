@@ -36,6 +36,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class FragmentProfile extends Fragment implements DialogSetting.UpdateCallback {
     private FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
+
     private Student student;
     private SocialMedia socialMedia;
     private StudentSetting studentSetting;
@@ -56,9 +57,11 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
         this.student = student;
         this.studentSetting = new StudentSetting();
     }
-    FragmentProfile(){
+
+    public FragmentProfile() {
 
     }
+
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
@@ -81,7 +84,6 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
 
 
         initializeProfile();
-        //  DialogSetting dialogSetting;//= new DialogSetting(Objects.requireNonNull(getActivity()),studentSetting);
         cameraButton.setOnClickListener(v -> selectImage(getContext()));
         facebookImage.setOnClickListener(v -> openWebPage(socialMedia.getFacebook()));
         twitterImage.setOnClickListener(v -> openWebPage(socialMedia.getTwitter()));
@@ -104,6 +106,19 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
             return true;
         });
         return view;
+    }
+
+    private void initializeProfile() {
+        getImageFromDatabase();
+        readSocialMediaFromStorage();
+        readUserSettingFromStorage();
+        userName.setText(student.getFullName());
+        userEmail.setText(student.getEmail());
+        userLocation.setText(student.getLocation());
+        userPhoneNumber.setText(student.getPhoneNumber());
+        userDate.setText(student.getDateOfBirth());
+        userOfferHelpTextView.setText(student.userOfferListStringFormat());
+        userNeedHelpTextView.setText(student.userNeedHelpListStringFormat());
     }
 
 
@@ -136,31 +151,20 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
                 case PICK_IMAGE_GALLERY:
                     imageUri = data.getData();
                     Picasso.get().load(imageUri).transform(new CircleTransform()).into(userImage);
-                    writeToDatabase();
+                    uploadImageToStorage();
                     break;
                 case PICK_IMAGE_CAMERA:
                     Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
                     userImage.setImageBitmap(photo);
+                    uploadImageToStorage();
+
                     break;
             }
         }
     }
 
-    private void initializeProfile() {
-        getImageFromDatabase();
-        readSocialMediaFromStorage();
-        readUserSettingFromStorage();
-        userName.setText(student.getFullName());
-        userEmail.setText(student.getEmail());
-        userLocation.setText(student.getLocation());
-        userPhoneNumber.setText(student.getPhoneNumber());
-        userDate.setText(student.getDateOfBirth());
-        userOfferHelpTextView.setText(student.userOfferListStringFormat());
-        userNeedHelpTextView.setText(student.userNeedHelpListStringFormat());
-    }
 
-
-    private void writeToDatabase() {
+    private void uploadImageToStorage() {
         StorageReference storageReference = fireStoreDatabase.getStorageDatabase().getReference(FireStoreDatabase.PROFILE_IMAGES_STORAGE).child((student.getEmail()));
         storageReference.putFile(imageUri).continueWithTask(task -> {
             if (!task.isSuccessful()) {
@@ -270,9 +274,6 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
                 .addOnFailureListener(e -> Log.d(TAG, "onFailure: failed to change the field. "));
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
-    }
 }
 
 

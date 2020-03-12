@@ -27,7 +27,10 @@ public class FragmentProficiency extends Fragment {
     private boolean giveHelpActive, needHelpActive;
     private String currentCourse;
 
-    FragmentProficiency(Student student) {
+    public FragmentProficiency(){
+
+    }
+    public FragmentProficiency(Student student) {
         this.student = student;
     }
 

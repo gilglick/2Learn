@@ -1,8 +1,14 @@
 package com.example.a2learn;
 
 
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 @SuppressWarnings("WeakerAccess")
 public class Student {
@@ -135,4 +141,5 @@ public class Student {
     public String getUri() {
         return uri;
     }
+
 }

@@ -42,6 +42,8 @@ public final class FireStoreDatabase {
     static final String TWITTER = "twitter";
     static final String LINKEDIN = "linkedin";
 
+    // Match attributes
+    static final String MATCHES = "optionalMatches";
     // Database
     private static FireStoreDatabase fireStoreDatabase;
     private FirebaseFirestore database;
