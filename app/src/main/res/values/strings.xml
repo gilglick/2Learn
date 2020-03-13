@@ -15,9 +15,9 @@
     <!-- Register form string  -->
     <string name="full_name">Full Name</string>
     <string name="email">Email Address</string>
-    <string name="confirm_password">Confirm password</string>
-    <string name="date_of_birth">Date of birth</string>
-    <string name="phone_number">Phone number</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="date_of_birth">Date Of Birth</string>
+    <string name="phone_number">Phone Number (optional)</string>
     <string name="register">Register</string>
 
 

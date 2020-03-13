@@ -6,9 +6,9 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="match_parent"
@@ -17,42 +17,42 @@
             android:background="@drawable/login_gradient_background" />
 
         <ImageView
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="0dp" />
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="200dp"
         android:id="@+id/layoutInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/login_gradient_white"
         android:padding="20dp"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
         <TextView
             android:text="@string/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:drawablePadding="20dp"
             android:drawableEnd="@drawable/ic_person"
-            android:layout_width="match_parent"
-            android:text="jkarta25@gmail.co"
-            android:layout_height="wrap_content" />
+            android:inputType="textEmailAddress" />
         <TextView
-            android:layout_marginTop="5dp"
-            android:text="@string/password"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/password"
+            android:layout_marginTop="5dp"/>
         <EditText
             android:id="@+id/password"
             android:drawablePadding="20dp"
-            android:text="aaAAaa12@"
+            android:inputType="textPassword"
             android:drawableEnd="@drawable/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -87,13 +87,13 @@
 
     <ImageView
         android:id="@+id/imageVIew"
+        android:layout_width="180dp"
+        android:layout_height="150dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="5dp"
         android:layout_centerHorizontal="true"
         android:src="@drawable/application_logo"
-        android:padding="5dp"
-        android:layout_width="150dp"
-        android:layout_height="150dp" />
+        android:padding="5dp" />
 
 
     <TextView

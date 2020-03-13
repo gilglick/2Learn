@@ -41,7 +41,7 @@ public final class Validation {
     }
 
     public static boolean isValidName(String name) {
-        final Pattern VALID_NAME = Pattern.compile("([A-Za-z])+\\.");
+        final Pattern VALID_NAME = Pattern.compile("([A-Za-z])+ ([A-Za-z])+");
         Matcher matcher = VALID_NAME.matcher(name);
         return matcher.matches() && !name.trim().matches("");
     }
