@@ -38,11 +38,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="120dp"
+                android:layout_marginTop="200dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/login_gradient_white"
                 android:orientation="vertical"
                 android:padding="20dp">
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -55,7 +56,6 @@
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_person"
                     android:drawablePadding="20dp"
-                    android:hint="@string/full_name"
                     android:inputType="text" />
 
                 <TextView
@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_email_black_24dp"
                     android:drawablePadding="20dp"
-                    android:hint="@string/email"
+                    android:hint="example@gmail.com"
                     android:inputType="textEmailAddress" />
 
                 <TextView
@@ -128,8 +128,9 @@
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    tools:ignore="Autofill,LabelFor" />
+
+                    android:hint="DD/MM/YYYY"
+                    android:focusableInTouchMode="false" />
 
                 <Button
                     android:id="@+id/registerButton"
@@ -139,7 +140,8 @@
                     android:background="@drawable/sign_in_up_button_gradient"
                     android:text="@string/register"
                     android:textAllCaps="false"
-                    android:textColor="#FFF" />
+                    android:textColor="#000"
+                    android:textStyle="bold"/>
 
                 <ProgressBar
                     android:id="@+id/progressBar"
@@ -147,28 +149,19 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center" />
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/appLogo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:padding="5dp"
+                android:src="@drawable/application_logo" />
         </RelativeLayout>
+
     </ScrollView>
-
-    <ImageView
-        android:id="@+id/imageVIew"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/login_gradient_white"
-        android:padding="5dp"
-        android:src="@mipmap/ic_launcher" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/imageVIew"
-        android:layout_centerHorizontal="true"
-        android:text="@string/app_name"
-        android:textColor="#FFF"
-        android:textSize="20sp" />
 
 
 
