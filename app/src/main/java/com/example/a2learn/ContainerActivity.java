@@ -15,6 +15,7 @@ import android.view.MenuItem;
 
 import com.example.a2learn.model.Student;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.storage.StorageReference;
 
 public class ContainerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
@@ -47,8 +48,8 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
 
         fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE).document(userId).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
-                Student stud = documentSnapshot.toObject(Student.class);
-                fragmentTransaction.replace(R.id.container_fragment,new FragmentProfile(stud));
+                Student student = documentSnapshot.toObject(Student.class);
+                fragmentTransaction.replace(R.id.container_fragment,new FragmentProfile(student));
                 fragmentTransaction.commit();
             }
         });

@@ -34,6 +34,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         private TextView userNameChat;
         public ImageView userImageChat;
         public Button userChatButton;
+        public Button userProfileButton;
         private View itemView;
 
         public ViewHolder(@NonNull View itemView) {
@@ -42,6 +43,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
             userNameChat = itemView.findViewById(R.id.userNameChat);
             userImageChat = itemView.findViewById(R.id.userImageChat);
             userChatButton = itemView.findViewById(R.id.userChat);
+            userProfileButton = itemView.findViewById(R.id.userProfile);
             this.itemView = itemView;
         }
 
@@ -69,7 +71,12 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         }
         holder.userChatButton.setOnClickListener(v -> {
             if (fragmentLoader != null) {
-                fragmentLoader.triggerFragment(student);
+                fragmentLoader.triggerFragmentChat(student);
+            }
+        });
+        holder.userProfileButton.setOnClickListener(v -> {
+            if(fragmentLoader != null){
+                fragmentLoader.triggerFragmentProfile(student);
             }
         });
     }
@@ -104,6 +111,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     }
 
     interface OnFragmentLoader {
-        void triggerFragment(Student student);
+        void triggerFragmentChat(Student student);
+        void triggerFragmentProfile(Student student);
     }
 }
