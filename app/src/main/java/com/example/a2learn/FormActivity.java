@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -19,10 +21,15 @@ import com.example.a2learn.model.Match;
 import com.example.a2learn.model.Student;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
 
 public class FormActivity extends AppCompatActivity {
 
     private EditText mFullName, mEmail, mPassword, mConfirmPassword, mDateOfBirth, mPhoneNumber;
+    private AutoCompleteTextView mAcademicInstitution;
     private Button registerButton;
     private ProgressBar progressBar;
     private FirebaseAuth firebaseAuth;
@@ -39,9 +46,19 @@ public class FormActivity extends AppCompatActivity {
         mPassword = findViewById(R.id.password);
         mConfirmPassword = findViewById(R.id.confirmPassword);
         mPhoneNumber = findViewById(R.id.phoneNumber);
+        mAcademicInstitution = findViewById(R.id.academeInstitution);
         mDateOfBirth = findViewById(R.id.dateOfBirth);
         progressBar = findViewById(R.id.progressBar);
         registerButton = findViewById(R.id.registerButton);
+
+        String[] academicInstitution = getApplication().getResources().getStringArray(R.array.institution);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplication(), R.layout.course_item, R.id.custom_list_item, academicInstitution);
+        mAcademicInstitution.setAdapter(arrayAdapter);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mAcademicInstitution.setAdapter(arrayAdapter);
+
+
+
         inProgress(false);
 
         registerButton.setOnClickListener(e -> {
@@ -72,10 +89,9 @@ public class FormActivity extends AppCompatActivity {
                 Student stud = new Student(
                         mFullName.getText().toString(),
                         mEmail.getText().toString(),
-                        "Afeka Academic College of Engineering",
+                        mAcademicInstitution.getText().toString(),
                         mDateOfBirth.getText().toString(),
                         mPhoneNumber.getText().toString());
-                Log.i("tag", stud + "");
                 firebaseAuth.createUserWithEmailAndPassword(mEmail.getText().toString(),
                         mPassword.getText().toString()).addOnSuccessListener(authResult -> {
                     FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();

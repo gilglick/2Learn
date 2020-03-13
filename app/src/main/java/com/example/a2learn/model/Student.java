@@ -74,7 +74,7 @@ public class Student {
 
 
     public void setAcademicInstitution(String academicInstitution) {
-        this.academicInstitution= academicInstitution;
+        this.academicInstitution = academicInstitution;
     }
 
 
@@ -102,28 +102,28 @@ public class Student {
         return email.equals(student.email);
     }
 
-    @Override
-    public String toString() {
-        return "Student: " + "\n" +
-                "fullName: " + fullName + "\n"
-                + "email: " + email + "\n"
-                + "phone: " + phoneNumber + "\n"
-                + "date of birth: " + dateOfBirth + "\n"
-                + "student description: " + "\n";
-    }
-
     public String userNeedHelpListStringFormat() {
         StringBuilder sb = new StringBuilder();
-        for (String course : needHelpList) {
-            sb.append(course).append("\n");
+        for (int i = 0; i < needHelpList.size(); i++) {
+            if (i == needHelpList.size() - 1) {
+                sb.append(needHelpList.get(i));
+            } else {
+                sb.append(needHelpList.get(i));
+                sb.append(System.getProperty("line.separator"));
+            }
         }
         return sb.toString();
     }
 
     public String userOfferListStringFormat() {
         StringBuilder sb = new StringBuilder();
-        for (String course : giveHelpList) {
-            sb.append(course).append("\n");
+        for (int i = 0; i < giveHelpList.size(); i++) {
+            if (i == giveHelpList.size() - 1) {
+                sb.append(giveHelpList.get(i));
+            } else {
+                sb.append(giveHelpList.get(i));
+                sb.append(System.getProperty("line.separator"));
+            }
         }
         return sb.toString();
     }
@@ -135,7 +135,8 @@ public class Student {
     public String getUri() {
         return uri;
     }
-    public String getDefaultUri(){
+
+    public String getDefaultUri() {
         return "gs://learn-d79df.appspot.com/profileImages/defaultImage.JPG";
     }
 

@@ -17,8 +17,10 @@
     <string name="email">Email Address</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="date_of_birth">Date Of Birth</string>
-    <string name="phone_number">Phone Number (optional)</string>
+    <string name="phone_number_form">Phone Number (optional)</string>
+    <string name="academic_institution_form">Academic Institution (optional)</string>
     <string name="register">Register</string>
+
 
 
     <!-- Profile string  -->
@@ -27,6 +29,8 @@
     <string name="open">open</string>
     <string name="needHelpList">Need help</string>
     <string name="offerHelpList">Offer help</string>
+    <string name="phone_number">Phone Number</string>
+
 
     <string name="description">
         Add new courses to your list
@@ -38,12 +42,19 @@
     <string name="proficiency">My proficiency</string>
     <string name="add_proficiency">Add Proficiency</string>
     <string name="log_out">Log out</string>
-    <string name="academic_institution">Afeka Academic College of Engineering </string>
 
     <!-- Home String   -->
     <string name="refresh">Refresh</string>
     <string name="come_back_in_another_time">I\'\ll be back in another time</string>
 
+    <string-array name="institution">
+
+        <item>Afeka- Tel-Aviv Academic College Of Engineering</item>
+        <item>Tel-Aviv University</item>
+        <item>HIT- Holon Institute Of Technology</item>
+        <item>Ruppin Academic Center</item>
+        <item>Bar-Ilan University</item>
+    </string-array>
 
     <string-array name="courses">
 
@@ -75,6 +86,7 @@
     <string name="match">Match</string>
     <string name="type_a_message">Type a message...</string>
     <string name="about">About</string>
+    <string name="no_details">no_details</string>
 
 
 </resources>

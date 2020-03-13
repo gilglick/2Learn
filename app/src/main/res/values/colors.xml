@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#000000</color>
     <color name="address">#2F7092</color>
     <color name="followers">#0D5D98</color>
     <color name="headings">#3797CF</color>
@@ -12,7 +12,7 @@
     <color name="gradStart">#63C9FF</color>
     <color name="followersBg">#65DCE5</color>
     <color name="followingBg">#49BEFF</color>
-    <color name="grey">#E5E5E5</color>
+    <color name="grey">#D0E5E5E5</color>
     <color name="light_grey">#eeeeee</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#80000000</color>

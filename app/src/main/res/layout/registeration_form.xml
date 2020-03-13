@@ -103,7 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="@string/phone_number" />
+                    android:text="@string/phone_number_form" />
 
                 <EditText
                     android:id="@+id/phoneNumber"
@@ -113,6 +113,18 @@
                     android:drawablePadding="20dp"
                     android:inputType="phone" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/academic_institution_form" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/academeInstitution"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_school_black_24dp"
+                    android:drawablePadding="20dp"
+                    android:inputType="textAutoComplete" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -128,7 +140,6 @@
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:focusable="false"
-
                     android:hint="DD/MM/YYYY"
                     android:focusableInTouchMode="false" />
 
