@@ -30,17 +30,10 @@ import com.example.a2learn.model.Student;
 import com.example.a2learn.model.StudentSetting;
 import com.example.a2learn.utility.CircleTransform;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
-import java.util.UUID;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -59,12 +52,17 @@ public class FragmentProfile extends Fragment {
     private TextView userOfferHelpTextView;
     private ImageView userImage;
     private Uri imageUri;
+    private boolean readOnly;
     private static final int PICK_IMAGE_GALLERY = 1;
     private static final int PICK_IMAGE_CAMERA = 0;
 
     FragmentProfile(Student student) {
         this.student = student;
-        this.studentSetting = new StudentSetting();
+    }
+
+    FragmentProfile(Student student, boolean readOnly) {
+        this.student = student;
+        this.readOnly = readOnly;
     }
 
     public FragmentProfile() {
@@ -90,7 +88,7 @@ public class FragmentProfile extends Fragment {
         ImageView linkedin = view.findViewById(R.id.linkedin);
 
         initializeProfile();
-        userImage.setOnClickListener(v -> selectImage(getContext()));
+
         facebookImage.setOnClickListener(v -> openWebPage(socialMedia.getFacebook()));
         twitterImage.setOnClickListener(v -> openWebPage(socialMedia.getTwitter()));
         linkedin.setOnClickListener(v -> openWebPage(socialMedia.getLinkedin()));
@@ -118,6 +116,11 @@ public class FragmentProfile extends Fragment {
         userDate.setText(student.getDateOfBirth());
         userOfferHelpTextView.setText(student.userOfferListStringFormat());
         userNeedHelpTextView.setText(student.userNeedHelpListStringFormat());
+        userImage.setOnClickListener(v -> {
+            if (!readOnly)
+                selectImage(getContext());
+        });
+
     }
 
 
@@ -182,7 +185,7 @@ public class FragmentProfile extends Fragment {
     }
 
     private void getImageFromDatabase() {
-        if(!student.getUri().matches("")){
+        if (!student.getUri().matches("")) {
             storageReference = storageReference.child((student.getEmail()));
             storageReference.getDownloadUrl().addOnCompleteListener(task -> {
                 if (task.isSuccessful() && task.getResult() != null) {
@@ -190,7 +193,7 @@ public class FragmentProfile extends Fragment {
                     Picasso.get().load(uri).transform(new CircleTransform()).into(userImage);
                 }
             }).addOnFailureListener(e -> Toast.makeText(getActivity(), "Download image failed", Toast.LENGTH_SHORT).show());
-        }else{
+        } else {
             Picasso.get().load(R.drawable.no_picture_circle).transform(new CircleTransform()).into(userImage);
         }
 
@@ -220,10 +223,12 @@ public class FragmentProfile extends Fragment {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         studentSetting = documentSnapshot.toObject(StudentSetting.class);
-
                     } else {
                         studentSetting = new StudentSetting();
                         fireStoreDatabase.writeUserSetting(student.getEmail(), studentSetting);
+                    }
+                    if (readOnly) {
+                        setReadOnlyView();
                     }
                 }).addOnFailureListener(e -> Log.d(TAG, "onFailure: "));
     }
@@ -237,6 +242,18 @@ public class FragmentProfile extends Fragment {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, webPage);
         startActivity(browserIntent);
 
+    }
+
+    private void setReadOnlyView() {
+        if (!studentSetting.isDisplayEmail()) {
+            userEmail.setVisibility(View.INVISIBLE);
+        }
+        if (!studentSetting.isDisplayPhone()) {
+            userPhoneNumber.setVisibility(View.INVISIBLE);
+        }
+        if (!studentSetting.isDisplayDate()) {
+            userDate.setVisibility(View.INVISIBLE);
+        }
     }
 
 

@@ -87,6 +87,8 @@
     <string name="type_a_message">Type a message...</string>
     <string name="about">About</string>
     <string name="no_details">no_details</string>
+    <string name="ask_help_in">Ask Help In :</string>
+    <string name="searching">Searching for new students</string>
 
 
 </resources>

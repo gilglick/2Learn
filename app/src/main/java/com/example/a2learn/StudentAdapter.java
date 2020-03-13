@@ -32,8 +32,10 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView userNameChat;
-        public ImageView userImageChat;
-        public Button userChatButton;
+        private ImageView userImageChat;
+        private ImageView chatImageView;
+        private ImageView ratingImageView;
+        private ImageView infoImageView;
         private View itemView;
 
         public ViewHolder(@NonNull View itemView) {
@@ -41,7 +43,9 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
 
             userNameChat = itemView.findViewById(R.id.userNameChat);
             userImageChat = itemView.findViewById(R.id.userImageChat);
-            userChatButton = itemView.findViewById(R.id.userChat);
+            chatImageView = itemView.findViewById(R.id.userChat);
+            ratingImageView = itemView.findViewById(R.id.userRating);
+            infoImageView = itemView.findViewById(R.id.userInfo);
             this.itemView = itemView;
         }
 
@@ -67,11 +71,20 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         } else {
             Picasso.get().load(R.drawable.no_picture_circle).transform(new CircleTransform()).into(holder.userImageChat);
         }
-        holder.userChatButton.setOnClickListener(v -> {
+        holder.chatImageView.setOnClickListener(v -> {
             if (fragmentLoader != null) {
-                fragmentLoader.triggerFragment(student);
+                fragmentLoader.triggerFragmentChat(student);
             }
         });
+        holder.infoImageView.setOnClickListener(v -> {
+            if(fragmentLoader != null){
+                fragmentLoader.triggerFragmentProfile(student);
+            }
+        });
+        holder.ratingImageView.setOnClickListener(v -> {
+            // need to open pop up
+        });
+
     }
 
     @Override
@@ -89,21 +102,13 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         return position;
     }
 
-    public void clear() {
-        int size = getItemCount();
-        if (size > 0) {
-            mUsers.subList(0, size).clear();
-
-            notifyItemRangeRemoved(0, size);
-        }
-    }
-
 
     public void setFragmentLoader(OnFragmentLoader fragmentLoader) {
         this.fragmentLoader = fragmentLoader;
     }
 
     interface OnFragmentLoader {
-        void triggerFragment(Student student);
+        void triggerFragmentChat(Student student);
+        void triggerFragmentProfile(Student student);
     }
 }

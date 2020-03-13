@@ -2,10 +2,13 @@ package com.example.a2learn;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,10 +33,13 @@ public class FragmentHome extends Fragment {
     private List<Card> rowItems;
     private ListenerRegistration listen;
     private Student student;
+    private ProgressBar progressBar;
+    private TextView searching;
 
-    public FragmentHome(){
+    public FragmentHome() {
 
     }
+
     public FragmentHome(Student student) {
         this.student = student;
 
@@ -45,7 +51,10 @@ public class FragmentHome extends Fragment {
         View view = inflater.inflate(R.layout.swipecard_activity, container, false);
         ImageButton likeButton = view.findViewById(R.id.likebtn);
         ImageButton disLikeButton = view.findViewById(R.id.dislikebtn);
+        progressBar = view.findViewById(R.id.progressBarCards);
+        searching = view.findViewById(R.id.searchingCardsTextView);
         SwipeFlingAdapterView flingContainer = view.findViewById(R.id.frame);
+
         rowItems = new ArrayList<>();
         arrayAdapter = new CardArrayAdapter(getActivity(), R.layout.item, rowItems);
         flingContainer.setAdapter(arrayAdapter);
@@ -77,8 +86,12 @@ public class FragmentHome extends Fragment {
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                if (itemsInAdapter == 0 || rowItems.size() == 0) {
-                    showEndDialog();
+                if(itemsInAdapter > 0 ){
+                    progressBar.setVisibility(View.INVISIBLE);
+                    searching.setVisibility(View.INVISIBLE);
+                }else{
+                    progressBar.setVisibility(View.VISIBLE);
+                    searching.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -126,7 +139,7 @@ public class FragmentHome extends Fragment {
                     Map<String, Boolean> map = studentMatches.getOptionalMatches();
                     if (map.containsKey(encodeDot(callee))) {
                         update(caller, callee, true);
-                        update(callee, caller,true);
+                        update(callee, caller, true);
                         Toast.makeText(getActivity(), "MATCH!!!!", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -143,33 +156,13 @@ public class FragmentHome extends Fragment {
                 .document(caller)
                 .update(FireStoreDatabase.MATCHES + "." + encodeDot(callee), match);
     }
-//
-//    private void updateCaller(String caller, String callee, boolean match) {
-//        fireStoreDatabase.getDatabase()
-//                .collection(FireStoreDatabase.STUDENT_STORAGE)
-//                .document(caller)
-//                .update(FireStoreDatabase.MATCHES + "." + encodeDot(callee), match);
-//    }
-//
-//    private void updateCallee(String callee, String caller,boolean match) {
-//        fireStoreDatabase.getDatabase()
-//                .collection(FireStoreDatabase.STUDENT_STORAGE)
-//                .document(callee)
-//                .update(FireStoreDatabase.MATCHES + "." + encodeDot(caller), match);
-//    }
+
 
     private String encodeDot(String userId) {
         return userId.replace('.', ':');
     }
 
-    private void showEndDialog() {
-        new AlertDialog.Builder(getActivity())
-                .setTitle("Oops!")
-                .setMessage("You watched all your currently optional matches.")
-                .setPositiveButton(R.string.refresh, (dialog, which) -> {
-                }).setNegativeButton(R.string.come_back_in_another_time, null)
-                .setIcon(android.R.drawable.ic_dialog_alert).show();
-    }
+
 
     @Override
     public void onStop() {

@@ -30,9 +30,9 @@ public class CardArrayAdapter extends android.widget.ArrayAdapter<Card> {
             name.setText(card_item.getFullName());
             askForHelp.setText(card_item.getUserNeedHelpListStringFormat());
             offerForHelp.setText(card_item.getUserOfferListStringFormat());
-            if(!card_item.getStudent().getUri().matches("")){
+            if (!card_item.getStudent().getUri().matches("")) {
                 Picasso.get().load(card_item.getStudent().getUri()).into(image);
-            }else{
+            } else {
                 Picasso.get().load(R.drawable.no_picture).into(image);
             }
         }

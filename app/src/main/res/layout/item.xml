@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="top"
@@ -30,48 +29,13 @@
             android:background="@color/white"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="220dp"
-                    android:background="@drawable/no_picture"
-                    android:scaleType="fitXY" />
-
-                <TextView
-                    android:id="@+id/item_swipe_left_indicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:alpha="0"
-                    android:background="@drawable/ic_home_menu"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="5dp"
-                    android:text="LIKE"
-                    android:textColor="@color/grey"
-                    android:textSize="35sp" />
-
-                <TextView
-                    android:id="@+id/item_swipe_right_indicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_margin="10dp"
-                    android:alpha="0"
-                    android:background="@drawable/ic_home_menu"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="5dp"
-                    android:text="NOPE"
-                    android:textColor="@color/grey"
-                    android:textSize="35sp" />
-            </FrameLayout>
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="220dp"
+                android:background="@drawable/no_picture"
+                android:scaleType="fitXY"
+                android:contentDescription="@string/user_image_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -87,19 +51,23 @@
 
                     <TextView
                         android:id="@+id/name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Jonathan, 29"
-                        android:textColor="@color/grey"
+                        android:layout_weight="1"
+                        android:paddingLeft="10dp"
+                        android:textColor="@color/black"
                         android:textSize="20sp" />
 
                     <RatingBar
                         android:id="@+id/ratingBar"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="20dp"
+                        style="?android:attr/ratingBarStyleIndicator"
+                        android:isIndicator="false"
                         android:numStars="5" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -111,7 +79,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:background="@drawable/ic_school_black_24dp"
                         android:textColor="@color/grey"
                         android:textSize="20sp" />
@@ -120,8 +88,7 @@
                         android:id="@+id/academeInstitution"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="Afeka academic"
+                        android:layout_marginStart="20dp"
                         android:textColor="@color/grey"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -152,7 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="Ask Help In :"
+                        android:text="@string/ask_help_in"
                         android:textColor="@color/headings"
                         android:textSize="14sp" />
 
@@ -175,7 +142,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="Ask Help In :"
+                        android:text="@string/ask_help_in"
                         android:textColor="@color/headings"
                         android:textSize="14sp" />
 

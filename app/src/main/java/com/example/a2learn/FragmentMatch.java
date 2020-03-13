@@ -78,11 +78,23 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
     }
 
     @Override
-    public void triggerFragment(Student student) {
+    public void triggerFragmentChat(Student student) {
         FragmentChat fragmentChat = new FragmentChat();
+
         Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container_fragment, fragmentChat)
                 .addToBackStack(null)
                 .commit();
     }
+
+    @Override
+    public void triggerFragmentProfile(Student student) {
+        FragmentProfile fragmentProfile = new FragmentProfile(student, true);
+        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_fragment, fragmentProfile)
+                .addToBackStack(null)
+                .commit();
+
+    }
+
 }

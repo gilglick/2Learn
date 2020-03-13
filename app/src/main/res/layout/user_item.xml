@@ -28,17 +28,28 @@
         android:layout_alignParentEnd="true"
         android:orientation="horizontal">
 
-        <Button
+        <ImageView
             android:id="@+id/userChat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/chat" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/chat" />
 
-        <Button
-            android:id="@+id/userProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/prfile_menu" />
+        <ImageView
+            android:id="@+id/userRating"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/star" />
+
+        <ImageView
+            android:id="@+id/userInfo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/info" />
+
+
     </LinearLayout>
 
     <View
