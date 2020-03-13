@@ -1,6 +1,4 @@
-package com.example.a2learn;
-
-import android.widget.ImageView;
+package com.example.a2learn.model;
 
 public class Card {
     private Student student;

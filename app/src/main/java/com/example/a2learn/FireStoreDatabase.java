@@ -2,6 +2,9 @@ package com.example.a2learn;
 
 import android.util.Log;
 
+import com.example.a2learn.model.SocialMedia;
+import com.example.a2learn.model.Student;
+import com.example.a2learn.model.StudentSetting;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FieldValue;

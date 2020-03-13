@@ -2,7 +2,6 @@ package com.example.a2learn;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.a2learn.model.Card;
+import com.example.a2learn.model.Match;
+import com.example.a2learn.model.Student;
 import com.google.firebase.firestore.DocumentChange;
 
 import com.google.firebase.firestore.ListenerRegistration;
@@ -21,8 +23,6 @@ import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class FragmentHome extends Fragment {
     private FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();

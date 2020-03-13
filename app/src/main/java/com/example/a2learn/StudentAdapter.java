@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.a2learn.model.Student;
 import com.example.a2learn.utility.CircleTransform;
 import com.squareup.picasso.Picasso;
 

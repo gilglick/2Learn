@@ -1,4 +1,4 @@
-package com.example.a2learn;
+package com.example.a2learn.model;
 
 @SuppressWarnings("WeakerAccess")
 public class SocialMedia {
@@ -11,7 +11,7 @@ public class SocialMedia {
 
     }
 
-    SocialMedia(String facebook, String twitter, String linkedin) {
+    public SocialMedia(String facebook, String twitter, String linkedin) {
         this.facebook = facebook;
         this.twitter = twitter;
         this.linkedin = linkedin;

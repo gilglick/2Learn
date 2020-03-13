@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.a2learn.model.Student;
 import com.google.android.material.navigation.NavigationView;
 
 public class ContainerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -75,6 +76,12 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
                         break;
                     case R.id.nav_chat:
                         fragmentTransaction.replace(R.id.container_fragment, new FragmentMatch(student)).commit();
+                        break;
+                    case R.id.setting:
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentSetting(student)).commit();
+                        break;
+                    case R.id.about:
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentAbout()).commit();
                         break;
 
                 }

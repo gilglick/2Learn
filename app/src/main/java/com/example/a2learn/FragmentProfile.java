@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,20 +22,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.example.a2learn.model.SocialMedia;
+import com.example.a2learn.model.Student;
+import com.example.a2learn.model.StudentSetting;
 import com.example.a2learn.utility.CircleTransform;
+
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
+import java.util.UUID;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class FragmentProfile extends Fragment implements DialogSetting.UpdateCallback {
+public class FragmentProfile extends Fragment {
     private FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
-
+    private StorageReference storageReference = fireStoreDatabase.getStorageDatabase().getReference(FireStoreDatabase.PROFILE_IMAGES_STORAGE);
     private Student student;
     private SocialMedia socialMedia;
     private StudentSetting studentSetting;
@@ -49,7 +59,6 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
     private TextView userOfferHelpTextView;
     private ImageView userImage;
     private Uri imageUri;
-    private DialogSetting dialogSetting;
     private static final int PICK_IMAGE_GALLERY = 1;
     private static final int PICK_IMAGE_CAMERA = 0;
 
@@ -69,9 +78,7 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         userImage = view.findViewById(R.id.userImage);
-        Button cameraButton = view.findViewById(R.id.cameraButton);
         userEmail = view.findViewById(R.id.emailTextView);
-        CardView editButton = view.findViewById(R.id.editButton);
         userName = view.findViewById(R.id.userNameProfile);
         userLocation = view.findViewById(R.id.userLocationProfile);
         userPhoneNumber = view.findViewById(R.id.phoneNumberProfile);
@@ -82,20 +89,12 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
         ImageView twitterImage = view.findViewById(R.id.twitter);
         ImageView linkedin = view.findViewById(R.id.linkedin);
 
-
         initializeProfile();
-        cameraButton.setOnClickListener(v -> selectImage(getContext()));
+        userImage.setOnClickListener(v -> selectImage(getContext()));
         facebookImage.setOnClickListener(v -> openWebPage(socialMedia.getFacebook()));
         twitterImage.setOnClickListener(v -> openWebPage(socialMedia.getTwitter()));
         linkedin.setOnClickListener(v -> openWebPage(socialMedia.getLinkedin()));
 
-        editButton.setOnClickListener(v -> {
-            if (dialogSetting == null) {
-                dialogSetting = new DialogSetting(Objects.requireNonNull(getActivity()), studentSetting);
-            }
-            dialogSetting.setCallback(this);
-            dialogSetting.show();
-        });
 
         view.setOnTouchListener((v, event) -> {
             InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -114,7 +113,7 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
         readUserSettingFromStorage();
         userName.setText(student.getFullName());
         userEmail.setText(student.getEmail());
-        userLocation.setText(student.getLocation());
+        userLocation.setText(student.getAcademicInstitution());
         userPhoneNumber.setText(student.getPhoneNumber());
         userDate.setText(student.getDateOfBirth());
         userOfferHelpTextView.setText(student.userOfferListStringFormat());
@@ -165,7 +164,7 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
 
 
     private void uploadImageToStorage() {
-        StorageReference storageReference = fireStoreDatabase.getStorageDatabase().getReference(FireStoreDatabase.PROFILE_IMAGES_STORAGE).child((student.getEmail()));
+        storageReference = storageReference.child((student.getEmail()));
         storageReference.putFile(imageUri).continueWithTask(task -> {
             if (!task.isSuccessful()) {
                 Toast.makeText(getActivity(), "Upload failed", Toast.LENGTH_SHORT).show();
@@ -183,15 +182,18 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
     }
 
     private void getImageFromDatabase() {
-        StorageReference storageReference = fireStoreDatabase.getStorageDatabase().getReference(FireStoreDatabase.PROFILE_IMAGES_STORAGE).child((student.getEmail()));
-        storageReference.getDownloadUrl().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                Uri uri = task.getResult();
-                Picasso.get().load(uri).transform(new CircleTransform()).into(userImage);
-            } else {
-                Picasso.get().load(R.drawable.no_picture_circle).transform(new CircleTransform()).into(userImage);
-            }
-        }).addOnFailureListener(e -> Toast.makeText(getActivity(), "Download image failed", Toast.LENGTH_SHORT).show());
+        if(!student.getUri().matches("")){
+            storageReference = storageReference.child((student.getEmail()));
+            storageReference.getDownloadUrl().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    Uri uri = task.getResult();
+                    Picasso.get().load(uri).transform(new CircleTransform()).into(userImage);
+                }
+            }).addOnFailureListener(e -> Toast.makeText(getActivity(), "Download image failed", Toast.LENGTH_SHORT).show());
+        }else{
+            Picasso.get().load(R.drawable.no_picture_circle).transform(new CircleTransform()).into(userImage);
+        }
+
     }
 
     private void readSocialMediaFromStorage() {
@@ -228,9 +230,7 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
 
 
     private void openWebPage(String url) {
-
         Uri webPage = Uri.parse(url);
-
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
             webPage = Uri.parse("http://" + url);
         }
@@ -239,40 +239,6 @@ public class FragmentProfile extends Fragment implements DialogSetting.UpdateCal
 
     }
 
-    @Override
-    public void notifyProfileOnUpdate(int fieldToUpdate, String newValue) {
-        switch (fieldToUpdate) {
-            case Utility.PHONE_NUMBER_INDICATOR:
-                student.setPhoneNumber(userPhoneNumber.getText().toString());
-                fireStoreDatabase.updateField(student.getEmail(), FireStoreDatabase.STUDENT_STORAGE, FireStoreDatabase.PHONE_NUMBER, newValue);
-                userPhoneNumber.setText(newValue);
-                break;
-            case Utility.FACEBOOK_INDICATOR:
-                fireStoreDatabase.updateField(student.getEmail(), FireStoreDatabase.SOCIAL_MEDIA_STORAGE, FireStoreDatabase.FACEBOOK, newValue);
-                socialMedia.setFacebook(newValue);
-                break;
-            case Utility.TWITTER_INDICATOR:
-                fireStoreDatabase.updateField(student.getEmail(), FireStoreDatabase.SOCIAL_MEDIA_STORAGE, FireStoreDatabase.TWITTER, newValue);
-                socialMedia.setTwitter(newValue);
-                break;
-            case Utility.LINKEDIN_INDICATOR:
-                fireStoreDatabase.updateField(student.getEmail(), FireStoreDatabase.SOCIAL_MEDIA_STORAGE, FireStoreDatabase.LINKEDIN, newValue);
-                socialMedia.setLinkedin(newValue);
-                break;
-        }
-
-
-    }
-
-    @Override
-    public void notifyOnUserPreferenceChanged(String field, boolean checked) {
-        fireStoreDatabase.getDatabase()
-                .collection(FireStoreDatabase.SETTING_STORAGE)
-                .document(student.getEmail())
-                .update(field, checked)
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "onSuccess: field update successfully. "))
-                .addOnFailureListener(e -> Log.d(TAG, "onFailure: failed to change the field. "));
-    }
 
 }
 
