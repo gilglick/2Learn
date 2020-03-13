@@ -1,4 +1,4 @@
-package com.example.a2learn;
+package com.example.a2learn.model;
 
 import java.util.HashMap;
 import java.util.Map;

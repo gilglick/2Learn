@@ -1,14 +1,8 @@
-package com.example.a2learn;
+package com.example.a2learn.model;
 
-
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 @SuppressWarnings("WeakerAccess")
 public class Student {
@@ -16,7 +10,7 @@ public class Student {
     private String email;
     private String phoneNumber;
     private String dateOfBirth;
-    private String location;
+    private String academicInstitution;
     private String uri;
     private List<String> giveHelpList;
     private List<String> needHelpList;
@@ -25,12 +19,12 @@ public class Student {
 
     }
 
-    public Student(String fullName, String email, String location, String dateOfBirth, String phoneNumber) {
+    public Student(String fullName, String email, String academicInstitution, String dateOfBirth, String phoneNumber) {
         this.fullName = fullName;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.phoneNumber = phoneNumber;
-        this.location = location;
+        this.academicInstitution = academicInstitution;
         this.uri = "";
         giveHelpList = new ArrayList<>();
         needHelpList = new ArrayList<>();
@@ -79,8 +73,8 @@ public class Student {
     }
 
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setAcademicInstitution(String academicInstitution) {
+        this.academicInstitution= academicInstitution;
     }
 
 
@@ -88,8 +82,8 @@ public class Student {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getLocation() {
-        return location;
+    public String getAcademicInstitution() {
+        return academicInstitution;
     }
 
     @Override
@@ -140,6 +134,9 @@ public class Student {
 
     public String getUri() {
         return uri;
+    }
+    public String getDefaultUri(){
+        return "gs://learn-d79df.appspot.com/profileImages/defaultImage.JPG";
     }
 
 }

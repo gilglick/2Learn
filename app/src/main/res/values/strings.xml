@@ -25,7 +25,6 @@
     <string name="user_image_content">User image picture</string>
     <string name="close">close</string>
     <string name="open">open</string>
-    <string name="about">About</string>
     <string name="needHelpList">Need help</string>
     <string name="offerHelpList">Offer help</string>
 
@@ -39,7 +38,7 @@
     <string name="proficiency">My proficiency</string>
     <string name="add_proficiency">Add Proficiency</string>
     <string name="log_out">Log out</string>
-    <string name="israel_kfar_saba">Israel - kfar saba</string>
+    <string name="academic_institution">Afeka Academic College of Engineering </string>
 
     <!-- Home String   -->
     <string name="refresh">Refresh</string>
@@ -63,7 +62,7 @@
     <string name="edit_facebook_url">Facebook</string>
     <string name="edit_twitter_url">Twitter</string>
     <string name="edit_linkedin_url">Linkedin</string>
-    <string name="setting">Edit Details</string>
+    <string name="setting">Setting</string>
     <string name="hint_facebook">https://www.facebook.com</string>
     <string name="hint_twitter">https://www.twitter.com/</string>
     <string name="hint_linkedin">https://www.linkedin.com</string>
@@ -75,6 +74,7 @@
     <string name="chat">Chat</string>
     <string name="match">Match</string>
     <string name="type_a_message">Type a message...</string>
+    <string name="about">About</string>
 
 
 </resources>

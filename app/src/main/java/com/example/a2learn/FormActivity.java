@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.a2learn.model.Match;
+import com.example.a2learn.model.Student;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -70,7 +72,7 @@ public class FormActivity extends AppCompatActivity {
                 Student stud = new Student(
                         mFullName.getText().toString(),
                         mEmail.getText().toString(),
-                        "location",
+                        "Afeka Academic College of Engineering",
                         mDateOfBirth.getText().toString(),
                         mPhoneNumber.getText().toString());
                 Log.i("tag", stud + "");

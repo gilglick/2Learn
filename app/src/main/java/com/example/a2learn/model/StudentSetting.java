@@ -1,4 +1,4 @@
-package com.example.a2learn;
+package com.example.a2learn.model;
 
 public class StudentSetting {
 
@@ -6,7 +6,7 @@ public class StudentSetting {
     private boolean displayPhone;
     private boolean displayDate;
 
-    StudentSetting(){
+    public StudentSetting(){
 
     }
 
