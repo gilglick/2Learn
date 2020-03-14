@@ -64,7 +64,8 @@
                         android:layout_weight="1"
                         android:layout_marginEnd="20dp"
                         style="?android:attr/ratingBarStyleIndicator"
-                        android:isIndicator="false"
+                        android:progressTint="@color/goldenStar"
+                        android:isIndicator="true"
                         android:numStars="5" />
 
                 </LinearLayout>

@@ -1,6 +1,5 @@
 package com.example.a2learn;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,10 +16,12 @@ import androidx.fragment.app.Fragment;
 
 import com.example.a2learn.model.Card;
 import com.example.a2learn.model.Match;
+import com.example.a2learn.model.Rating;
 import com.example.a2learn.model.Student;
 import com.google.firebase.firestore.DocumentChange;
 
 import com.google.firebase.firestore.ListenerRegistration;
+
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -58,8 +59,7 @@ public class FragmentHome extends Fragment {
         rowItems = new ArrayList<>();
         arrayAdapter = new CardArrayAdapter(getActivity(), R.layout.item, rowItems);
         flingContainer.setAdapter(arrayAdapter);
-        initializeCardsFromDatabase();
-
+        cardsListener();
         likeButton.setOnClickListener(v -> {
             onMatchListener();
             flingContainer.getTopCardListener().selectRight();
@@ -86,10 +86,10 @@ public class FragmentHome extends Fragment {
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                if(itemsInAdapter > 0 ){
+                if (itemsInAdapter > 0) {
                     progressBar.setVisibility(View.INVISIBLE);
                     searching.setVisibility(View.INVISIBLE);
-                }else{
+                } else {
                     progressBar.setVisibility(View.VISIBLE);
                     searching.setVisibility(View.VISIBLE);
                 }
@@ -105,8 +105,32 @@ public class FragmentHome extends Fragment {
 
         return view;
     }
+//
+//    private void initCards() {
+//        fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE)
+//                .get().addOnCompleteListener(task -> {
+//            if (task.isSuccessful() && task.getResult() != null) {
+//                List<Student> list = task.getResult().toObjects(Student.class);
+//                for (Student cStudent : list) {
+//                    Log.i("tag", "initCards: " + cStudent);
+//                    fireStoreDatabase.getDatabase().collection(FireStoreDatabase.RATING)
+//                            .document(cStudent.getEmail())
+//                            .get().addOnCompleteListener(task1 -> {
+//                        if (task1.isSuccessful() && task1.getResult() != null) {
+//                            Rating rating = task1.getResult().toObject(Rating.class);
+//                            if (rating != null && !cStudent.equals(student)) {
+//                                rowItems.add(new Card(cStudent, rating));
+//                                arrayAdapter.notifyDataSetChanged();
+//
+//                            }
+//                        }
+//                    });
+//                }
+//            }
+//        });
+//    }
 
-    private void initializeCardsFromDatabase() {
+    private void cardsListener() {
         listen = fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
                     if (queryDocumentSnapshots != null) {
@@ -114,16 +138,22 @@ public class FragmentHome extends Fragment {
                         for (DocumentChange doc : list) {
                             Student currentStudent = doc.getDocument().toObject(Student.class);
                             if (!currentStudent.equals(student)) {
-                                rowItems.add(new Card(currentStudent));
+                                fireStoreDatabase.getDatabase().collection(FireStoreDatabase.RATING)
+                                        .document(currentStudent.getEmail())
+                                        .get().addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful() && task1.getResult() != null) {
+                                        Rating rating = task1.getResult().toObject(Rating.class);
+                                        if (rating != null && !currentStudent.equals(student)) {
+                                            rowItems.add(new Card(currentStudent, rating));
+                                            arrayAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
-                    if (arrayAdapter != null)
-                        arrayAdapter.notifyDataSetChanged();
-
                 });
     }
-
 
     private void onMatchListener() {
         String caller, callee;
@@ -163,10 +193,10 @@ public class FragmentHome extends Fragment {
     }
 
 
-
     @Override
     public void onStop() {
         super.onStop();
         listen.remove();
     }
+
 }

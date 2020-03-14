@@ -30,6 +30,10 @@ import com.example.a2learn.model.Student;
 import com.example.a2learn.model.StudentSetting;
 import com.example.a2learn.utility.CircleTransform;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 

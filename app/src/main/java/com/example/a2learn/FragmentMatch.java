@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,7 +42,7 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         studentList = new ArrayList<>();
-        studentAdapter = new StudentAdapter(getContext(), studentList);
+        studentAdapter = new StudentAdapter(getContext(), studentList,student);
         studentAdapter.setFragmentLoader(FragmentMatch.this);
         recyclerView.setAdapter(studentAdapter);
         readAllMatchFromStorage();
@@ -99,15 +98,16 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
 
     }
 
-
-
     @Override
-    public void triggerRatingBar(String userId) {
+    public void triggerRatingBar(Student caller, Student callee) {
         if(getActivity() != null){
-            RatingDialog ratingDialog = new RatingDialog(getActivity(),userId);
+            RatingDialog ratingDialog = new RatingDialog(getActivity(),caller, callee);
             ratingDialog.show();
-            Toast.makeText(getActivity(), "testing", Toast.LENGTH_SHORT).show();
+
         }
+
     }
+
+
 
 }

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.a2learn.model.Match;
+import com.example.a2learn.model.Rating;
 import com.example.a2learn.model.Student;
 import com.example.a2learn.utility.DialogDate;
 import com.google.firebase.auth.FirebaseAuth;
@@ -94,6 +95,8 @@ public class FormActivity extends AppCompatActivity {
                     fireStoreDatabase.addStudent(stud);
                     fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
                             .document(stud.getEmail()).set(new Match());
+                    fireStoreDatabase.getDatabase().collection(FireStoreDatabase.RATING)
+                            .document(stud.getEmail()).set(new Rating());
                     startActivity(new Intent(this, LoginActivity.class));
                 }).addOnFailureListener(e1 ->
                         Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT).show());

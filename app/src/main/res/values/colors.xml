@@ -17,6 +17,6 @@
     <color name="white">#FFFFFF</color>
     <color name="transparent">#80000000</color>
     <color name="black">#F0000000</color>
-    <color name="golenStar">#FFDF00</color>
+    <color name="goldenStar">#FFDF00</color>
 
 </resources>
