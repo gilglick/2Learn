@@ -15,6 +15,7 @@
         android:text="@string/upgrade_your_skills"
         android:textColor="@color/followers"
         android:textSize="18sp"
+        android:paddingTop="10dp"
         android:textStyle="bold" />
 
 
@@ -24,6 +25,7 @@
         android:layout_height="wrap_content"
         android:autofillHints="select course"
         android:completionThreshold="0"
+        android:paddingTop="50dp"
         android:hint="@string/search_course"
         android:inputType="text" />
 
@@ -61,86 +63,39 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:paddingTop="60dp"
+        android:paddingBottom="60dp"
         android:gravity="center"
+
         android:orientation="horizontal">
 
-        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/addCourseCard"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:layout_marginEnd="20dp"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground"
-            card_view:cardCornerRadius="4dp">
+
 
             <ImageView
-                android:layout_width="50dp"
+                android:id="@+id/addButton"
+                android:layout_width="48dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:background="@drawable/file" />
+                android:src="@drawable/plus"
+                 />
 
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/removeCourseCard"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground"
-            card_view:cardCornerRadius="4dp">
 
             <ImageView
+                android:id="@id/removeButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:background="@drawable/remove" />
 
-        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/descriptionContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="@string/information"
-            android:textColor="@color/followers"
-            android:textSize="18sp" />
-
-        <View
-
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="5dp"
-            android:background="@color/grey" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/proficiency_description"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
-
-    </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/floatingInformation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_gravity="end"
         android:layout_margin="10dp"
-        android:backgroundTint="@color/followers"
-        android:elevation="6dp"
-        android:src="@drawable/ic_info_outline_black_24dp"
-        app:fabSize="mini" />
+        android:background="@drawable/info"/>
 
 </LinearLayout>

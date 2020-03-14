@@ -2,6 +2,7 @@ package com.example.a2learn;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -30,7 +32,7 @@ public class FragmentProficiency extends Fragment {
     private Student student;
     private boolean giveHelpActive, needHelpActive;
     private String currentCourse;
-    private FloatingActionButton floatingActionButton;
+    private ImageButton floatingActionButton;
     private LinearLayout descriptionContent;
     private boolean isContentVisible = false;
 
@@ -53,8 +55,6 @@ public class FragmentProficiency extends Fragment {
         CardView addCourse = view.findViewById(R.id.addCourseCard);
         CardView removeCourse = view.findViewById(R.id.removeCourseCard);
         floatingActionButton = view.findViewById(R.id.floatingInformation);
-        descriptionContent = view.findViewById(R.id.descriptionContent);
-        descriptionContent.setVisibility(View.INVISIBLE);
         String[] courses = Objects.requireNonNull(getActivity()).getResources().getStringArray(R.array.courses);
         List<String> courseList = Arrays.asList(courses);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.course_item, R.id.custom_list_item, courses);
@@ -65,12 +65,13 @@ public class FragmentProficiency extends Fragment {
         coursesEditText.setOnItemClickListener((parent, view1, position, id) -> currentCourse = arrayAdapter.getItem(position));
 
         floatingActionButton.setOnClickListener(v -> {
-            if (!isContentVisible) {
-                descriptionContent.setVisibility(View.VISIBLE);
-            } else {
-                descriptionContent.setVisibility(View.INVISIBLE);
-            }
-            isContentVisible = !isContentVisible;
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.information)
+                       .setMessage(R.string.proficiency_description)
+                        .setPositiveButton(android.R.string.ok, ((dialog, which) -> {
+                        })).setIcon(android.R.drawable.ic_dialog_info)
+                        .show();
+
         });
         giveHelpRadioButton.setOnClickListener(v -> {
             giveHelpActive = true;
