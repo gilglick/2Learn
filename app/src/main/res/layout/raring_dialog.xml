@@ -7,16 +7,17 @@
 
     <RatingBar
         android:id="@+id/customRatingBar"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:numStars="5"
-        android:progressTint="@color/golenStar"
+        android:progressTint="@color/goldenStar"
         android:layout_centerHorizontal="true"/>
     <Button
+        android:id="@+id/rateMe"
         android:layout_below="@+id/customRatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rate me"
+        android:text="@string/rate_me"
         android:textStyle="bold"
         android:textSize="15sp"
         android:layout_centerHorizontal="true"/>

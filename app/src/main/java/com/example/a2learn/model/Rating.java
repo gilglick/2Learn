@@ -1,17 +1,35 @@
 package com.example.a2learn.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Rating {
-    private List<Double> ratings;
+    private Map<String, Float> ratings = new HashMap<>();
+    private float currentRating;
 
-    public Rating(){
-        ratings = new ArrayList<>();
+    public Rating() {
+        this.currentRating = 0F;
     }
 
-    public void addRate(double rate){
-        ratings.add(rate);
+    public Map<String, Float> getRatings() {
+        return ratings;
     }
 
+
+    public float calcRating() {
+        float rating = 0;
+        for (Float rate : ratings.values()) {
+            rating += rate;
+        }
+        return rating / ratings.size();
+    }
+
+
+    public float getCurrentRating() {
+        return currentRating;
+    }
+
+    public void setCurrentRating(Float currentRating) {
+        this.currentRating = currentRating;
+    }
 }

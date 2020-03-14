@@ -22,10 +22,12 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     private Context context;
     private List<Student> mUsers;
     private OnFragmentLoader fragmentLoader;
+    private Student caller;
 
-    public StudentAdapter(Context context, List<Student> mUsers) {
+    public StudentAdapter(Context context, List<Student> mUsers, Student caller) {
         this.context = context;
         this.mUsers = mUsers;
+        this.caller = caller;
         setHasStableIds(true);
 
     }
@@ -37,7 +39,6 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         private ImageView chatImageView;
         private ImageView ratingImageView;
         private ImageView infoImageView;
-        private View itemView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -47,7 +48,6 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
             chatImageView = itemView.findViewById(R.id.userChat);
             ratingImageView = itemView.findViewById(R.id.userRating);
             infoImageView = itemView.findViewById(R.id.userInfo);
-            this.itemView = itemView;
         }
 
     }
@@ -62,27 +62,27 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        Student student = mUsers.get(position);
-        holder.userNameChat.setText(student.getFullName());
-        if (!student.getUri().matches("")) {
-            Picasso.get().load(student.getUri()).transform(new CircleTransform()).into(holder.userImageChat);
+        Student callee = mUsers.get(position);
+        holder.userNameChat.setText(callee.getFullName());
+        if (!callee.getUri().matches("")) {
+            Picasso.get().load(callee.getUri()).transform(new CircleTransform()).into(holder.userImageChat);
         } else {
             Picasso.get().load(R.drawable.no_picture_circle).transform(new CircleTransform()).into(holder.userImageChat);
         }
         holder.chatImageView.setOnClickListener(v -> {
             if (fragmentLoader != null) {
-                fragmentLoader.triggerFragmentChat(student);
+                fragmentLoader.triggerFragmentChat(callee);
             }
         });
         holder.infoImageView.setOnClickListener(v -> {
-            if(fragmentLoader != null){
-                fragmentLoader.triggerFragmentProfile(student);
+            if (fragmentLoader != null) {
+                fragmentLoader.triggerFragmentProfile(callee);
             }
         });
         holder.ratingImageView.setOnClickListener(v -> {
-                if(fragmentLoader != null){
-                    fragmentLoader.triggerRatingBar(student.getEmail());
-                }
+            if (fragmentLoader != null) {
+                fragmentLoader.triggerRatingBar(caller, callee);
+            }
         });
 
     }
@@ -109,7 +109,9 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
 
     interface OnFragmentLoader {
         void triggerFragmentChat(Student student);
+
         void triggerFragmentProfile(Student student);
-        void triggerRatingBar(String userId);
+
+        void triggerRatingBar(Student caller, Student callee);
     }
 }

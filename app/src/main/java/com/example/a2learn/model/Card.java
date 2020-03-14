@@ -2,9 +2,14 @@ package com.example.a2learn.model;
 
 public class Card {
     private Student student;
-
-    public Card(Student student) {
+    private Rating rating;
+    public Card(Student student,Rating rating) {
         this.student = student;
+        this.rating = rating;
+    }
+
+    public Rating getRating() {
+        return rating;
     }
 
     public Student getStudent() {
