@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.a2learn.model.Student;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,10 +30,14 @@ public class FragmentProficiency extends Fragment {
     private Student student;
     private boolean giveHelpActive, needHelpActive;
     private String currentCourse;
+    private FloatingActionButton floatingActionButton;
+    private LinearLayout descriptionContent;
+    private boolean isContentVisible = false;
 
-    public FragmentProficiency(){
+    public FragmentProficiency() {
 
     }
+
     public FragmentProficiency(Student student) {
         this.student = student;
     }
@@ -46,6 +52,9 @@ public class FragmentProficiency extends Fragment {
         RadioButton giveHelpRadioButton = view.findViewById(R.id.radioButtonGiveHelp);
         CardView addCourse = view.findViewById(R.id.addCourseCard);
         CardView removeCourse = view.findViewById(R.id.removeCourseCard);
+        floatingActionButton = view.findViewById(R.id.floatingInformation);
+        descriptionContent = view.findViewById(R.id.descriptionContent);
+        descriptionContent.setVisibility(View.INVISIBLE);
         String[] courses = Objects.requireNonNull(getActivity()).getResources().getStringArray(R.array.courses);
         List<String> courseList = Arrays.asList(courses);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.course_item, R.id.custom_list_item, courses);
@@ -55,6 +64,14 @@ public class FragmentProficiency extends Fragment {
 
         coursesEditText.setOnItemClickListener((parent, view1, position, id) -> currentCourse = arrayAdapter.getItem(position));
 
+        floatingActionButton.setOnClickListener(v -> {
+            if (!isContentVisible) {
+                descriptionContent.setVisibility(View.VISIBLE);
+            } else {
+                descriptionContent.setVisibility(View.INVISIBLE);
+            }
+            isContentVisible = !isContentVisible;
+        });
         giveHelpRadioButton.setOnClickListener(v -> {
             giveHelpActive = true;
             needHelpActive = false;

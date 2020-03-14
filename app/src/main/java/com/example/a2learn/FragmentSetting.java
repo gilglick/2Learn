@@ -59,7 +59,6 @@ public class FragmentSetting extends Fragment {
         userLinkedin = view.findViewById(R.id.linkedinDialogEditText);
         Switch userLinkedinSwitch = view.findViewById(R.id.linkedinDialogSwitch);
         CardView confirmEdit = view.findViewById(R.id.confirmChangesButton);
-        CardView exitExit = view.findViewById(R.id.cancelChanges);
         emailCheckBox = view.findViewById(R.id.emailCheckBox);
         phoneNumberCheckBox = view.findViewById(R.id.phoneNumberCheckBox);
         dateOfBirthCheckBox = view.findViewById(R.id.dateOfBirthCheckBox);
@@ -98,10 +97,6 @@ public class FragmentSetting extends Fragment {
             }
         });
 
-        exitExit.setOnClickListener(v -> {
-            initSwitches(switches);
-            initEditTexts(editTexts);
-        });
         view.setOnTouchListener((v, event) -> {
             InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Activity.INPUT_METHOD_SERVICE);
             View view12 = getActivity().getCurrentFocus();

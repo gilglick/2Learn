@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a2learn.model.Student;
 import com.example.a2learn.utility.CircleTransform;
+import com.example.a2learn.utility.RatingDialog;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -49,9 +50,6 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
             this.itemView = itemView;
         }
 
-        public View getItemView() {
-            return itemView;
-        }
     }
 
     @NonNull
@@ -82,7 +80,9 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
             }
         });
         holder.ratingImageView.setOnClickListener(v -> {
-            // need to open pop up
+                if(fragmentLoader != null){
+                    fragmentLoader.triggerRatingBar(student.getEmail());
+                }
         });
 
     }
@@ -110,5 +110,6 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     interface OnFragmentLoader {
         void triggerFragmentChat(Student student);
         void triggerFragmentProfile(Student student);
+        void triggerRatingBar(String userId);
     }
 }

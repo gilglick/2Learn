@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a2learn.model.Match;
 import com.example.a2learn.model.Student;
+import com.example.a2learn.utility.RatingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +97,17 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
                 .addToBackStack(null)
                 .commit();
 
+    }
+
+
+
+    @Override
+    public void triggerRatingBar(String userId) {
+        if(getActivity() != null){
+            RatingDialog ratingDialog = new RatingDialog(getActivity(),userId);
+            ratingDialog.show();
+            Toast.makeText(getActivity(), "testing", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

@@ -7,9 +7,8 @@
     android:clipToPadding="false"
     android:orientation="vertical"
     android:outlineProvider="bounds"
-    android:paddingLeft="10sp"
-    android:paddingRight="10sp"
-    android:paddingBottom="10sp">
+    android:padding="10dp"
+    >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"

@@ -7,19 +7,15 @@
     android:layout_gravity="center"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="@string/setting"
-            android:textSize="20sp"
-            tools:ignore="PrivateResource" />
-    </LinearLayout>
+        android:layout_margin="10dp"
+        android:text="@string/setting"
+        android:textColor="@color/followers"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:ignore="PrivateResource" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -118,8 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:enabled="false"
-                android:inputType="phone"
-                 />
+                android:inputType="phone" />
 
             <Switch
                 android:id="@+id/phoneNumberDialogSwitch"
@@ -151,11 +146,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
+                android:autofillHints="@string/hint_facebook"
                 android:enabled="false"
                 android:hint="@string/hint_facebook"
                 android:inputType="text"
-                android:textSize="12sp"
-                android:autofillHints="@string/hint_facebook" />
+                android:textSize="12sp" />
 
             <Switch
                 android:id="@+id/facebookDialogSwitch"
@@ -256,25 +251,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="start"
-                android:background="@drawable/diskette" />
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cancelChanges"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="start"
-            android:layout_marginStart="30dp"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground"
-            card_view:cardCornerRadius="4dp">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:background="@drawable/cancel" />
+                android:background="@drawable/save" />
 
         </androidx.cardview.widget.CardView>
 

@@ -25,7 +25,7 @@ public final class FireStoreDatabase {
     static final String SETTING_STORAGE = "settings";
     static final String PROFILE_IMAGES_STORAGE = "profileImages";
     static final String MATCH_STORGE = "matches";
-
+    public static final String RATING = "rating";
     // Student attributes
     private List<Student> studentList = new ArrayList<>();
     private List<Student> updateData = new ArrayList<>();

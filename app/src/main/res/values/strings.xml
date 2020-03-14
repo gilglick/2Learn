@@ -89,6 +89,13 @@
     <string name="no_details">no_details</string>
     <string name="ask_help_in">Ask Help In :</string>
     <string name="searching">Searching for new students</string>
+    <string name="proficiency_description">Upgrade your skills to help yourself find the best match for you.
+        \nAfter searching the relevant course you can add the course by pressing the add icon, or removing course by pressing on the remove button.
+        \nYou can view those courses in your profile.
+    </string>
+    <string name="upgrade_your_skills">Upgrade your skills</string>
+    <string name="information">Information</string>
+    <string name="search_course">Search course</string>
 
 
 </resources>
