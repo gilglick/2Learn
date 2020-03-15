@@ -52,8 +52,8 @@ public class FragmentProficiency extends Fragment {
         AutoCompleteTextView coursesEditText = view.findViewById(R.id.courseNameEditText);
         RadioButton needHelpRadioButton = view.findViewById(R.id.radioButtonNeedHelp);
         RadioButton giveHelpRadioButton = view.findViewById(R.id.radioButtonGiveHelp);
-        CardView addCourse = view.findViewById(R.id.addCourseCard);
-        CardView removeCourse = view.findViewById(R.id.removeCourseCard);
+        ImageButton addCourse = view.findViewById(R.id.addButton);
+        ImageButton removeCourse = view.findViewById(R.id.removeButton);
         floatingActionButton = view.findViewById(R.id.floatingInformation);
         String[] courses = Objects.requireNonNull(getActivity()).getResources().getStringArray(R.array.courses);
         List<String> courseList = Arrays.asList(courses);
