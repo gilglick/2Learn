@@ -30,7 +30,7 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
     public FragmentMatch() {
     }
 
-    public FragmentMatch(Student student) {
+    FragmentMatch(Student student) {
         this.student = student;
     }
 

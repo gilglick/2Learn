@@ -99,5 +99,30 @@
     <string name="rate_me">Rate me</string>
 
 
+    <!--    -->
+    <string name="user_id">userId</string>
+
+
+    <!-- Error in the application   -->
+
+    <!-- Used in Login Activity -->
+    <string name="sign_in_error">Sign in failed, forget your password?</string>
+    <string name="invalid_email_format">Invalid email format, Please try again</string>
+    <string name="invalid_password_login">Invalid password, did you forget your password? </string>
+
+    <!-- Used in Form Activity    -->
+
+    <string name="invalid_name_form">Invalid name format, type your name separated by space and your last name </string>
+    <string name="invalid_email_form">Invalid format of email</string>
+    <string name="invalid_password_form">Password must be at least 8 letter long.\n It should include big letter, small letter, digit and special character. </string>
+    <string name="invalid_confirm_password_form">Password don\'t match</string>
+    <string name="register_failed">Registration failed</string>
+
+
+    <string name="http">http://</string>
+    <string name="https">https://</string>
+    <string name="facebook">https://www.facebook.com</string>
+    <string name="twitter">https://www.twitter.com</string>
+    <string name="linkedin">https://www.linkedin.com</string>
 </resources>
 

@@ -28,7 +28,6 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class FragmentSetting extends Fragment {
     private FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
-
     private EditText userPhoneNumber;
     private EditText userFacebook;
     private EditText userTwitter;
@@ -38,7 +37,10 @@ public class FragmentSetting extends Fragment {
     private CheckBox dateOfBirthCheckBox;
     private StudentSetting studentSetting;
     private Student student;
-
+    private final int PHONE_NUMBER_INDICATOR = 0;
+    private final int FACEBOOK_INDICATOR = 1;
+    private final int TWITTER_INDICATOR = 2;
+    private final int LINKEDIN_INDICATOR = 3;
     private SparseArray<String> sparseArray = new SparseArray<>();
 
     FragmentSetting(Student student) {
@@ -144,16 +146,16 @@ public class FragmentSetting extends Fragment {
         if (userSwitch.isChecked()) {
             String newValue = editText.getText().toString();
             switch (indicator) {
-                case Utility.PHONE_NUMBER_INDICATOR:
+                case PHONE_NUMBER_INDICATOR:
                     validData = Validation.isValidPhoneNumber(newValue);
                     break;
-                case Utility.FACEBOOK_INDICATOR:
+                case FACEBOOK_INDICATOR:
                     validData = Validation.isValidFacebookUrl(newValue);
                     break;
-                case Utility.TWITTER_INDICATOR:
+                case TWITTER_INDICATOR:
                     validData = Validation.isValidTwitterUrl(newValue);
                     break;
-                case Utility.LINKEDIN_INDICATOR:
+                case LINKEDIN_INDICATOR:
                     validData = Validation.isValidLinkedinkUrl(newValue);
                     break;
             }
@@ -182,16 +184,16 @@ public class FragmentSetting extends Fragment {
 
     private void notifyProfileOnUpdate(int fieldToUpdate, String newValue) {
         switch (fieldToUpdate) {
-            case Utility.PHONE_NUMBER_INDICATOR:
+            case PHONE_NUMBER_INDICATOR:
                 fireStoreDatabase.updateField(student.getEmail(), FireStoreDatabase.STUDENT_STORAGE, FireStoreDatabase.PHONE_NUMBER, newValue);
                 break;
-            case Utility.FACEBOOK_INDICATOR:
+            case FACEBOOK_INDICATOR:
                 fireStoreDatabase.updateField(student.getEmail(), FireStoreDatabase.SOCIAL_MEDIA_STORAGE, FireStoreDatabase.FACEBOOK, newValue);
                 break;
-            case Utility.TWITTER_INDICATOR:
+            case TWITTER_INDICATOR:
                 fireStoreDatabase.updateField(student.getEmail(), FireStoreDatabase.SOCIAL_MEDIA_STORAGE, FireStoreDatabase.TWITTER, newValue);
                 break;
-            case Utility.LINKEDIN_INDICATOR:
+            case LINKEDIN_INDICATOR:
                 fireStoreDatabase.updateField(student.getEmail(), FireStoreDatabase.SOCIAL_MEDIA_STORAGE, FireStoreDatabase.LINKEDIN, newValue);
                 break;
         }

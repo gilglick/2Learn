@@ -55,31 +55,27 @@ public class FormActivity extends AppCompatActivity {
         mAcademicInstitution.setAdapter(arrayAdapter);
 
 
-
         inProgress(false);
 
         registerButton.setOnClickListener(e -> {
-            boolean validName, validEmail, validPassword, validConfirmPassword, validDateOfBirth, validInput;
+            boolean validName, validEmail, validPassword, validConfirmPassword, validInput;
             validName = Validation.isValidName(mFullName.getText().toString());
             validEmail = Validation.isValidEmail(mEmail.getText().toString());
             validPassword = Validation.isValidPassword(mPassword.getText().toString());
             validConfirmPassword = mConfirmPassword.getText().toString().compareTo(mPassword.getText().toString()) == 0;
-            validDateOfBirth = Validation.isValidDate(mDateOfBirth.getText().toString());
-            validInput = validName && validEmail && validPassword && validConfirmPassword && validDateOfBirth;
+            validInput = validName && validEmail && validPassword && validConfirmPassword;
             if (!validName) {
-                mFullName.setError("Name cannot be empty");
+                mFullName.setError(getString(R.string.invalid_name_form));
             }
             if (!validEmail) {
-                mEmail.setError("Not valid email address ");
+                mEmail.setError(getString(R.string.invalid_email_form));
             }
             if (!validPassword) {
-                mPassword.setError("Not valid password format");
+                mPassword.setError(getString(R.string.invalid_password_form));
             }
             if (!validConfirmPassword) {
-                mConfirmPassword.setError("Password don't match");
-            }
-            if (!validDateOfBirth) {
-                mDateOfBirth.setError("Date of birth cannot be empty");
+                mConfirmPassword.setError(getString(R.string.invalid_confirm_password_form));
+
             }
             if (validInput) {
                 inProgress(true);
@@ -99,7 +95,7 @@ public class FormActivity extends AppCompatActivity {
                             .document(stud.getEmail()).set(new Rating());
                     startActivity(new Intent(this, LoginActivity.class));
                 }).addOnFailureListener(e1 ->
-                        Toast.makeText(getApplicationContext(), "Registration failed", Toast.LENGTH_SHORT).show());
+                        Toast.makeText(getApplicationContext(), getString(R.string.register_failed), Toast.LENGTH_SHORT).show());
             }
 
         });
@@ -124,7 +120,9 @@ public class FormActivity extends AppCompatActivity {
         };
     }
 
-
+    /**
+     * Get activates while the user press the registration button
+     */
     public void inProgress(boolean isUploading) {
         if (isUploading) {
             progressBar.setVisibility(View.VISIBLE);
@@ -134,6 +132,9 @@ public class FormActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Hide the keyboard with pressing on the screen
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);

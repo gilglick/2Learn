@@ -1,7 +1,6 @@
 package com.example.a2learn;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,30 +104,7 @@ public class FragmentHome extends Fragment {
 
         return view;
     }
-//
-//    private void initCards() {
-//        fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE)
-//                .get().addOnCompleteListener(task -> {
-//            if (task.isSuccessful() && task.getResult() != null) {
-//                List<Student> list = task.getResult().toObjects(Student.class);
-//                for (Student cStudent : list) {
-//                    Log.i("tag", "initCards: " + cStudent);
-//                    fireStoreDatabase.getDatabase().collection(FireStoreDatabase.RATING)
-//                            .document(cStudent.getEmail())
-//                            .get().addOnCompleteListener(task1 -> {
-//                        if (task1.isSuccessful() && task1.getResult() != null) {
-//                            Rating rating = task1.getResult().toObject(Rating.class);
-//                            if (rating != null && !cStudent.equals(student)) {
-//                                rowItems.add(new Card(cStudent, rating));
-//                                arrayAdapter.notifyDataSetChanged();
-//
-//                            }
-//                        }
-//                    });
-//                }
-//            }
-//        });
-//    }
+
 
     private void cardsListener() {
         listen = fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE)

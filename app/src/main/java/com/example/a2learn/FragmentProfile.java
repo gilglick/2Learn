@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,16 +23,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
 import com.example.a2learn.model.SocialMedia;
 import com.example.a2learn.model.Student;
 import com.example.a2learn.model.StudentSetting;
 import com.example.a2learn.utility.CircleTransform;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
@@ -90,9 +84,7 @@ public class FragmentProfile extends Fragment {
         ImageView facebookImage = view.findViewById(R.id.facebook);
         ImageView twitterImage = view.findViewById(R.id.twitter);
         ImageView linkedin = view.findViewById(R.id.linkedin);
-
         initializeProfile();
-
         facebookImage.setOnClickListener(v -> openWebPage(socialMedia.getFacebook()));
         twitterImage.setOnClickListener(v -> openWebPage(socialMedia.getTwitter()));
         linkedin.setOnClickListener(v -> openWebPage(socialMedia.getLinkedin()));
@@ -157,12 +149,12 @@ public class FragmentProfile extends Fragment {
                 case PICK_IMAGE_GALLERY:
                     imageUri = data.getData();
                     Picasso.get().load(imageUri).transform(new CircleTransform()).into(userImage);
-                    uploadImageToStorage();
+                    uploadImageToDatabase();
                     break;
                 case PICK_IMAGE_CAMERA:
                     Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
                     userImage.setImageBitmap(photo);
-                    uploadImageToStorage();
+                    uploadImageToDatabase();
 
                     break;
             }
@@ -170,14 +162,10 @@ public class FragmentProfile extends Fragment {
     }
 
 
-    private void uploadImageToStorage() {
+    /** Upload user's image to the database */
+    private void uploadImageToDatabase() {
         storageReference = storageReference.child((student.getEmail()));
-        storageReference.putFile(imageUri).continueWithTask(task -> {
-            if (!task.isSuccessful()) {
-                Toast.makeText(getActivity(), "Upload failed", Toast.LENGTH_SHORT).show();
-            }
-            return storageReference.getDownloadUrl();
-        }).addOnCompleteListener(task -> {
+        storageReference.putFile(imageUri).continueWithTask(task -> storageReference.getDownloadUrl()).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Uri downloadUri = task.getResult();
                 if (downloadUri != null) {
@@ -188,6 +176,9 @@ public class FragmentProfile extends Fragment {
         });
     }
 
+    /**
+     * Get user image from the database
+     */
     private void getImageFromDatabase() {
         if (!student.getUri().matches("")) {
             storageReference = storageReference.child((student.getEmail()));
@@ -196,13 +187,16 @@ public class FragmentProfile extends Fragment {
                     Uri uri = task.getResult();
                     Picasso.get().load(uri).transform(new CircleTransform()).into(userImage);
                 }
-            }).addOnFailureListener(e -> Toast.makeText(getActivity(), "Download image failed", Toast.LENGTH_SHORT).show());
+            }).addOnFailureListener(e -> Log.d(TAG, "getImageFromDatabase: " + "Download image failed"));
         } else {
             Picasso.get().load(R.drawable.no_picture_circle).transform(new CircleTransform()).into(userImage);
         }
 
     }
 
+    /**
+     * Read the social media url from the database
+     */
     private void readSocialMediaFromStorage() {
         fireStoreDatabase.getDatabase()
                 .collection(FireStoreDatabase.SOCIAL_MEDIA_STORAGE)
@@ -212,13 +206,15 @@ public class FragmentProfile extends Fragment {
                     if (documentSnapshot.exists()) {
                         socialMedia = documentSnapshot.toObject(SocialMedia.class);
                     } else {
-                        socialMedia = new SocialMedia(Utility.FACEBOOK_URL, Utility.TWITTER_URL, Utility.LINKEDIN_URL);
+                        socialMedia = new SocialMedia(getString(R.string.facebook),getString(R.string.twitter), getString(R.string.linkedin));
                         fireStoreDatabase.writeSocialMediaSetting(student.getEmail(), socialMedia);
                     }
-                }).addOnFailureListener(e -> Log.d(TAG, "onFailure: "));
+                }).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + "Failed to read social media"));
     }
 
-
+    /**
+     * Read the user setting from the database
+     */
     private void readUserSettingFromStorage() {
         fireStoreDatabase.getDatabase()
                 .collection(FireStoreDatabase.SETTING_STORAGE)
@@ -234,20 +230,26 @@ public class FragmentProfile extends Fragment {
                     if (readOnly) {
                         setReadOnlyView();
                     }
-                }).addOnFailureListener(e -> Log.d(TAG, "onFailure: "));
+                }).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + "Failed to read user's setting from database"));
     }
 
 
+    /**
+     * Open the web while pressing on facebook, linkedin and twitter.
+     */
     private void openWebPage(String url) {
         Uri webPage = Uri.parse(url);
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            webPage = Uri.parse("http://" + url);
+        if (!url.startsWith(getString(R.string.http)) && !url.startsWith(getString(R.string.https))) {
+            webPage = Uri.parse(getString(R.string.http) + url);
         }
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, webPage);
         startActivity(browserIntent);
 
     }
 
+    /**
+     * Set user view to read only mode
+     */
     private void setReadOnlyView() {
         if (!studentSetting.isDisplayEmail()) {
             userEmail.setVisibility(View.INVISIBLE);

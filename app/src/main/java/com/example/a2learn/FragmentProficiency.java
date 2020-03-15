@@ -11,17 +11,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.example.a2learn.model.Student;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,15 +29,12 @@ public class FragmentProficiency extends Fragment {
     private Student student;
     private boolean giveHelpActive, needHelpActive;
     private String currentCourse;
-    private ImageButton floatingActionButton;
-    private LinearLayout descriptionContent;
-    private boolean isContentVisible = false;
 
     public FragmentProficiency() {
 
     }
 
-    public FragmentProficiency(Student student) {
+    FragmentProficiency(Student student) {
         this.student = student;
     }
 
@@ -54,7 +48,7 @@ public class FragmentProficiency extends Fragment {
         RadioButton giveHelpRadioButton = view.findViewById(R.id.radioButtonGiveHelp);
         ImageButton addCourse = view.findViewById(R.id.addButton);
         ImageButton removeCourse = view.findViewById(R.id.removeButton);
-        floatingActionButton = view.findViewById(R.id.floatingInformation);
+        ImageButton floatingActionButton = view.findViewById(R.id.floatingInformation);
         String[] courses = Objects.requireNonNull(getActivity()).getResources().getStringArray(R.array.courses);
         List<String> courseList = Arrays.asList(courses);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.course_item, R.id.custom_list_item, courses);
@@ -64,15 +58,12 @@ public class FragmentProficiency extends Fragment {
 
         coursesEditText.setOnItemClickListener((parent, view1, position, id) -> currentCourse = arrayAdapter.getItem(position));
 
-        floatingActionButton.setOnClickListener(v -> {
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.information)
-                       .setMessage(R.string.proficiency_description)
-                        .setPositiveButton(android.R.string.ok, ((dialog, which) -> {
-                        })).setIcon(android.R.drawable.ic_dialog_info)
-                        .show();
-
-        });
+        floatingActionButton.setOnClickListener(v -> new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.information)
+                .setMessage(R.string.proficiency_description)
+                .setPositiveButton(android.R.string.ok, ((dialog, which) -> {
+                })).setIcon(android.R.drawable.ic_dialog_info)
+                .show());
         giveHelpRadioButton.setOnClickListener(v -> {
             giveHelpActive = true;
             needHelpActive = false;

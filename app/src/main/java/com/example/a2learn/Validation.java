@@ -3,7 +3,6 @@ package com.example.a2learn;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("WeakerAccess")
 public final class Validation {
 
     public static boolean isValidPassword(final String password) {
@@ -46,12 +45,7 @@ public final class Validation {
         return matcher.matches() && !name.trim().matches("");
     }
 
-    public static boolean isValidDate(String date) {
-        return !date.trim().matches("");
-    }
-
     public static boolean isValidPhoneNumber(String phoneNumber) {
-
         return phoneNumber.trim().length() != 0;
     }
 }
