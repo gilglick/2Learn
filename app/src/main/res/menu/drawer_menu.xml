@@ -7,7 +7,7 @@
             android:title="@string/home_menu"/>
         <item android:id="@+id/nav_profile"
             android:icon="@drawable/ic_profile_menu"
-            android:title="@string/prfile_menu"/>
+            android:title="@string/profile_menu"/>
         <item android:id="@+id/nav_chat"
             android:icon="@drawable/ic_chat_menu"
             android:title="@string/my_matches"/>

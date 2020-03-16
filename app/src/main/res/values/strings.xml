@@ -27,9 +27,13 @@
     <string name="user_image_content">User image picture</string>
     <string name="close">close</string>
     <string name="open">open</string>
-    <string name="askHelpList">Ask help</string>
-    <string name="offerHelpList">Offer help</string>
+    <string name="askHelpList">Ask Help</string>
+    <string name="offerHelpList">Offer Help</string>
     <string name="phone_number">Phone Number</string>
+
+    <string name="offer_help_in_that_Course">Offer help in that course</string>
+
+    <string name="ask_help_in_that_Course">Ask help in that course</string>
 
 
     <string name="description">
@@ -37,14 +41,14 @@
     </string>
     <!-- Drawer menu   -->
     <string name="home_menu">Home</string>
-    <string name="prfile_menu">Profile</string>
+    <string name="profile_menu">Profile</string>
     <string name="my_matches">My matches</string>
     <string name="proficiency">My proficiency</string>
     <string name="add_proficiency">Add Proficiency</string>
     <string name="log_out">Log out</string>
 
     <!-- Home String   -->
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="come_back_in_another_time">I\'\ll be back in another time</string>
 
     <string-array name="institution">
@@ -80,14 +84,16 @@
     <string name="display_your_phone_number">Display your phone number</string>
     <string name="display_your_email">Display your Email</string>
     <string name="display_your_date_of_birth">Display your date of birth</string>
-    <string name="visible_to_people_who_view_your_profile">Visible to people who view your profile</string>
+    <string name="profile_visibility">Profile visibility</string>
     <string name="edit_your_profile">Edit your profile</string>
     <string name="chat">Chat</string>
     <string name="match">Match</string>
-    <string name="type_a_message">Type a message...</string>
+    <string name="type_a_message">Type a message…</string>
     <string name="about">About</string>
     <string name="no_details">no_details</string>
     <string name="ask_help_in">Ask Help In :</string>
+    <string name="offer_help_in">Offer Help In :</string>
+
     <string name="searching">Searching for new students</string>
     <string name="proficiency_description">Upgrade your skills to help yourself find the best match for you.
         \nAfter searching the relevant course you can add the course by pressing the add icon, or removing course by pressing on the remove button.
@@ -124,5 +130,8 @@
     <string name="facebook">https://www.facebook.com</string>
     <string name="twitter">https://www.twitter.com</string>
     <string name="linkedin">https://www.linkedin.com</string>
+    <string name="addButton">Add button</string>
+    <string name="removeButton">Remove button</string>
+    <string name="you_have_match">\" you have a match with \"</string>
 </resources>
 

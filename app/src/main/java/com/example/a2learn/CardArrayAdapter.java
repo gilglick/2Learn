@@ -29,18 +29,20 @@ public class CardArrayAdapter extends android.widget.ArrayAdapter<Card> {
         TextView name = convertView.findViewById(R.id.name);
         TextView askForHelp = convertView.findViewById(R.id.AskHelpTextView);
         TextView offerForHelp = convertView.findViewById(R.id.OfferHelpTextView);
+        TextView academeInstitution = convertView.findViewById(R.id.academeInstitution);
         ImageView image = convertView.findViewById(R.id.image);
         RatingBar ratingBar = convertView.findViewById(R.id.ratingBar);
+        ratingBar.setNumStars(5);
         if (card_item != null) {
             name.setText(card_item.getFullName());
             askForHelp.setText(card_item.getUserNeedHelpListStringFormat());
             offerForHelp.setText(card_item.getUserOfferListStringFormat());
+            academeInstitution.setText(card_item.getAcademicInstitution());
             if (!card_item.getStudent().getUri().matches("")) {
                 Picasso.get().load(card_item.getStudent().getUri()).into(image);
             } else {
                 Picasso.get().load(R.drawable.no_picture).into(image);
             }
-            Log.i("fdsa", "getView: " + card_item.getStudent().getRating());
             ratingBar.setRating(card_item.getRating().getCurrentRating());
         }
 

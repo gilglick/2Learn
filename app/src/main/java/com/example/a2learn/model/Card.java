@@ -3,13 +3,10 @@ package com.example.a2learn.model;
 public class Card {
     private Student student;
     private Rating rating;
+
     public Card(Student student,Rating rating) {
         this.student = student;
         this.rating = rating;
-    }
-
-    public Rating getRating() {
-        return rating;
     }
 
     public Student getStudent() {
@@ -18,6 +15,14 @@ public class Card {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public Rating getRating() {
+        return rating;
+    }
+
+    public String getAcademicInstitution(){
+        return student.getAcademicInstitution();
     }
 
     public String getEmail() {

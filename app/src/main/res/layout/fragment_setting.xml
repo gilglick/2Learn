@@ -17,11 +17,16 @@
         android:textStyle="bold"
         tools:ignore="PrivateResource" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/grey" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="@string/visible_to_people_who_view_your_profile"
+        android:layout_margin="10dp"
+        android:text="@string/profile_visibility"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -37,7 +42,8 @@
             <CheckBox
                 android:id="@+id/emailCheckBox"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/followingBg"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -53,7 +59,8 @@
             <CheckBox
                 android:id="@+id/phoneNumberCheckBox"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/address"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -69,7 +76,8 @@
             <CheckBox
                 android:id="@+id/dateOfBirthCheckBox"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/followersBg"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -78,16 +86,10 @@
         </LinearLayout>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/grey" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="10dp"
         android:text="@string/edit_your_profile"
         android:textStyle="bold" />
 
@@ -235,25 +237,15 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-
-        <androidx.cardview.widget.CardView
+        <Button
             android:id="@+id/confirmChangesButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground"
-            card_view:cardCornerRadius="4dp">
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="start"
-                android:background="@drawable/save" />
-
-        </androidx.cardview.widget.CardView>
+            android:textColor="#000"
+            android:background="@drawable/sign_in_up_button_gradient"
+            android:layout_marginTop="0dp"
+            android:textAllCaps="false"
+            android:text="Save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 </LinearLayout>

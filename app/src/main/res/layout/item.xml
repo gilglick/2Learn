@@ -53,20 +53,19 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:textStyle="bold"
+                        android:fontFamily="cursive"
+                        android:textSize="22sp" />
 
                     <RatingBar
                         android:id="@+id/ratingBar"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="20dp"
+                        android:numStars="5"
                         style="?android:attr/ratingBarStyleIndicator"
-                        android:progressTint="@color/goldenStar"
-                        android:isIndicator="true"
-                        android:numStars="5" />
+                        android:progressTint="@color/goldenStar" />
 
                 </LinearLayout>
 
@@ -79,18 +78,18 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:background="@drawable/ic_school_black_24dp"
-                        android:textColor="@color/grey"
-                        android:textSize="20sp" />
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="2dp"
+                        android:background="@drawable/ic_school_grey"
+                        android:contentDescription="@string/academic_institution_form" />
 
                     <TextView
                         android:id="@+id/academeInstitution"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="5dp"
                         android:textColor="@color/grey"
-                        android:textSize="20sp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -119,7 +118,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="@string/ask_help_in"
+                        android:text="@string/offer_help_in"
                         android:textColor="@color/headings"
                         android:textSize="14sp" />
 
@@ -142,7 +141,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="@string/offerHelpList"
+                        android:text="@string/ask_help_in"
                         android:textColor="@color/headings"
                         android:textSize="14sp" />
 

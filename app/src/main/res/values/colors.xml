@@ -18,5 +18,6 @@
     <color name="transparent">#80000000</color>
     <color name="black">#F0000000</color>
     <color name="goldenStar">#FFDF00</color>
-
+    <color name="match_background">#222831</color>
+    <color name="red">#E63333</color>
 </resources>

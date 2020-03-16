@@ -1,95 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
     tools:context=".ContainerActivity">
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_margin="10dp"
         android:text="@string/upgrade_your_skills"
         android:textColor="@color/followers"
-        android:textSize="18sp"
-        android:paddingTop="10dp"
+        android:textSize="20sp"
         android:textStyle="bold" />
     <View
+        android:id="@+id/view"
+        android:layout_below="@id/title"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:background="@color/grey" />
 
-
-    <AutoCompleteTextView
-        android:id="@+id/courseNameEditText"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:autofillHints="select course"
-        android:completionThreshold="0"
-        android:paddingTop="30dp"
-        android:hint="@string/search_course"
-        android:inputType="text" />
-
-    <RadioGroup
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/courseLayout"
+        android:layout_below="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <RadioButton
-            android:id="@+id/radioButtonNeedHelp"
-            android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+        <AutoCompleteTextView
+            android:id="@+id/courseNameEditText"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Need help" />
+            android:autofillHints="select course"
+            android:completionThreshold="0"
+            android:paddingTop="30dp"
+            android:backgroundTint="@color/followingBg"
+            android:hint="@string/search_course"
+            android:inputType="text" />
 
-
-        <RadioButton
-            android:id="@+id/radioButtonGiveHelp"
+        <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Give help" />
+            android:layout_height="wrap_content">
 
-    </RadioGroup>
+            <RadioButton
+                android:id="@+id/radioButtonNeedHelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:buttonTint="@color/followingBg"
+                android:text="@string/ask_help_in_that_Course" />
+
+
+            <RadioButton
+                android:id="@+id/radioButtonGiveHelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:buttonTint="@color/black"
+                android:text="@string/offer_help_in_that_Course" />
+
+        </RadioGroup>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
 
     <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_below="@+id/courseLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="60dp"
-        android:paddingBottom="60dp"
+        android:layout_marginTop="50dp"
         android:layout_marginBottom="110dp"
+
         android:gravity="center"
         android:orientation="horizontal">
-
-
 
         <ImageButton
             android:id="@+id/addButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:background="@drawable/ic_add_circle_black_24dp" />
+            android:elevation="7dp"
+            android:background="@drawable/ic_add_circle_black_24dp"
+            android:contentDescription="@string/addButton" />
 
             <ImageButton
                 android:id="@+id/removeButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:layout_marginStart="40dp"
-                android:background="@drawable/ic_delete_black_24dp" />
+                android:layout_marginStart="50dp"
+                android:background="@drawable/ic_delete_black_24dp"
+                android:contentDescription="@string/removeButton" />
 
     </LinearLayout>
 
 
     <ImageButton
         android:id="@+id/floatingInformation"
+        android:layout_below="@+id/buttonsLayout"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_gravity="end"
-        android:layout_margin="10dp"
-        android:background="@drawable/info"/>
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/info"
+        android:contentDescription="@string/information" />
 
-</LinearLayout>
+</RelativeLayout>

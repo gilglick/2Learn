@@ -26,7 +26,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
     private FirebaseAuth mAuth;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +38,9 @@ public class LoginActivity extends AppCompatActivity {
         Button signUp = findViewById(R.id.signUp);
         calculateRating();
         signIn.setOnClickListener(v -> {
+            signIn.setEnabled(false);
             if (hasInputError()) {
+                signIn.setEnabled(true);
                 return;
             }
             final String userEmail = email.getText().toString();
@@ -56,7 +57,9 @@ public class LoginActivity extends AppCompatActivity {
         signUp.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, FormActivity.class)));
     }
 
-    /** Check and validate the user's input */
+    /**
+     * Check and validate the user's input
+     */
     private boolean hasInputError() {
         boolean validEmail, validPassword;
         validEmail = Validation.isValidEmail(email.getText().toString());
@@ -67,10 +70,12 @@ public class LoginActivity extends AppCompatActivity {
         if (!validPassword) {
             password.setError(getString(R.string.invalid_password_login));
         }
-        return !validEmail && !validPassword;
+        return !validEmail || !validPassword;
     }
 
-    /** Calculating the rating of the users in application*/
+    /**
+     * Calculating the rating of the users in application
+     */
     public void calculateRating() {
         FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
         CollectionReference collectionReference = fireStoreDatabase.getDatabase().collection(FireStoreDatabase.RATING);
@@ -88,13 +93,17 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    /** Configuration of login window */
+    /**
+     * Configuration of login window
+     */
     private void configWindow() {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
-    /** Hide the keyboard with pressing on the screen */
+    /**
+     * Hide the keyboard with pressing on the screen
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -105,6 +114,4 @@ public class LoginActivity extends AppCompatActivity {
         return super.onTouchEvent(event);
 
     }
-
-
 }

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -60,7 +61,7 @@ public class FragmentSetting extends Fragment {
         Switch userTwitterSwitch = view.findViewById(R.id.twitterDialogSwitch);
         userLinkedin = view.findViewById(R.id.linkedinDialogEditText);
         Switch userLinkedinSwitch = view.findViewById(R.id.linkedinDialogSwitch);
-        CardView confirmEdit = view.findViewById(R.id.confirmChangesButton);
+        Button confirmEdit = view.findViewById(R.id.confirmChangesButton);
         emailCheckBox = view.findViewById(R.id.emailCheckBox);
         phoneNumberCheckBox = view.findViewById(R.id.phoneNumberCheckBox);
         dateOfBirthCheckBox = view.findViewById(R.id.dateOfBirthCheckBox);

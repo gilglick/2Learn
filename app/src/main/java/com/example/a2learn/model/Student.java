@@ -12,7 +12,6 @@ public class Student {
     private String dateOfBirth;
     private String academicInstitution;
     private String uri;
-    private Float rating;
     private List<String> giveHelpList;
     private List<String> needHelpList;
 
@@ -27,7 +26,6 @@ public class Student {
         this.phoneNumber = phoneNumber;
         this.academicInstitution = academicInstitution;
         this.uri = "";
-        this.rating = 0F;
         giveHelpList = new ArrayList<>();
         needHelpList = new ArrayList<>();
     }
@@ -46,6 +44,10 @@ public class Student {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String setAcademicInstitution(){
+        return academicInstitution;
     }
 
 
@@ -78,14 +80,6 @@ public class Student {
 
     public void setAcademicInstitution(String academicInstitution) {
         this.academicInstitution = academicInstitution;
-    }
-
-    public Float getRating() {
-        return rating;
-    }
-
-    public void setRating(Float rating) {
-        this.rating = rating;
     }
 
     public void setPhoneNumber(String phoneNumber) {

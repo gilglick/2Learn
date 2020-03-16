@@ -122,7 +122,7 @@
                     android:id="@+id/academeInstitution"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_school_black_24dp"
+                    android:drawableEnd="@drawable/ic_school_blackdp"
                     android:drawablePadding="20dp"
                     android:inputType="textAutoComplete" />
                 <TextView

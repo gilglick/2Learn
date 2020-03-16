@@ -14,23 +14,33 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.a2learn.model.Match;
 import com.example.a2learn.model.Rating;
 import com.example.a2learn.model.Student;
 import com.example.a2learn.utility.DialogDate;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
 
 
 public class FormActivity extends AppCompatActivity {
-
+    private FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
     private EditText mFullName, mEmail, mPassword, mConfirmPassword, mDateOfBirth, mPhoneNumber;
     private AutoCompleteTextView mAcademicInstitution;
     private Button registerButton;
     private ProgressBar progressBar;
     private FirebaseAuth firebaseAuth;
-
+    private Student student;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -79,7 +89,7 @@ public class FormActivity extends AppCompatActivity {
             }
             if (validInput) {
                 inProgress(true);
-                Student stud = new Student(
+                student = new Student(
                         mFullName.getText().toString(),
                         mEmail.getText().toString(),
                         mAcademicInstitution.getText().toString(),
@@ -87,12 +97,13 @@ public class FormActivity extends AppCompatActivity {
                         mPhoneNumber.getText().toString());
                 firebaseAuth.createUserWithEmailAndPassword(mEmail.getText().toString(),
                         mPassword.getText().toString()).addOnSuccessListener(authResult -> {
-                    FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
-                    fireStoreDatabase.addStudent(stud);
                     fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
-                            .document(stud.getEmail()).set(new Match());
+                            .document(student.getEmail()).set(new Match()).addOnCompleteListener(task -> {
+                                syncMatchDatabase();
+
+                    });
                     fireStoreDatabase.getDatabase().collection(FireStoreDatabase.RATING)
-                            .document(stud.getEmail()).set(new Rating());
+                            .document(student.getEmail()).set(new Rating());
                     startActivity(new Intent(this, LoginActivity.class));
                 }).addOnFailureListener(e1 ->
                         Toast.makeText(getApplicationContext(), getString(R.string.register_failed), Toast.LENGTH_SHORT).show());
@@ -130,6 +141,30 @@ public class FormActivity extends AppCompatActivity {
         } else {
             progressBar.setVisibility(View.GONE);
         }
+    }
+
+
+    private void syncMatchDatabase() {
+        fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        List<DocumentSnapshot> documentReferences = task.getResult().getDocuments();
+                        for (DocumentSnapshot documentSnapshot : documentReferences) {
+                            fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
+                                    .document(student.getEmail())
+                                    .update(FireStoreDatabase.MATCHES + "." + encodeDot(documentSnapshot.getId()), false);
+                            fireStoreDatabase.getDatabase()
+                                    .collection(FireStoreDatabase.MATCH_STORGE)
+                                    .document(documentSnapshot.getId())
+                                    .update(FireStoreDatabase.MATCHES + "." + encodeDot(student.getEmail()), false);
+                        }
+                        fireStoreDatabase.addStudent(student);
+                    }
+                });
+    }
+
+    private String encodeDot(String caller) {
+        return caller.replace('.', ':');
     }
 
     /**
