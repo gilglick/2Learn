@@ -60,7 +60,7 @@
                 android:id="@+id/phoneNumberCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="@color/address"/>
+                android:buttonTint="@color/followingBg"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -77,7 +77,7 @@
                 android:id="@+id/dateOfBirthCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="@color/followersBg"/>
+                android:buttonTint="@color/followingBg"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -116,6 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:enabled="false"
+                android:backgroundTint="@color/black"
                 android:inputType="phone" />
 
             <Switch
@@ -151,6 +152,7 @@
                 android:autofillHints="@string/hint_facebook"
                 android:enabled="false"
                 android:hint="@string/hint_facebook"
+                android:backgroundTint="@color/black"
                 android:inputType="text"
                 android:textSize="12sp" />
 
@@ -187,6 +189,7 @@
                 android:layout_weight="2"
                 android:hint="@string/hint_twitter"
                 android:inputType="text"
+                android:backgroundTint="@color/black"
                 android:textSize="12sp" />
 
             <Switch
@@ -218,6 +221,7 @@
                 android:id="@+id/linkedinDialogEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/black"
                 android:layout_weight="2"
                 android:hint="@string/hint_linkedin"
                 android:inputType="text"

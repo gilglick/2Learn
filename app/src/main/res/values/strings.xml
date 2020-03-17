@@ -139,5 +139,6 @@
     <string name="twitter_input_error">Not valid twitter url</string>
     <string name="facebook_input_error">Not valid facebook url</string>
     <string name="linkedin_input_error">Not valid linkedin url</string>
+    <string name="date_hint">DD/MM/YYYY</string>
 </resources>
 

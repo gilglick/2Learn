@@ -56,6 +56,7 @@
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_person"
                     android:drawablePadding="20dp"
+                    android:backgroundTint="@color/black"
                     android:inputType="text" />
 
                 <TextView
@@ -69,6 +70,7 @@
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_email_black_24dp"
                     android:drawablePadding="20dp"
+                    android:backgroundTint="@color/black"
                     android:hint="example@gmail.com"
                     android:inputType="textEmailAddress" />
 
@@ -84,6 +86,7 @@
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/password"
                     android:drawablePadding="20dp"
+                    android:backgroundTint="@color/black"
                     android:inputType="textPassword" />
 
                 <TextView
@@ -97,6 +100,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="20dp"
+                    android:backgroundTint="@color/black"
                     android:inputType="textPassword" />
 
                 <TextView
@@ -110,6 +114,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_phone"
+                    android:backgroundTint="@color/black"
                     android:drawablePadding="20dp"
                     android:inputType="phone" />
 
@@ -122,8 +127,9 @@
                     android:id="@+id/academeInstitution"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_school_blackdp"
+                    android:drawableEnd="@drawable/ic_account_balance_black_24dp"
                     android:drawablePadding="20dp"
+                    android:backgroundTint="@color/black"
                     android:inputType="textAutoComplete" />
                 <TextView
                     android:layout_width="wrap_content"
@@ -135,12 +141,13 @@
                     android:id="@+id/dateOfBirth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/black"
                     android:drawableEnd="@drawable/ic_date_range_black_24dp"
                     android:drawablePadding="20dp"
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:focusable="false"
-                    android:hint="DD/MM/YYYY"
+                    android:hint="@string/date_hint"
                     android:focusableInTouchMode="false" />
 
                 <Button
