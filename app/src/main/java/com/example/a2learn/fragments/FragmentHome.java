@@ -204,7 +204,7 @@ public class FragmentHome extends Fragment {
         ImageView callerImage = view.findViewById(R.id.callerImage);
         ImageView calleeImage = view.findViewById(R.id.calleeImage);
         TextView descriptionMatch = view.findViewById(R.id.match_description);
-        descriptionMatch.setText(caller.getFullName() + getString(R.string.you_have_match) + callee.getFullName());
+        descriptionMatch.setText(caller.getFullName() + " " + getString(R.string.you_have_match) + " " + callee.getFullName());
         if (!caller.getUri().matches(""))
             Picasso.get().load(caller.getUri()).into(callerImage);
         if (!callee.getUri().matches(""))

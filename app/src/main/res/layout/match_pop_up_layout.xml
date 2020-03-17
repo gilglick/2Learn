@@ -5,32 +5,40 @@
     android:background="@color/match_background"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/header_match"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/match_header_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/red"
-        android:text="@string/match_title"
         android:layout_centerHorizontal="true"
-        android:fontFamily="cursive"
-        android:textSize="50sp" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/match_description"
-        android:layout_width="wrap_content"
-        android:textColor="@color/white"
-        android:layout_marginStart="10dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/header_match"
-        android:layout_centerHorizontal="true"
-        android:fontFamily="cursive"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/header_match"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="cursive"
+            android:text="@string/match_title"
+            android:textColor="@color/red"
+            android:layout_gravity="center"
+            android:textSize="50sp" />
+
+        <TextView
+            android:id="@+id/match_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="cursive"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:text="Jonathn karta you ahve a match with aviv fox"
+            android:textSize="20sp" />
+    </LinearLayout>
 
     <LinearLayout
-        android:layout_below="@id/match_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/match_header_layout"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="20dp"
