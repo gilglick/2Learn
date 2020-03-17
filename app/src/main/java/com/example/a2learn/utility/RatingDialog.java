@@ -35,9 +35,12 @@ public class RatingDialog extends Dialog {
         ratingBar.setNumStars(5);
         ratingBar.setOnRatingBarChangeListener((rateBar, rating, fromUser) -> currentRate = ratingBar.getRating());
         rateMe.setOnClickListener(v -> {
-            updateRating(callee.getEmail(), caller.getEmail(), currentRate);
-            calculateRating(callee);
-            dismiss();
+            if(callee != null ){
+                rateMe.setEnabled(false);
+                updateRating(callee.getEmail(), caller.getEmail(), currentRate);
+                calculateRating(callee);
+                dismiss();
+            }
         });
     }
 
@@ -49,7 +52,8 @@ public class RatingDialog extends Dialog {
     }
 
 
-    private void calculateRating(Student callee) {
+    private void calculateRating(Student callee)
+    {
         FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
         fireStoreDatabase.getDatabase().collection("rating").document(callee.getEmail())
                 .get()
@@ -66,16 +70,19 @@ public class RatingDialog extends Dialog {
     }
 
     private void setCurrentRate() {
-        fireStoreDatabase.getDatabase().collection("rating").document(callee.getEmail())
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        Rating rating = task.getResult().toObject(Rating.class);
-                        if (rating != null) {
-                            float rate = rating.calcRating();
-                            ratingBar.setRating(rate);
+        if (callee != null) {
+            fireStoreDatabase.getDatabase().collection("rating").document(callee.getEmail())
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            Rating rating = task.getResult().toObject(Rating.class);
+                            if (rating != null) {
+                                float rate = rating.calcRating();
+                                ratingBar.setRating(rate);
+                            }
                         }
-                    }
-                });
+                    });
+        }
+
     }
 }

@@ -66,18 +66,15 @@ public class FormActivity extends AppCompatActivity {
             boolean validName, validEmail, validPassword, validConfirmPassword, validInput;
             validName = Validation.isValidName(mFullName.getText().toString());
             validEmail = Validation.isValidEmail(mEmail.getText().toString());
-            validPassword = Validation.isValidPassword(mPassword.getText().toString());
             validConfirmPassword = mConfirmPassword.getText().toString().compareTo(mPassword.getText().toString()) == 0;
-            validInput = validName && validEmail && validPassword && validConfirmPassword;
+            validInput = validName && validEmail && validConfirmPassword;
             if (!validName) {
                 mFullName.setError(getString(R.string.invalid_name_form));
             }
             if (!validEmail) {
                 mEmail.setError(getString(R.string.invalid_email_form));
             }
-            if (!validPassword) {
-                mPassword.setError(getString(R.string.invalid_password_form));
-            }
+
             if (!validConfirmPassword) {
                 mConfirmPassword.setError(getString(R.string.invalid_confirm_password_form));
 

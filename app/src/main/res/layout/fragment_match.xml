@@ -14,6 +14,7 @@
         android:textColor="@color/followers"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:text="@string/your_match_list"
         tools:ignore="PrivateResource" />
 
     <View
