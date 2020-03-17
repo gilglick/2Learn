@@ -11,17 +11,20 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:textColor="@color/red"
-        android:text="Match!"
+        android:text="@string/match_title"
         android:layout_centerHorizontal="true"
+        android:fontFamily="cursive"
         android:textSize="50sp" />
 
     <TextView
         android:id="@+id/match_description"
         android:layout_width="wrap_content"
         android:textColor="@color/white"
+        android:layout_marginStart="10dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/header_match"
         android:layout_centerHorizontal="true"
+        android:fontFamily="cursive"
         android:textSize="20sp" />
 
     <LinearLayout

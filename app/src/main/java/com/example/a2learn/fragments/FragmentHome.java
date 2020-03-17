@@ -2,6 +2,7 @@ package com.example.a2learn.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,6 +101,7 @@ public class FragmentHome extends Fragment {
                     searching.setVisibility(View.VISIBLE);
                     likeButton.setEnabled(false);
                     disLikeButton.setEnabled(false);
+
                 }
 
             }
@@ -154,7 +156,6 @@ public class FragmentHome extends Fragment {
                     if (bool != null && bool.equals(true)) {
                         update(caller, callee);
                         createMatchView(caller, callee);
-
                     }
                 }
             }
