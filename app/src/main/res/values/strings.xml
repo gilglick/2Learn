@@ -136,6 +136,8 @@
     <string name="camera_provider">com.example.a2learn.fileprovider</string>
     <string name="your_match_list">Your match list</string>
     <string name="empty_list">Your don\'\t have matches yet !</string>
-
+    <string name="twitter_input_error">Not valid twitter url</string>
+    <string name="facebook_input_error">Not valid facebook url</string>
+    <string name="linkedin_input_error">Not valid linkedin url</string>
 </resources>
 

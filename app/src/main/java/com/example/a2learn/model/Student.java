@@ -1,6 +1,8 @@
 package com.example.a2learn.model;
 
 
+import com.google.firebase.firestore.Exclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,7 +106,7 @@ public class Student {
         Student student = (Student) o;
         return email.equals(student.email);
     }
-
+    @Exclude
     public String getUserNeedHelpListStringFormat() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < needHelpList.size(); i++) {
@@ -118,6 +120,7 @@ public class Student {
         return sb.toString();
     }
 
+    @Exclude
     public String getUserOfferListStringFormat() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < giveHelpList.size(); i++) {

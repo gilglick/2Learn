@@ -29,6 +29,7 @@ public class RatingDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rating_dialog);
+        setCurrentRate();
         ratingBar = findViewById(R.id.customRatingBar);
         Button rateMe = findViewById(R.id.rateMe);
         ratingBar.setNumStars(5);
@@ -36,6 +37,7 @@ public class RatingDialog extends Dialog {
         rateMe.setOnClickListener(v -> {
             updateRating(callee.getEmail(), caller.getEmail(), currentRate);
             calculateRating(callee);
+            dismiss();
         });
     }
 
@@ -45,7 +47,6 @@ public class RatingDialog extends Dialog {
                 .document(caller)
                 .update("ratings" + "." + fireStoreDatabase.encodeDot(callee), rating);
     }
-
 
 
     private void calculateRating(Student callee) {
@@ -59,6 +60,20 @@ public class RatingDialog extends Dialog {
                             float rate = rating.calcRating();
                             fireStoreDatabase.getDatabase().collection("rating")
                                     .document(callee.getEmail()).update("currentRating", rate);
+                        }
+                    }
+                });
+    }
+
+    private void setCurrentRate() {
+        fireStoreDatabase.getDatabase().collection("rating").document(callee.getEmail())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        Rating rating = task.getResult().toObject(Rating.class);
+                        if (rating != null) {
+                            float rate = rating.calcRating();
+                            ratingBar.setRating(rate);
                         }
                     }
                 });

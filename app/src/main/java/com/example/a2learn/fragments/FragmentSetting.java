@@ -153,19 +153,23 @@ public class FragmentSetting extends Fragment {
                     validData = true;
                     break;
                 case FACEBOOK_INDICATOR:
-                    validData = Validation.isValidFacebookUrl(newValue);
+                    if (!(validData = Validation.isValidFacebookUrl(newValue))) {
+                        userFacebook.setError(getString(R.string.facebook_input_error));
+                    }
                     break;
                 case TWITTER_INDICATOR:
-                    validData = Validation.isValidTwitterUrl(newValue);
+                    if (!(validData = Validation.isValidTwitterUrl(newValue))) {
+                        userTwitter.setError(getString(R.string.twitter_input_error));
+                    }
                     break;
                 case LINKEDIN_INDICATOR:
-                    validData = Validation.isValidLinkedinkUrl(newValue);
+                    if (!(validData = Validation.isValidLinkedinkUrl(newValue))) {
+                        userLinkedin.setError(getString(R.string.linkedin_input_error));
+                    }
                     break;
             }
             if (validData) {
                 sparseArray.put(indicator, newValue);
-            } else {
-                editText.setError("" + indicator);
             }
 
         }
