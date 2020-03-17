@@ -22,7 +22,9 @@
             layout="@layout/content_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
     </LinearLayout>
+
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"

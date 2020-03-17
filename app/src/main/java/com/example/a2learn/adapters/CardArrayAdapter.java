@@ -1,4 +1,4 @@
-package com.example.a2learn;
+package com.example.a2learn.adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.a2learn.R;
 import com.example.a2learn.model.Card;
 import com.example.a2learn.model.Rating;
 import com.squareup.picasso.Picasso;
@@ -34,10 +35,10 @@ public class CardArrayAdapter extends android.widget.ArrayAdapter<Card> {
         RatingBar ratingBar = convertView.findViewById(R.id.ratingBar);
         ratingBar.setNumStars(5);
         if (card_item != null) {
-            name.setText(card_item.getFullName());
-            askForHelp.setText(card_item.getUserNeedHelpListStringFormat());
-            offerForHelp.setText(card_item.getUserOfferListStringFormat());
-            academeInstitution.setText(card_item.getAcademicInstitution());
+            name.setText(card_item.getStudent().getFullName());
+            askForHelp.setText(card_item.getStudent().getUserNeedHelpListStringFormat());
+            offerForHelp.setText(card_item.getStudent().getUserOfferListStringFormat());
+            academeInstitution.setText(card_item.getStudent().getAcademicInstitution());
             if (!card_item.getStudent().getUri().matches("")) {
                 Picasso.get().load(card_item.getStudent().getUri()).into(image);
             } else {

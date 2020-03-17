@@ -1,4 +1,4 @@
-package com.example.a2learn;
+package com.example.a2learn.utility;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,9 +45,7 @@ public final class Validation {
         return matcher.matches() && !name.trim().matches("");
     }
 
-    public static boolean isValidPhoneNumber(String phoneNumber) {
-        return phoneNumber.trim().length() != 0;
-    }
+
 }
 
 

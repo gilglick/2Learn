@@ -1,4 +1,4 @@
-package com.example.a2learn;
+package com.example.a2learn.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -15,6 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.example.a2learn.adapters.CardArrayAdapter;
+import com.example.a2learn.utility.FireStoreDatabase;
+import com.example.a2learn.R;
 import com.example.a2learn.model.Card;
 import com.example.a2learn.model.Match;
 import com.example.a2learn.model.Rating;
@@ -151,27 +154,6 @@ public class FragmentHome extends Fragment {
             arrayAdapter.notifyDataSetChanged();
         });
     }
-//    private void onMatchListener() {
-//        Student caller, callee;
-//        caller = student;
-//        callee = rowItems.get(0).getStudent();
-//        fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
-//                .document(caller.getEmail()).get().addOnCompleteListener(task -> {
-//            if (task.isSuccessful() && task.getResult() != null) {
-//                Match studentMatches = task.getResult().toObject(Match.class);
-//                if (studentMatches != null) {
-//                    Map<String, Boolean> map = studentMatches.getOptionalMatches();
-//                    if (map.containsKey(encodeDot(callee))) {
-//                        update(caller, callee, true);
-//                        update(callee, caller, true);
-//                        createMatchView(caller, callee);
-//                    }
-//                }
-//                rowItems.remove(0);
-//                arrayAdapter.notifyDataSetChanged();
-//            }
-//        });
-
 
     private void update(Student caller, Student callee) {
         fireStoreDatabase.getDatabase()
@@ -208,7 +190,7 @@ public class FragmentHome extends Fragment {
     @SuppressLint("SetTextI18n")
     private void createMatchView(Student caller, Student callee) {
         LayoutInflater li = LayoutInflater.from(getContext());
-        @SuppressLint("InflateParams") View view = li.inflate(R.layout.match_layout, null);
+        @SuppressLint("InflateParams") View view = li.inflate(R.layout.match_pop_up_layout, null);
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
         ImageView callerImage = view.findViewById(R.id.callerImage);
         ImageView calleeImage = view.findViewById(R.id.calleeImage);
@@ -217,7 +199,7 @@ public class FragmentHome extends Fragment {
         if (!caller.getUri().matches(""))
             Picasso.get().load(caller.getUri()).into(callerImage);
         if (!callee.getUri().matches(""))
-            Picasso.get().load(caller.getUri()).into(calleeImage);
+            Picasso.get().load(callee.getUri()).into(calleeImage);
         alertDialogBuilder.setView(view);
         alertDialogBuilder.create();
         alertDialogBuilder.show();

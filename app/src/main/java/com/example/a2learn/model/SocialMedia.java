@@ -7,8 +7,7 @@ public class SocialMedia {
     private String twitter;
     private String linkedin;
 
-    SocialMedia() {
-
+    public SocialMedia() {
     }
 
     public SocialMedia(String facebook, String twitter, String linkedin) {

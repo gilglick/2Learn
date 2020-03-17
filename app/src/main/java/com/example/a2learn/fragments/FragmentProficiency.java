@@ -1,4 +1,4 @@
-package com.example.a2learn;
+package com.example.a2learn.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.a2learn.utility.FireStoreDatabase;
+import com.example.a2learn.R;
 import com.example.a2learn.model.Student;
 
 import java.util.Arrays;
@@ -34,7 +36,7 @@ public class FragmentProficiency extends Fragment {
 
     }
 
-    FragmentProficiency(Student student) {
+    public FragmentProficiency(Student student) {
         this.student = student;
     }
 

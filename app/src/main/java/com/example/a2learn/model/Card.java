@@ -21,25 +21,7 @@ public class Card {
         return rating;
     }
 
-    public String getAcademicInstitution(){
-        return student.getAcademicInstitution();
-    }
 
-    public String getEmail() {
-        return student.getEmail();
-    }
-
-    public String getFullName() {
-        return student.getFullName();
-    }
-
-    public String getUserNeedHelpListStringFormat() {
-        return student.userNeedHelpListStringFormat();
-    }
-
-    public String getUserOfferListStringFormat() {
-        return student.userOfferListStringFormat();
-    }
 
     @Override
     public boolean equals(Object  o){

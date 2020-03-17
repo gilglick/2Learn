@@ -7,7 +7,9 @@ public class StudentSetting {
     private boolean displayDate;
 
     public StudentSetting(){
-
+        setDisplayEmail(true);
+        setDisplayPhone(true);
+        setDisplayDate(true);
     }
 
     public boolean isDisplayEmail() {

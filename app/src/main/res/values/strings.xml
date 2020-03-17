@@ -132,6 +132,10 @@
     <string name="linkedin">https://www.linkedin.com</string>
     <string name="addButton">Add button</string>
     <string name="removeButton">Remove button</string>
-    <string name="you_have_match">\" you have a match with \"</string>
+    <string name="you_have_match">You have a match with</string>
+    <string name="camera_provider">com.example.a2learn.fileprovider</string>
+    <string name="your_match_list">Your match list</string>
+    <string name="empty_list">Your don\'\t have matches yet !</string>
+
 </resources>
 

@@ -10,15 +10,16 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-//
+
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.logo_activity);
+        setContentView(R.layout.intro_layout);
         ImageView logo = findViewById(R.id.imageApplicationLogo);
+        final int DURATION = 2000;
         Animation a = new AlphaAnimation(0.00f, 1.00f);
-        a.setDuration(2000);
+        a.setDuration(DURATION);
         a.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
                 animation.setStartOffset((long) 250.00);
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         logo.startAnimation(a);
         Handler handler = new Handler();
-        int SPLASH_TIME = 2400;
+        final int SPLASH_TIME = 2400;
         handler.postDelayed(() -> {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);

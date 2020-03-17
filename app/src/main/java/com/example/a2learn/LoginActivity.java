@@ -15,6 +15,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.a2learn.model.Rating;
+import com.example.a2learn.utility.FireStoreDatabase;
+import com.example.a2learn.utility.Validation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -46,11 +48,12 @@ public class LoginActivity extends AppCompatActivity {
             final String userEmail = email.getText().toString();
             final String userPassword = password.getText().toString();
             mAuth.signInWithEmailAndPassword(userEmail, userPassword)
-                    .addOnSuccessListener(authResult ->
-                            startActivity(new Intent(LoginActivity.this, ContainerActivity.class)
-                                    .putExtra(getString(R.string.user_id), email.getText().toString())))
-                    .addOnFailureListener(e ->
-                            Toast.makeText(LoginActivity.this, getString(R.string.sign_in_error), Toast.LENGTH_LONG).show());
+                    .addOnSuccessListener(authResult -> {
+                        startActivity(new Intent(LoginActivity.this, ContainerActivity.class)
+                                .putExtra(getString(R.string.user_id), email.getText().toString()));
+                        finish();
+                    }).addOnFailureListener(e ->
+                    Toast.makeText(LoginActivity.this, getString(R.string.sign_in_error), Toast.LENGTH_LONG).show());
         });
 
 
@@ -92,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
     /**
      * Configuration of login window

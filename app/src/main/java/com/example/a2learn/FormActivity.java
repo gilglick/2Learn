@@ -14,21 +14,16 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.a2learn.model.Match;
 import com.example.a2learn.model.Rating;
 import com.example.a2learn.model.Student;
 import com.example.a2learn.utility.DialogDate;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.a2learn.utility.FireStoreDatabase;
+import com.example.a2learn.utility.Validation;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
@@ -98,13 +93,11 @@ public class FormActivity extends AppCompatActivity {
                 firebaseAuth.createUserWithEmailAndPassword(mEmail.getText().toString(),
                         mPassword.getText().toString()).addOnSuccessListener(authResult -> {
                     fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
-                            .document(student.getEmail()).set(new Match()).addOnCompleteListener(task -> {
-                                syncMatchDatabase();
-
-                    });
+                            .document(student.getEmail()).set(new Match()).addOnCompleteListener(task -> syncMatchDatabase());
                     fireStoreDatabase.getDatabase().collection(FireStoreDatabase.RATING)
                             .document(student.getEmail()).set(new Rating());
                     startActivity(new Intent(this, LoginActivity.class));
+                    finish();
                 }).addOnFailureListener(e1 ->
                         Toast.makeText(getApplicationContext(), getString(R.string.register_failed), Toast.LENGTH_SHORT).show());
             }
@@ -152,20 +145,17 @@ public class FormActivity extends AppCompatActivity {
                         for (DocumentSnapshot documentSnapshot : documentReferences) {
                             fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
                                     .document(student.getEmail())
-                                    .update(FireStoreDatabase.MATCHES + "." + encodeDot(documentSnapshot.getId()), false);
+                                    .update(FireStoreDatabase.MATCHES + "." + fireStoreDatabase.encodeDot(documentSnapshot.getId()), false);
                             fireStoreDatabase.getDatabase()
                                     .collection(FireStoreDatabase.MATCH_STORGE)
                                     .document(documentSnapshot.getId())
-                                    .update(FireStoreDatabase.MATCHES + "." + encodeDot(student.getEmail()), false);
+                                    .update(FireStoreDatabase.MATCHES + "." + fireStoreDatabase.encodeDot(student.getEmail()), false);
                         }
                         fireStoreDatabase.addStudent(student);
                     }
                 });
     }
 
-    private String encodeDot(String caller) {
-        return caller.replace('.', ':');
-    }
 
     /**
      * Hide the keyboard with pressing on the screen

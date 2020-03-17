@@ -1,4 +1,4 @@
-package com.example.a2learn;
+package com.example.a2learn.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.a2learn.R;
 import com.example.a2learn.model.Student;
 import com.example.a2learn.utility.CircleTransform;
 import com.squareup.picasso.Picasso;
@@ -53,7 +54,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.user_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recycler_match_item, parent, false);
         return new StudentAdapter.ViewHolder(view);
     }
 
@@ -105,7 +106,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         this.fragmentLoader = fragmentLoader;
     }
 
-    interface OnFragmentLoader {
+    public interface OnFragmentLoader {
         void triggerFragmentChat(Student student);
 
         void triggerFragmentProfile(Student student);

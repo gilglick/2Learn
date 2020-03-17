@@ -1,4 +1,4 @@
-package com.example.a2learn;
+package com.example.a2learn.utility;
 
 import android.util.Log;
 
@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public final class FireStoreDatabase {
     private static final String TAG = "FireStoreDatabase";
@@ -101,6 +102,20 @@ public final class FireStoreDatabase {
                 .addOnFailureListener(e -> Log.d(TAG, "Failed to upload user's setting! "));
     }
 
+    public void getUserImageFromDatabase(Student student) {
+        if (!student.getUri().matches("")) {
+            StorageReference storageReference = fireStoreDatabase.getStorageDatabase().getReference().child((student.getEmail()));
+            storageReference.getDownloadUrl().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    student.setUri(task.getResult().toString());
+                }
+            }).addOnFailureListener(e -> Log.d(TAG, "getImageFromDatabase: " + "Download image failed"));
+        }
+
+    }
+    public String encodeDot(String caller) {
+        return caller.replace('.', ':');
+    }
 
 }
 

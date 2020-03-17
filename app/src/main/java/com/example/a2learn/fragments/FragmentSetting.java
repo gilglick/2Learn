@@ -1,4 +1,4 @@
-package com.example.a2learn;
+package com.example.a2learn.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -17,9 +17,11 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.example.a2learn.utility.FireStoreDatabase;
+import com.example.a2learn.R;
+import com.example.a2learn.utility.Validation;
 import com.example.a2learn.model.Student;
 import com.example.a2learn.model.StudentSetting;
 
@@ -44,7 +46,7 @@ public class FragmentSetting extends Fragment {
     private final int LINKEDIN_INDICATOR = 3;
     private SparseArray<String> sparseArray = new SparseArray<>();
 
-    FragmentSetting(Student student) {
+    public FragmentSetting(Student student) {
         this.student = student;
     }
 
@@ -148,7 +150,7 @@ public class FragmentSetting extends Fragment {
             String newValue = editText.getText().toString();
             switch (indicator) {
                 case PHONE_NUMBER_INDICATOR:
-                    validData = Validation.isValidPhoneNumber(newValue);
+                    validData = true;
                     break;
                 case FACEBOOK_INDICATOR:
                     validData = Validation.isValidFacebookUrl(newValue);

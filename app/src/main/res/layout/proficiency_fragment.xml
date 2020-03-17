@@ -32,12 +32,12 @@
         android:padding="20dp">
         <AutoCompleteTextView
             android:id="@+id/courseNameEditText"
-            android:layout_width="250dp"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:autofillHints="select course"
             android:completionThreshold="0"
             android:paddingTop="30dp"
-            android:backgroundTint="@color/followingBg"
+            android:backgroundTint="@color/black"
             android:hint="@string/search_course"
             android:inputType="text" />
 
@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:buttonTint="@color/followingBg"
+                android:buttonTint="@color/black"
                 android:text="@string/ask_help_in_that_Course" />
 
 
@@ -79,8 +79,8 @@
 
         <ImageButton
             android:id="@+id/addButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
             android:layout_gravity="center"
             android:elevation="7dp"
             android:background="@drawable/ic_add_circle_black_24dp"
@@ -101,11 +101,11 @@
     <ImageButton
         android:id="@+id/floatingInformation"
         android:layout_below="@+id/buttonsLayout"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/info"
         android:contentDescription="@string/information" />
 

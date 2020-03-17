@@ -13,7 +13,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.a2learn.fragments.FragmentAbout;
+import com.example.a2learn.fragments.FragmentHome;
+import com.example.a2learn.fragments.FragmentMatch;
+import com.example.a2learn.fragments.FragmentProficiency;
+import com.example.a2learn.fragments.FragmentProfile;
+import com.example.a2learn.fragments.FragmentSetting;
 import com.example.a2learn.model.Student;
+import com.example.a2learn.utility.FireStoreDatabase;
 import com.google.android.material.navigation.NavigationView;
 
 public class ContainerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,11 +52,17 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
         anActionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         anActionBarDrawerToggle.syncState();
 
+
         fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE).document(userId).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 Student stud = documentSnapshot.toObject(Student.class);
-                fragmentTransaction.replace(R.id.container_fragment,new FragmentProfile(stud));
-                fragmentTransaction.commit();
+                if (stud != null) {
+                    if (!stud.getGiveHelpList().isEmpty() || !stud.getNeedHelpList().isEmpty()) {
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentHome(stud)).commit();
+                    } else {
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentProficiency(stud)).commit();
+                    }
+                }
             }
         });
     }

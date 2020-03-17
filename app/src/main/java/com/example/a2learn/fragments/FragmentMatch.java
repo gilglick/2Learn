@@ -1,9 +1,11 @@
-package com.example.a2learn;
+package com.example.a2learn.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.a2learn.utility.FireStoreDatabase;
+import com.example.a2learn.R;
+import com.example.a2learn.adapters.StudentAdapter;
 import com.example.a2learn.model.Match;
 import com.example.a2learn.model.Student;
 import com.example.a2learn.utility.RatingDialog;
@@ -26,23 +31,24 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
     private StudentAdapter studentAdapter;
     private List<Student> studentList;
     private Student student;
-
+    private TextView emptyListTextView;
     public FragmentMatch() {
     }
 
-    FragmentMatch(Student student) {
+    public FragmentMatch(Student student) {
         this.student = student;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_match, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        emptyListTextView = view.findViewById(R.id.emptyListTextView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         studentList = new ArrayList<>();
-        studentAdapter = new StudentAdapter(getContext(), studentList,student);
+        studentAdapter = new StudentAdapter(getContext(), studentList, student);
         studentAdapter.setFragmentLoader(FragmentMatch.this);
         recyclerView.setAdapter(studentAdapter);
         readAllMatchFromStorage();
@@ -57,6 +63,7 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
                 Match studentMatches = task.getResult().toObject(Match.class);
                 if (studentMatches != null) {
                     Map<String, Boolean> map = studentMatches.getOptionalMatches();
+                    emptyListTextView.setText(getString(R.string.your_match_list));
                     map.forEach((key, hasMatch) -> {
                         if (hasMatch) {
                             fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE)
@@ -65,13 +72,16 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
                                     Student stud = task1.getResult().toObject(Student.class);
                                     studentList.add(stud);
                                     studentAdapter.notifyDataSetChanged();
+
                                 }
                             });
                         }
-                    });
+                    }
+                    );
                 }
             }
         });
+
     }
 
     private String decodeDot(String userId) {
@@ -100,14 +110,13 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
 
     @Override
     public void triggerRatingBar(Student caller, Student callee) {
-        if(getActivity() != null){
-            RatingDialog ratingDialog = new RatingDialog(getActivity(),caller, callee);
+        if (getActivity() != null) {
+            RatingDialog ratingDialog = new RatingDialog(getActivity(), caller, callee);
             ratingDialog.show();
 
         }
 
     }
-
 
 
 }

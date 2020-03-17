@@ -1,6 +1,5 @@
 package com.example.a2learn.utility;
 
-import com.example.a2learn.FireStoreDatabase;
 import com.example.a2learn.R;
 import com.example.a2learn.model.Rating;
 import com.example.a2learn.model.Student;
@@ -29,7 +28,7 @@ public class RatingDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.raring_dialog);
+        setContentView(R.layout.rating_dialog);
         ratingBar = findViewById(R.id.customRatingBar);
         Button rateMe = findViewById(R.id.rateMe);
         ratingBar.setNumStars(5);
@@ -44,13 +43,9 @@ public class RatingDialog extends Dialog {
         fireStoreDatabase.getDatabase()
                 .collection(FireStoreDatabase.RATING)
                 .document(caller)
-                .update("ratings" + "." + encodeDot(callee), rating);
+                .update("ratings" + "." + fireStoreDatabase.encodeDot(callee), rating);
     }
 
-
-    private String encodeDot(String userId) {
-        return userId.replace('.', ':');
-    }
 
 
     private void calculateRating(Student callee) {

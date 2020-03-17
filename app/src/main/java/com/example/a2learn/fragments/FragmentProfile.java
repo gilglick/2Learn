@@ -1,4 +1,4 @@
-package com.example.a2learn;
+package com.example.a2learn.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -6,9 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +24,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.example.a2learn.utility.FireStoreDatabase;
+import com.example.a2learn.R;
 import com.example.a2learn.model.SocialMedia;
 import com.example.a2learn.model.Student;
 import com.example.a2learn.model.StudentSetting;
@@ -31,6 +37,11 @@ import com.example.a2learn.utility.CircleTransform;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -53,8 +64,9 @@ public class FragmentProfile extends Fragment {
     private boolean readOnly;
     private static final int PICK_IMAGE_GALLERY = 1;
     private static final int PICK_IMAGE_CAMERA = 0;
+    private String pathToFile;
 
-    FragmentProfile(Student student) {
+    public FragmentProfile(Student student) {
         this.student = student;
     }
 
@@ -71,8 +83,8 @@ public class FragmentProfile extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
         userImage = view.findViewById(R.id.userImage);
         userEmail = view.findViewById(R.id.emailTextView);
         userName = view.findViewById(R.id.userNameProfile);
@@ -110,8 +122,8 @@ public class FragmentProfile extends Fragment {
         userLocation.setText(student.getAcademicInstitution());
         userPhoneNumber.setText(student.getPhoneNumber());
         userDate.setText(student.getDateOfBirth());
-        userOfferHelpTextView.setText(student.userOfferListStringFormat());
-        userNeedHelpTextView.setText(student.userNeedHelpListStringFormat());
+        userOfferHelpTextView.setText(student.getUserOfferListStringFormat());
+        userNeedHelpTextView.setText(student.getUserNeedHelpListStringFormat());
         userImage.setOnClickListener(v -> {
             if (!readOnly)
                 selectImage(getContext());
@@ -126,8 +138,7 @@ public class FragmentProfile extends Fragment {
         builder.setTitle("Choose your profile picture");
         builder.setItems(options, (dialog, item) -> {
             if (options[item].equals("Take Photo")) {
-                Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePicture, PICK_IMAGE_CAMERA);
+                dispatchTakePictureIntent();
             } else if (options[item].equals("Choose from Gallery")) {
                 Intent gallery = new Intent();
                 gallery.setType("image/*");
@@ -152,17 +163,19 @@ public class FragmentProfile extends Fragment {
                     uploadImageToDatabase();
                     break;
                 case PICK_IMAGE_CAMERA:
-                    Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
-                    userImage.setImageBitmap(photo);
+                    Bitmap bitmap = BitmapFactory.decodeFile(pathToFile);
+                    imageUri = getImageUri(Objects.requireNonNull(getActivity()), bitmap);
+                    Picasso.get().load(imageUri).transform(new CircleTransform()).into(userImage);
                     uploadImageToDatabase();
-
                     break;
             }
         }
     }
 
 
-    /** Upload user's image to the database */
+    /**
+     * Upload user's image to the database
+     */
     private void uploadImageToDatabase() {
         storageReference = storageReference.child((student.getEmail()));
         storageReference.putFile(imageUri).continueWithTask(task -> storageReference.getDownloadUrl()).addOnCompleteListener(task -> {
@@ -181,17 +194,10 @@ public class FragmentProfile extends Fragment {
      */
     private void getImageFromDatabase() {
         if (!student.getUri().matches("")) {
-            storageReference = storageReference.child((student.getEmail()));
-            storageReference.getDownloadUrl().addOnCompleteListener(task -> {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    Uri uri = task.getResult();
-                    Picasso.get().load(uri).transform(new CircleTransform()).into(userImage);
-                }
-            }).addOnFailureListener(e -> Log.d(TAG, "getImageFromDatabase: " + "Download image failed"));
+            Picasso.get().load(student.getUri()).transform(new CircleTransform()).into(userImage);
         } else {
             Picasso.get().load(R.drawable.no_picture_circle).transform(new CircleTransform()).into(userImage);
         }
-
     }
 
     /**
@@ -206,7 +212,7 @@ public class FragmentProfile extends Fragment {
                     if (documentSnapshot.exists()) {
                         socialMedia = documentSnapshot.toObject(SocialMedia.class);
                     } else {
-                        socialMedia = new SocialMedia(getString(R.string.facebook),getString(R.string.twitter), getString(R.string.linkedin));
+                        socialMedia = new SocialMedia(getString(R.string.facebook), getString(R.string.twitter), getString(R.string.linkedin));
                         fireStoreDatabase.writeSocialMediaSetting(student.getEmail(), socialMedia);
                     }
                 }).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + "Failed to read social media"));
@@ -262,7 +268,47 @@ public class FragmentProfile extends Fragment {
         }
     }
 
+    String currentPhotoPath;
 
+    private File createImageFile() throws IOException {
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Objects.requireNonNull(getActivity()).getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(Objects.requireNonNull(getActivity()).getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                Log.d(TAG, "dispatchTakePictureIntent: " + ex.toString());
+            }
+            if (photoFile != null) {
+                pathToFile = photoFile.getAbsolutePath();
+                Uri photoURI = FileProvider.getUriForFile(getActivity(),
+                        getString(R.string.camera_provider),
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, PICK_IMAGE_CAMERA);
+            }
+        }
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
 }
 
 

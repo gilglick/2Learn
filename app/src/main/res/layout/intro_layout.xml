@@ -18,8 +18,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Welcome"
+            android:text="Welcome!"
             android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="cursive"
             android:textSize="40sp"/>
 
 
@@ -29,5 +32,16 @@
             android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:background="@drawable/application_logo" />
+
+        <TextView
+            android:id="@+id/appText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="learn together "
+            android:textColor="@color/light_grey"
+            android:fontFamily="cursive"
+            android:textSize="30sp"/>
     </LinearLayout>
 </RelativeLayout>

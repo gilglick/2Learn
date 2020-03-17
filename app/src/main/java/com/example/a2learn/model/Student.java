@@ -50,7 +50,6 @@ public class Student {
         return academicInstitution;
     }
 
-
     public List<String> getGiveHelpList() {
         return giveHelpList;
     }
@@ -106,7 +105,7 @@ public class Student {
         return email.equals(student.email);
     }
 
-    public String userNeedHelpListStringFormat() {
+    public String getUserNeedHelpListStringFormat() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < needHelpList.size(); i++) {
             if (i == needHelpList.size() - 1) {
@@ -119,7 +118,7 @@ public class Student {
         return sb.toString();
     }
 
-    public String userOfferListStringFormat() {
+    public String getUserOfferListStringFormat() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < giveHelpList.size(); i++) {
             if (i == giveHelpList.size() - 1) {
