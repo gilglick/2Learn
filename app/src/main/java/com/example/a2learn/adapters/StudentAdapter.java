@@ -62,12 +62,15 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         Student callee = mUsers.get(position);
-        holder.userNameChat.setText(callee.getFullName());
-        if (!callee.getUri().matches("")) {
-            Picasso.get().load(callee.getUri()).transform(new CircleTransform()).into(holder.userImageChat);
-        } else {
-            Picasso.get().load(R.drawable.no_picture_circle).transform(new CircleTransform()).into(holder.userImageChat);
+        if (callee != null) {
+            holder.userNameChat.setText(callee.getFullName());
+            if (!callee.getUri().matches("")) {
+                Picasso.get().load(callee.getUri()).transform(new CircleTransform()).into(holder.userImageChat);
+            } else {
+                Picasso.get().load(R.drawable.no_picture_circle).transform(new CircleTransform()).into(holder.userImageChat);
+            }
         }
+
         holder.chatImageView.setOnClickListener(v -> {
             if (fragmentLoader != null) {
                 fragmentLoader.triggerFragmentChat(callee);

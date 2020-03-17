@@ -62,8 +62,16 @@ public class FragmentHome extends Fragment {
         arrayAdapter = new CardArrayAdapter(getActivity(), R.layout.item, rowItems);
         flingContainer.setAdapter(arrayAdapter);
         cardsListener();
-        likeButton.setOnClickListener(v -> flingContainer.getTopCardListener().selectRight());
-        disLikeButton.setOnClickListener(v -> flingContainer.getTopCardListener().selectLeft());
+        likeButton.setOnClickListener(v -> {
+            likeButton.setEnabled(false);
+            flingContainer.getTopCardListener().selectRight();
+            likeButton.setEnabled(true);
+        });
+        disLikeButton.setOnClickListener(v -> {
+            likeButton.setEnabled(false);
+            flingContainer.getTopCardListener().selectLeft();
+            likeButton.setEnabled(true);
+        });
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
             public void removeFirstObjectInAdapter() {
@@ -113,7 +121,7 @@ public class FragmentHome extends Fragment {
                         List<DocumentChange> list = queryDocumentSnapshots.getDocumentChanges();
                         for (DocumentChange doc : list) {
                             Student currentStudent = doc.getDocument().toObject(Student.class);
-                            if (!currentStudent.equals(student)) {
+                            if (student != null && !currentStudent.equals(student)) {
                                 fireStoreDatabase.getDatabase().collection(FireStoreDatabase.MATCH_STORGE)
                                         .document(student.getEmail()).get().addOnCompleteListener(task -> {
                                     if (task.isSuccessful() && task.getResult() != null) {

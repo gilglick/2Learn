@@ -60,9 +60,9 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
                 Student stud = documentSnapshot.toObject(Student.class);
                 if (stud != null) {
                     if (!stud.getGiveHelpList().isEmpty() || !stud.getNeedHelpList().isEmpty()) {
-                        fragmentTransaction.replace(R.id.container_fragment, new FragmentHome(stud)).commit();
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentHome(stud)).addToBackStack(null).commit();
                     } else {
-                        fragmentTransaction.replace(R.id.container_fragment, new FragmentProficiency(stud)).commit();
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentProficiency(stud)).addToBackStack(null).commit();
                     }
                 }
             }
@@ -73,7 +73,6 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawerLayout.closeDrawer(GravityCompat.START);
-        fragmentManager.popBackStack();
         fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE).document(userId).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 Student student = documentSnapshot.toObject(Student.class);
@@ -81,23 +80,24 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
                 fragmentTransaction = fragmentManager.beginTransaction();
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-                        fragmentTransaction.replace(R.id.container_fragment, new FragmentHome(student)).commit();
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentHome(student)).addToBackStack(null).commit();
                         break;
                     case R.id.nav_profile:
-                        fragmentTransaction.replace(R.id.container_fragment, new FragmentProfile(student)).commit();
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentProfile(student)).addToBackStack(null).commit();
                         break;
                     case R.id.proficiency:
-                        fragmentTransaction.replace(R.id.container_fragment, new FragmentProficiency(student)).commit();
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentProficiency(student)).addToBackStack(null).commit();
                         break;
                     case R.id.nav_chat:
-                        fragmentTransaction.replace(R.id.container_fragment, new FragmentMatch(student)).commit();
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentMatch(student)).addToBackStack(null).commit();
                         break;
                     case R.id.setting:
-                        fragmentTransaction.replace(R.id.container_fragment, new FragmentSetting(student)).commit();
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentSetting(student)).addToBackStack(null).commit();
                         break;
                     case R.id.about:
-                        fragmentTransaction.replace(R.id.container_fragment, new FragmentAbout()).commit();
+                        fragmentTransaction.replace(R.id.container_fragment, new FragmentAbout()).addToBackStack(null).commit();
                         break;
+
 
                 }
             }
@@ -112,22 +112,30 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
         return false;
     }
 
+
     @Override
     public void onBackPressed() {
-        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-            switch (which) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    super.onBackPressed();
-                    break;
-                case DialogInterface.BUTTON_NEGATIVE:
-                    break;
-            }
-        };
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to exit?").setPositiveButton("Yes", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener).show();
-
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            super.onBackPressed();
+        } else {
+            DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        super.onBackPressed();
+                        startActivity(new Intent(this, LoginActivity.class));
+                        finish();
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            };
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to exit ?").setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+        }
     }
+
+
 }
 
 

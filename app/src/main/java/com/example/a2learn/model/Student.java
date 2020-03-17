@@ -106,6 +106,7 @@ public class Student {
         Student student = (Student) o;
         return email.equals(student.email);
     }
+
     @Exclude
     public String getUserNeedHelpListStringFormat() {
         StringBuilder sb = new StringBuilder();

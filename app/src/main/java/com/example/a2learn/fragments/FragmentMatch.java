@@ -1,11 +1,9 @@
 package com.example.a2learn.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +29,7 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
     private StudentAdapter studentAdapter;
     private List<Student> studentList;
     private Student student;
-    private TextView emptyListTextView;
+
     public FragmentMatch() {
     }
 
@@ -44,11 +42,10 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_match, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        emptyListTextView = view.findViewById(R.id.emptyListTextView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
         studentList = new ArrayList<>();
-        studentAdapter = new StudentAdapter(getContext(), studentList, student);
+        studentAdapter = new StudentAdapter(this.getActivity(), studentList, student);
         studentAdapter.setFragmentLoader(FragmentMatch.this);
         recyclerView.setAdapter(studentAdapter);
         readAllMatchFromStorage();
@@ -63,20 +60,18 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
                 Match studentMatches = task.getResult().toObject(Match.class);
                 if (studentMatches != null) {
                     Map<String, Boolean> map = studentMatches.getOptionalMatches();
-                    emptyListTextView.setText(getString(R.string.your_match_list));
                     map.forEach((key, hasMatch) -> {
-                        if (hasMatch) {
-                            fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE)
-                                    .document(decodeDot(key)).get().addOnCompleteListener(task1 -> {
-                                if (task1.isSuccessful() && task1.getResult() != null) {
-                                    Student stud = task1.getResult().toObject(Student.class);
-                                    studentList.add(stud);
-                                    studentAdapter.notifyDataSetChanged();
-
+                                if (hasMatch) {
+                                    fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE)
+                                            .document(decodeDot(key)).get().addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful() && task1.getResult() != null) {
+                                            Student stud = task1.getResult().toObject(Student.class);
+                                            studentList.add(stud);
+                                            studentAdapter.notifyDataSetChanged();
+                                        }
+                                    });
                                 }
-                            });
-                        }
-                    }
+                            }
                     );
                 }
             }
@@ -105,7 +100,6 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
                 .replace(R.id.container_fragment, fragmentProfile)
                 .addToBackStack(null)
                 .commit();
-
     }
 
     @Override
@@ -113,7 +107,6 @@ public class FragmentMatch extends Fragment implements StudentAdapter.OnFragment
         if (getActivity() != null) {
             RatingDialog ratingDialog = new RatingDialog(getActivity(), caller, callee);
             ratingDialog.show();
-
         }
 
     }
