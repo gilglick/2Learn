@@ -154,7 +154,6 @@ public class FragmentHome extends Fragment {
                 if (studentMatches != null) {
                     Boolean bool = studentMatches.getOptionalMatches().get(encodeDot(caller));
                     if (bool != null && bool.equals(true)) {
-                        update(caller, callee);
                         createMatchView(caller, callee);
                     }
                 }

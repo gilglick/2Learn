@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -32,6 +34,7 @@ import com.example.a2learn.model.Student;
 import com.example.a2learn.model.StudentSetting;
 import com.example.a2learn.utility.CircleTransform;
 
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
@@ -149,6 +152,7 @@ public class FragmentProfile extends Fragment {
         builder.show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -157,25 +161,27 @@ public class FragmentProfile extends Fragment {
                 case PICK_IMAGE_GALLERY:
                     imageUri = data.getData();
                     Picasso.get().load(imageUri).transform(new CircleTransform()).into(userImage);
-                    uploadImageToDatabase();
+                    uploadImageToStorage();
                     break;
                 case PICK_IMAGE_CAMERA:
                     Bitmap bitmap = BitmapFactory.decodeFile(pathToFile);
                     imageUri = getImageUri(Objects.requireNonNull(getActivity()), bitmap);
                     Picasso.get().load(imageUri).transform(new CircleTransform()).into(userImage);
-                    uploadImageToDatabase();
+                    uploadImageToStorage();
                     break;
             }
         }
     }
 
-
-    /**
-     * Upload user's image to the database
-     */
-    private void uploadImageToDatabase() {
-        storageReference = storageReference.child((student.getEmail()));
-        storageReference.putFile(imageUri).continueWithTask(task -> storageReference.getDownloadUrl()).addOnCompleteListener(task -> {
+    private void uploadImageToStorage() {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference().child("profileImages/" + student.getEmail());
+        storageReference.putFile(imageUri).continueWithTask(task -> {
+            if (!task.isSuccessful()) {
+                Log.i(TAG, "uploadImageToStorage: " + "task failed");
+            }
+            return storageReference.getDownloadUrl();
+        }).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Uri downloadUri = task.getResult();
                 if (downloadUri != null) {
@@ -190,8 +196,15 @@ public class FragmentProfile extends Fragment {
      * Get user image from the database
      */
     private void getImageFromDatabase() {
+        Log.i(TAG, "getImageFromDatabase: " + student.getUri());
         if (!student.getUri().matches("")) {
-            Picasso.get().load(student.getUri()).transform(new CircleTransform()).into(userImage);
+            storageReference.child((student.getEmail())).getDownloadUrl().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    Uri uri = task.getResult();
+                    Picasso.get().load(uri).transform(new CircleTransform()).into(userImage);
+
+                }
+            }).addOnFailureListener(e -> Log.d(TAG, "getImageFromDatabase: error download iamge"));
         } else {
             Picasso.get().load(R.drawable.no_picture_circle).transform(new CircleTransform()).into(userImage);
         }
@@ -306,6 +319,7 @@ public class FragmentProfile extends Fragment {
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
+
 }
 
 

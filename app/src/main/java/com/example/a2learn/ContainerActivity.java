@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.a2learn.fragments.FragmentAbout;
@@ -26,6 +27,7 @@ import com.example.a2learn.utility.FireStoreDatabase;
 import com.google.android.material.navigation.NavigationView;
 
 public class ContainerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = "";
     FireStoreDatabase fireStoreDatabase = FireStoreDatabase.getInstance();
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle anActionBarDrawerToggle;
@@ -76,6 +78,7 @@ public class ContainerActivity extends AppCompatActivity implements NavigationVi
         fireStoreDatabase.getDatabase().collection(FireStoreDatabase.STUDENT_STORAGE).document(userId).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 Student student = documentSnapshot.toObject(Student.class);
+                Log.i(TAG, "onNavigationItemSelected: " + student.getUri());
                 fragmentManager = getSupportFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 switch (item.getItemId()) {

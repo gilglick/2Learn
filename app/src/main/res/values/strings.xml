@@ -142,5 +142,15 @@
     <string name="date_hint">DD/MM/YYYY</string>
     <string name="match_title">It\'\s A Match!</string>
     <string name="student_searching_failed">Sorry no new students were found!</string>
+    <string name="application_description">application description</string>
+    <string name="about_us">2Learn® is the world\'s most popular social&#8211;learning app for new and random people,
+        with 30 billion matches. We are like your most reliable platform
+        for catching up your needs. If you come to meet new people,
+        expand your social network, learn together, find and give help,
+        meet others, or maybe just live the moment &#8211; you\'ve come to the right place.
+        We don\'t just call ourselves the &quot;smartest app in the world&quot; : we see it on every time someone using our app and tell us, and it\'s just get bigger.
+        How many social &#8211; learning apps do you know ?
+</string>
+    <string name="credits">©Gil Glick,Jonathan Karta, Perry Shalom</string>
 </resources>
 
